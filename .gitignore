@@ -1,0 +1,35 @@
+# will have compiled files and executables
+debug
+/target
+
+# Build outputs
+build/
+*.bin
+*.rom
+*.lst
+*.o
+*.map
+*.elf
+*.symbols.json
+
+# Release distributables
+dist/
+
+# TODO: update
+# Test temporaries
+tests/golden/*.bin
+tests/golden/*.rom
+tests/golden/*.lst
+
+# Build logs and temp files
+build.log
+BUILD_STEPS.txt
+
+# Python
+__pycache__/
+*.pyc
+
+# temporary files
+temp/
+
+tools/
