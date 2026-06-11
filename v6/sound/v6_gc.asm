@@ -14,8 +14,8 @@
 ; !!! BECAUSE IT'S ACCESSED VIA THE NON_STACK OPERATIONS !!!
 ; !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-.include "asm/v6/sound/v6_gc_consts.asm"
-.include "asm/v6/sound/v6_gc_runtime_data.asm"
+.include "sound/v6_gc_consts.asm"
+.include "sound/v6_gc_runtime_data.asm"
 
 // Init the cong before playing
 .global v6_gc_init_song
@@ -36,11 +36,7 @@ v6_gc_init:
 ; init a new song before playing it.
 ; hl - the song reg ptrs (v6_gc_ay_reg_data_ptrs)
 ; de - the song data
-; a - song data ram-disk access cmd
 v6_gc_init_song:
-			; store the command to be used in the interruption routine
-			sta v6_song_ram_disk_m
-
 			push h
 			; store the end of the array of ptrs to the song reg data
 			lxi b, GC_TASKS * ADDR_LEN
@@ -60,9 +56,7 @@ v6_gc_init_song:
 			; update _v6_gc_buffer ptr
 			pop h
 			push h
-			; hl - points to the song data
-			lxi d, _v6_gc_buffer
-;			dad d
+			; song data addr = _v6_gc_buffer
 			; hl - absolute _v6_gc_buffer ptr
 			mov a, h
 			sta v6_gc_buffer_ptr0 + 1
@@ -72,7 +66,7 @@ v6_gc_init_song:
 			; update _v6_gc_task_stack_end ptr
 			pop h
 			; hl - points to the song data
-			lxi d, _v6_gc_task_stack_end
+			lxi d, GC_BUFFER_SIZE * GC_TASKS + GC_STACK_SIZE * GC_TASKS ;_v6_gc_task_stack_end
 			dad d
 			shld v6_gc_task_stack_end0 + 1
 			ret

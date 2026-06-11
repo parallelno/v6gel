@@ -5,11 +5,11 @@
 .global v6_scr_offset_y
 
 
-.include "asm/v6/v6_macros.asm"
-.include "asm/v6/v6_consts.asm"
-.include "asm/v6/v6_utils.asm"
-.include "asm/v6/v6_controls.asm"
-.include "asm/v6/sound/v6_sound.asm"
+.include "common/v6_macros.asm"
+.include "common/v6_consts.asm"
+.include "misc/v6_utils.asm"
+.include "controls/v6_controls.asm"
+.include "sound/v6_sound.asm"
 
 
 
@@ -145,4 +145,22 @@ game_updates_required:
 .opt
 v6_ram_disk_mode:
 			.byte RAM_DISK_OFF_CMD
+.endopt
+
+; Vertical scrolling. It applies every frame.
+; The range from 0 to 255. The normal, non scrolled value is 255
+.opt
+v6_scr_offset_y:
+			.byte 255
+.endopt
+
+; V6 palette.
+; To update the palette:
+; * Copy new colors into this array.
+; * Set v6_palette_update_request = PALETTE_UPD_REQ_YES.
+; The interruption routine will apply new colors, then reset the
+; v6_palette_update_request back to PALETTE_UPD_REQ_NO.
+.opt
+v6_palette:
+			.storage PALETTE_LEN
 .endopt

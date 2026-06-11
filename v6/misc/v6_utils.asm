@@ -1,6 +1,6 @@
 @memusage_v6_utils:
-.include "asm/v6/v6_rnd.asm"
-.include "asm/v6/v6_dzx0.asm"
+.include "misc/v6_rnd.asm"
+.include "misc/v6_dzx0.asm"
 
 
 ; shared chunk of code to restore SP

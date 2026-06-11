@@ -2,7 +2,7 @@
 
 @memusage_v6_controls:
 
-.include "asm/v6/v6_controls_consts.asm"
+.include "controls/v6_controls_consts.asm"
 
 
 .optional

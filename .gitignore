@@ -4,6 +4,7 @@ debug
 
 # Build outputs
 build/
+out/
 *.bin
 *.rom
 *.lst
