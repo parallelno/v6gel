@@ -72,6 +72,7 @@ SPRITE_H_MIN			= SPRITE_COPY_TO_SCR_H_MIN
 ; Ram-disk
 ;=======================================================
 
+; Ram-disk ports for all 8 ram-disks
 RAM_DISK0_PORT = 0x10
 RAM_DISK1_PORT = 0x11
 RAM_DISK2_PORT = 0x20
@@ -81,24 +82,29 @@ RAM_DISK5_PORT = 0x41
 RAM_DISK6_PORT = 0x80
 RAM_DISK7_PORT = 0x81
 
-RAM_DISK_PORT = RAM_DISK1_PORT ; working RAM Disk used by the game
+; V6 ram-disk used for music, graphics, level data, and back buffers
+RAM_DISK_PORT = RAM_DISK1_PORT
 
+; Ram-disk access commands:
+; Disable the access
 RAM_DISK_OFF_CMD = 0
+; Enable the access via the stack commands
 RAM_DISK_S0 = %00010000
 RAM_DISK_S1 = %00010100
 RAM_DISK_S2 = %00011000
 RAM_DISK_S3 = %00011100
-
+; Selects ram-disk back to access the ram-disk via the mem R/W commands (only 0x8000-0xFFFF available)
 RAM_DISK_M0 = %00000000
 RAM_DISK_M1 = %00000001
 RAM_DISK_M2 = %00000010
 RAM_DISK_M3 = %00000011
-
-RAM_DISK_M_89 = %01000000
-RAM_DISK_M_AD = %00100000
-RAM_DISK_M_EF = %10000000
+; Enable the access to particular addr range, cam be combined.
+RAM_DISK_M_89 = %01000000 ; 0x8000-0x9FFF
+RAM_DISK_M_AD = %00100000 ; 0xA000-0xDFFF
+RAM_DISK_M_EF = %10000000 ; 0xE000-0xFFFF
 RAM_DISK_M_8F = RAM_DISK_M_89 | RAM_DISK_M_AD | RAM_DISK_M_EF
 RAM_DISK_M_AF = RAM_DISK_M_AD | RAM_DISK_M_EF
+
 
 ;=======================================================
 ; V6 Engine

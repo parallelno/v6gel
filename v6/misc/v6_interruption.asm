@@ -101,8 +101,7 @@ interruption_no_fps_update:
 			;================================================================
 			; music update
 			;================================================================
-			lda v6_song_ram_disk_m
-			CALL_RAM_DISK_FUNC_BANK_NO_RESTORE(v6_sound_update)
+			CALL_RAM_DISK_FUNC_NO_RESTORE(v6_sound_update, RAM_DISK_MUSIC)
 
 			pop d
 			pop b

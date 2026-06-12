@@ -1,4 +1,5 @@
-
+.global dzx0
+.global dzx0_rd
 
 ; -----------------------------------------------------------------------------
 ; ZX0 8080 decoder by Ivan Gorodetsky - OLD FILE FORMAT v1
@@ -85,8 +86,6 @@ dzx0:
 			add a
 			ret
 
-
-/*
 
 
 	; unpack to the RAM Disk $8000-$FFFF
@@ -204,4 +203,3 @@ dzx0_rd:
 			add a
 			jnc @elias_loop
 			jmp @elias
-*/

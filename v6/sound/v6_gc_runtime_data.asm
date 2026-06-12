@@ -51,10 +51,3 @@ v6_gc_task_id:
 
 v6_song_reg_data_ptrs_end: ; contains the end of the array of ptrs to the song reg data
 			.storage WORD_LEN
-
-
-; gigachad16 player uses this ram disk access command for the read the song data.
-; set by
-v6_song_ram_disk_m:
-			.byte RAM_DISK_OFF_CMD
-.endopt

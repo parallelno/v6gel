@@ -16,6 +16,7 @@
 
 .include "sound/v6_gc_consts.asm"
 .include "sound/v6_gc_runtime_data.asm"
+.include "sound/v6_gc_runtime_data_rd.asm"
 
 // Init the cong before playing
 .global v6_gc_init_song
@@ -34,47 +35,35 @@ v6_gc_init:
 			ret
 
 ; init a new song before playing it.
-; hl - the song reg ptrs (v6_gc_ay_reg_data_ptrs)
-; de - the song data
+; hl - the song ay reg ptrs (array of 14 pointers, each points for particular array
+; 	   in the song data (v6_gc_ay_reg_data_ptrs))
+; de - the song reg data (14 byte arrays, each for ay register)
 v6_gc_init_song:
-			push h
+			call v6_gc_pause
+
+			; erase gc runtime buffers
+			lxi h, GC_STREAM_BUFFERS
+			lxi b, GC_MUSIC_DATA
+			call mem_erase
+
 			; store the end of the array of ptrs to the song reg data
-			lxi b, GC_TASKS * ADDR_LEN
-			dad b
+			lxi h, GC_MUSIC_REG_PTRS + GC_TASKS * ADDR_LEN
 			shld v6_song_reg_data_ptrs_end
 
-			push d
-			call v6_gc_pause
-			pop d
-			pop h
-			; hl - points to the array of ptrs to the reg data
-			; de - points to the song data
-			push d
-			mvi c, GC_TASKS
-			call add_offset_to_labels_len
-
-			; update _v6_gc_buffer ptr
-			pop h
-			push h
-			; song data addr = _v6_gc_buffer
-			; hl - absolute _v6_gc_buffer ptr
-			mov a, h
+			mvi a, >GC_STREAM_BUFFERS
 			sta v6_gc_buffer_ptr0 + 1
 			adi GC_TASKS - 1
 			sta v6_gc_buffer_ptr2
 
 			; update _v6_gc_task_stack_end ptr
-			pop h
-			; hl - points to the song data
-			lxi d, GC_BUFFER_SIZE * GC_TASKS + GC_STACK_SIZE * GC_TASKS ;_v6_gc_task_stack_end
-			dad d
+			lxi h, GC_TASKS_STACKS + GC_STACK_SIZE * GC_TASKS
 			shld v6_gc_task_stack_end0 + 1
 			ret
 
 
 ; uses to start a new song or to repeat a finished song
 ; requires a call v6_gc_init_song upfront!
-; ex. CALL_RAM_DISK_FUNC_NO_RESTORE(v6_gc_start, RAM_DISK_M_PERMANENT_SONG01 | RAM_DISK_M_8F)
+; ex. CALL_RAM_DISK_FUNC_NO_RESTORE(v6_gc_start, RAM_DISK_MUSIC)
 v6_gc_start:
 			call v6_gc_tasks_init
 			call v6_gc_scheduler_init
