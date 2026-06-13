@@ -1,6 +1,7 @@
 .global dzx0
 .global dzx0_rd
 
+.opt
 ; -----------------------------------------------------------------------------
 ; ZX0 8080 decoder by Ivan Gorodetsky - OLD FILE FORMAT v1
 ; Based on ZX0 z80 decoder by Einar Saukas https://github.com/einar-saukas/ZX0
@@ -85,9 +86,10 @@ dzx0:
 			pop psw
 			add a
 			ret
+.endopt
 
 
-
+.opt
 	; unpack to the RAM Disk $8000-$FFFF
 	; in:
 	; de - compressed data addr
@@ -203,3 +205,4 @@ dzx0_rd:
 			add a
 			jnc @elias_loop
 			jmp @elias
+.endopt

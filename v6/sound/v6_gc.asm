@@ -26,41 +26,46 @@
 .global v6_gc_unpause
 .global v6_gc_flip_pause
 
+.opt
 setting_music:
 			.byte SETTING_OFF
+.endopt
 
+.opt
 v6_gc_init:
 			call v6_gc_pause
 			;call v6_gc_clear_buffers ; commented out because it's already erased in the file
 			ret
+.endopt
 
+
+.opt
 ; init a new song before playing it.
-; hl - the song ay reg ptrs (array of 14 pointers, each points for particular array
-; 	   in the song data (v6_gc_ay_reg_data_ptrs))
-; de - the song reg data (14 byte arrays, each for ay register)
 v6_gc_init_song:
 			call v6_gc_pause
 
 			; erase gc runtime buffers
-			lxi h, GC_STREAM_BUFFERS
-			lxi b, GC_MUSIC_DATA
+			lxi h, _gc_reg_streams
+			lxi b, _gc_song_data
 			call mem_erase
 
 			; store the end of the array of ptrs to the song reg data
-			lxi h, GC_MUSIC_REG_PTRS + GC_TASKS * ADDR_LEN
+			lxi h, _gc_packed_reg_stream_ptrs + GC_TASKS * ADDR_LEN
 			shld v6_song_reg_data_ptrs_end
 
-			mvi a, >GC_STREAM_BUFFERS
+			mvi a, >_gc_reg_streams
 			sta v6_gc_buffer_ptr0 + 1
 			adi GC_TASKS - 1
 			sta v6_gc_buffer_ptr2
 
 			; update _v6_gc_task_stack_end ptr
-			lxi h, GC_TASKS_STACKS + GC_STACK_SIZE * GC_TASKS
+			lxi h, _gc_task_stacks + GC_STACK_SIZE * GC_TASKS
 			shld v6_gc_task_stack_end0 + 1
 			ret
+.endopt
 
 
+.opt
 ; uses to start a new song or to repeat a finished song
 ; requires a call v6_gc_init_song upfront!
 ; ex. CALL_RAM_DISK_FUNC_NO_RESTORE(v6_gc_start, RAM_DISK_MUSIC)
@@ -78,8 +83,10 @@ v6_gc_start:
 
 			call v6_gc_unpause
 			ret
+.endopt
 
 
+.opt
 ; called by the unterruption routine
 ; ex. CALL_RAM_DISK_FUNC_NO_RESTORE(v6_gc_update, RAM_DISK_S_SONG01 | RAM_DISK_M_PERMANENT_SONG01 | RAM_DISK_M_8F)
 v6_gc_update:
@@ -103,8 +110,10 @@ v6_gc_update:
 			inr m
 			call v6_gc_ay_update
 			ret
+.endopt
 
 
+.opt
 ;==========================================
 ; create a v6_gc_unpack tasks
 v6_gc_tasks_init:
@@ -161,14 +170,19 @@ v6_gc_tasks_init_restore_sp:
 			lxi sp, TEMP_ADDR
 			ei
 			ret
+.endopt
 
+.opt
 ; Set the current task stack pointer to the first task stack pointer
 v6_gc_scheduler_init:
 			lxi h, v6_gc_task_sps
 			shld v6_gc_current_task_spp
 			ret
+.endopt
+
 
 /*
+.opt
 ; it clears the last 14 bytes of every buffer
 ; to prevent player to play garbage data
 ; when it repeats the current song or
@@ -188,8 +202,10 @@ v6_gc_clear_buffers:
 			jnz @next_buff
 			ret
 v6_gc_buffer_ptr1 = @v6_gc_buffer_ptr + 1
+.endopt
 */
 
+.opt
 ; this func restores the context of the current task
 ; then calls v6_gc_unpack to let it continue unpacking reg_data
 ; this code is performed during an interruption
@@ -210,7 +226,10 @@ v6_gc_scheduler_update:
 			pop b
 			; go to v6_gc_unpack
 			ret
+.endopt
 
+
+.opt
 ; v6_gc_unpack task calls this after unpacking 16 bytes.
 ; it stores all the registers of the current task
 v6_gc_scheduler_store_task_context:
@@ -240,8 +259,10 @@ v6_gc_scheduler_store_task_context:
 v6_gc_scheduler_restore_sp:
 			lxi sp, TEMP_ADDR
 			ret
+.endopt
 
 
+.opt
 ; unpacks 16 bytes of reg_data for the current task
 ; this function is called from the interruption routine
 ; Parameters (forward):
@@ -371,7 +392,10 @@ v6_gc_unpack:
 			dcr e
 		.endif
 .endmacro
+.endopt
 
+
+.opt
 ; send buffers data to AY regs
 ; input:
 ; hl = buffer_idx
@@ -407,7 +431,10 @@ v6_gc_ay_update:
 @doNotSendData:
 			ret
 v6_gc_buffer_ptr2 = @v6_gc_buffer_ptr + 1
+.endopt
 
+
+.opt
 ; to mute the player. It can continue the song after unmute
 ; to call from this module: call v6_gc_pause
 v6_gc_pause:
@@ -424,13 +451,19 @@ v6_gc_pause:
 			dcr e
 			jp @send_data
 			ret
+.endopt
 
+
+.opt
 ; to unpause the player after being muted. It continues the song from where it has been stopped
 v6_gc_unpause:
 			mvi a, SETTING_ON
 			sta setting_music
 			ret
+.endopt
 
+
+.opt
 ; to flip mute/unmute
 v6_gc_flip_pause:
 			lxi h, setting_music
@@ -440,7 +473,10 @@ v6_gc_flip_pause:
 			cpi SETTING_OFF
 			jz v6_gc_pause
 			jmp v6_gc_unpause
+.endopt
 
+
+.opt
 ; return setting_music value
 ; to call from this module: call v6_gc_get_setting
 ; out:
@@ -448,3 +484,4 @@ v6_gc_flip_pause:
 v6_gc_get_setting:
 			lda setting_music
 			ret
+.endopt

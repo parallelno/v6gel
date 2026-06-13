@@ -11,23 +11,23 @@ GC_TASKS		= 14 ; 14 individual threads for each AY register
 
 
 
-_song01_ay_reg_data00_relative = 0x0ee0 + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
-_song01_ay_reg_data01_relative = 0x122f + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
-_song01_ay_reg_data02_relative = 0x133a + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
-_song01_ay_reg_data03_relative = 0x167d + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
-_song01_ay_reg_data04_relative = 0x1847 + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
-_song01_ay_reg_data05_relative = 0x1e1e + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
-_song01_ay_reg_data06_relative = 0x1e8f + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
-_song01_ay_reg_data07_relative = 0x26c8 + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
-_song01_ay_reg_data08_relative = 0x28e0 + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
-_song01_ay_reg_data09_relative = 0x29a6 + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
-_song01_ay_reg_data10_relative = 0x2b7c + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
-_song01_ay_reg_data11_relative = 0x2d7d + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
-_song01_ay_reg_data12_relative = 0x3020 + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
-_song01_ay_reg_data13_relative = 0x3027 + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
+_song01_ay_reg_data00_ptr = 0x0ee0 + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
+_song01_ay_reg_data01_ptr = 0x122f + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
+_song01_ay_reg_data02_ptr = 0x133a + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
+_song01_ay_reg_data03_ptr = 0x167d + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
+_song01_ay_reg_data04_ptr = 0x1847 + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
+_song01_ay_reg_data05_ptr = 0x1e1e + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
+_song01_ay_reg_data06_ptr = 0x1e8f + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
+_song01_ay_reg_data07_ptr = 0x26c8 + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
+_song01_ay_reg_data08_ptr = 0x28e0 + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
+_song01_ay_reg_data09_ptr = 0x29a6 + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
+_song01_ay_reg_data10_ptr = 0x2b7c + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
+_song01_ay_reg_data11_ptr = 0x2d7d + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
+_song01_ay_reg_data12_ptr = 0x3020 + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
+_song01_ay_reg_data13_ptr = 0x3027 + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS
 
 _song01_ay_reg_data_ptrs:
-			.word _song01_ay_reg_data00_relative, _song01_ay_reg_data01_relative, _song01_ay_reg_data02_relative, _song01_ay_reg_data03_relative, _song01_ay_reg_data04_relative, _song01_ay_reg_data05_relative, _song01_ay_reg_data06_relative, _song01_ay_reg_data07_relative, _song01_ay_reg_data08_relative, _song01_ay_reg_data09_relative, _song01_ay_reg_data10_relative, _song01_ay_reg_data11_relative, _song01_ay_reg_data12_relative, _song01_ay_reg_data13_relative,
+			.word _song01_ay_reg_data00_ptr, _song01_ay_reg_data01_ptr, _song01_ay_reg_data02_ptr, _song01_ay_reg_data03_ptr, _song01_ay_reg_data04_ptr, _song01_ay_reg_data05_ptr, _song01_ay_reg_data06_ptr, _song01_ay_reg_data07_ptr, _song01_ay_reg_data08_ptr, _song01_ay_reg_data09_ptr, _song01_ay_reg_data10_ptr, _song01_ay_reg_data11_ptr, _song01_ay_reg_data12_ptr, _song01_ay_reg_data13_ptr,
 
 
 _song01_ay_reg_data:

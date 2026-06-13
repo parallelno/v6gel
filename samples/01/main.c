@@ -17,15 +17,20 @@ extern uint8_t v6_palette[16];
 extern uint8_t v6_scr_offset_y;
 extern uint8_t v6_palette_update_request;
 extern uint16_t v6_action_code;
+extern uint8_t* v6_ram_disk_mode;
+extern uint8_t ram_disk_port;
 
 extern uint8_t _song01_data[];
-extern uint8_t GC_STREAM_BUFFERS[];
+extern uint8_t _gc_song_data[];
 extern uint8_t RAM_DISK_MUSIC;
 
 V6C_NOINLINE_ASM_EXTERN
 extern void v6_gc_init_song();
 V6C_NOINLINE_ASM_EXTERN
 extern void v6_gc_start();
+V6C_NOINLINE_ASM_EXTERN
+extern void v6_gc_unpack_init_play_song(uint8_t* song_data);
+
 
 
 V6C_INLINE
@@ -36,26 +41,35 @@ void dzx0_rd_wrapper(
     register uint16_t _uncomp asm("BC") = (uint16_t)target;
     register uint8_t _cmd asm("A") = ramdisk_cmd;
     asm (
+		"di                             \n"
         // de - compressed data addr
         // bc - uncompressed data addr
         // a - RAM Disk activation command
-        "CALL dzx0_rd      \n"
-         : /* no output */
-         : /* no input constraints */
-         : "A", "BC", "DE", "HL", "FLAGS"  /* clobbered registers */
+        "CALL dzx0_rd                   \n"
+        "ei                             \n"
+
+        : /* no output */
+          /* input constraints */
+        : "r" (_comp), "r" (_uncomp), "a"(ramdisk_cmd)
+
+          /* clobbered registers */
+        : "A", "BC", "DE", "HL", "FLAGS"
     );
 }
 
 
+
+
 void main() {
     // Set the palette
-    memcpy(v6_palette, palette, sizeof(palette));
-    v6_palette_update_request = PALETTE_UPD_REQ_YES;
+    // memcpy(v6_palette, palette, sizeof(palette));
+    // v6_palette_update_request = PALETTE_UPD_REQ_YES;
 
     // unpack the song data to the ram-disk and start the music player
-    dzx0_rd_wrapper(_song01_data, GC_STREAM_BUFFERS, RAM_DISK_MUSIC);
-    v6_gc_init_song();
-    v6_gc_start();
+    // dzx0_rd_wrapper(_song01_data, _gc_song_data, (uint8_t)((uintptr_t)&RAM_DISK_MUSIC & 0xFF));
+    // v6_gc_init_song();
+    // v6_gc_start();
+    v6_gc_unpack_init_play_song(_song01_data);
 
     while (true){
         v6c_hlt();

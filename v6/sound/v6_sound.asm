@@ -1,18 +1,24 @@
 @memusage_v6_sound:
 
 .include "sound/v6_gc.asm"
+.include "sound/v6_gc_utils.asm"
 .include "sound/v6_sfx.asm"
 
 
+.opt
 ; init sound
 v6_sound_init:
 			call v6_sfx_player_init
 			call v6_gc_init
 			ret
+.endopt
 
+
+.opt
 ; play music and sfx
 ; called by the unterruption routine
 v6_sound_update:
 			call v6_gc_update
 			call v6_sfx_update
 			ret
+.endopt
