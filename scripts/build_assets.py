@@ -24,12 +24,8 @@ if _SCRIPTS_DIR not in sys.path:
 
 import v6export
 import v6loads
-from utils import asmgen, common, consts
+from utils import asmgen, common, consts, tools
 from utils.log import ExportError, TextColor, printc
-
-DEFAULT_V6ASM = v6export.DEFAULT_V6ASM
-DEFAULT_PACKER = v6export.DEFAULT_PACKER
-DEFAULT_V6FDD = r"C:\Work\Programming\v6asm\target\release\v6fdd.exe"
 
 
 def _unique_asset_paths(config_j):
@@ -62,9 +58,9 @@ def parse_args(argv):
 	)
 	p.add_argument("config", help="build config JSON (asset_type=config)")
 	p.add_argument("-o", "--out-dir", default="build/release", help="build output root")
-	p.add_argument("--asm", default=DEFAULT_V6ASM, help="path to v6asm")
-	p.add_argument("--packer", default=DEFAULT_PACKER, help="zx0 packer command")
-	p.add_argument("--v6fdd", default=DEFAULT_V6FDD, help="path to v6fdd.exe")
+	p.add_argument("--asm", default=None, help="path to v6asm (default: $V6ASM, tools/v6asm/, or PATH)")
+	p.add_argument("--packer", default=None, help="zx0 packer command (default: $ZX0, tools/zx0/, or PATH)")
+	p.add_argument("--v6fdd", default=None, help="path to v6fdd (default: $V6FDD, tools/v6asm/, or PATH)")
 	p.add_argument("--fdd-template", default=None, help="template/boot FDD image (-t)")
 	p.add_argument("--transport", action="store_true",
 				help="transport-compress each blob (.bin->.com) before storing on the "
@@ -107,6 +103,10 @@ def main(argv=None):
 	stored_ext = consts.EXT_COM if transport else consts.EXT_BIN
 
 	try:
+		args.asm = tools.resolve_v6asm(args.asm)
+		args.packer = tools.resolve_zx0(args.packer)
+		args.v6fdd = tools.resolve_v6fdd(args.v6fdd)
+
 		# --- per-asset export (+ transport compression) ---
 		stored_files = []
 		for asset_path in _unique_asset_paths(config_j):

@@ -16,12 +16,6 @@ out/
 # Release distributables
 dist/
 
-# TODO: update
-# Test temporaries
-tests/golden/*.bin
-tests/golden/*.rom
-tests/golden/*.lst
-
 # Build logs and temp files
 build.log
 BUILD_STEPS.txt

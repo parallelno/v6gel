@@ -1,0 +1,38 @@
+[project]
+name = "v6gel-pipeline"
+version = "0.1.0"
+description = "Asset pipeline for the v6gel game engine library (Vector-06c)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+dependencies = [
+    "Pillow>=10.0",
+    "lhafile>=0.3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.6",
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = { "" = "scripts" }
+packages = ["exporters", "utils"]
+py-modules = ["v6export", "v6loads", "build_assets", "clear"]
+
+[tool.ruff]
+line-length = 100
+indent-width = 4
+
+[tool.ruff.lint]
+# A small, sensible starter set: pyflakes (F), pycodestyle (E/W),
+# isort (I) and a few bug-catching pyupgrade/flake8-bugbear rules.
+select = ["E", "F", "W", "I", "B", "UP"]
+
+[tool.ruff.format]
+# The codebase indents with tabs; keep ruff's formatter consistent with that.
+indent-style = "tab"

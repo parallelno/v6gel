@@ -26,11 +26,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import exporters
 from exporters.context import ExportContext
-from utils import consts
+from utils import consts, tools
 from utils.log import ExportError, TextColor, printc
-
-DEFAULT_V6ASM = r"C:\Work\Programming\v6asm\target\release\v6asm"
-DEFAULT_PACKER = r"C:\Work\Programming\v6\tools\zx0\zx0salvador.exe -classic"
 
 
 def parse_args(argv=None):
@@ -48,12 +45,13 @@ def parse_args(argv=None):
 		help="directory for the .bin blob (default: out-dir)",
 	)
 	parser.add_argument(
-		"--asm", dest="v6asm", default=DEFAULT_V6ASM,
-		help="path to the v6asm assembler",
+		"--asm", dest="v6asm", default=None,
+		help="path to the v6asm assembler (default: $V6ASM, tools/v6asm/, or PATH)",
 	)
 	parser.add_argument(
-		"--packer", default=DEFAULT_PACKER,
-		help="zx0 packer command for format-intrinsic compression",
+		"--packer", default=None,
+		help="zx0 packer command for format-intrinsic compression "
+			"(default: $ZX0, tools/zx0/, or PATH)",
 	)
 	parser.add_argument(
 		"--temp", dest="temp_dir", default="build/temp/",
@@ -105,8 +103,8 @@ def build_context(args):
 		name=name,
 		out_dir=out_dir,
 		bin_dir=bin_dir,
-		v6asm_path=args.v6asm,
-		packer_path=args.packer,
+		v6asm_path=tools.resolve_v6asm(args.v6asm),
+		packer_path=tools.resolve_zx0(args.packer),
 		emit_asm=args.emit_asm,
 		temp_dir=args.temp_dir,
 		stored_ext=stored_ext,
