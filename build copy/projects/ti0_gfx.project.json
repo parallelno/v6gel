@@ -1,0 +1,9 @@
+{
+    "name": "ti0_gfx",
+    "asmPath": "../debug/tiled_img_gfx\\ti0_gfx_data.asm",
+    "debugPath": "ti0_gfx.debug.json",
+    "romPath": "../bin/TI0_GFX.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}

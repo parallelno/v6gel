@@ -1,0 +1,9 @@
+{
+    "name": "tim_gfx",
+    "asmPath": "../debug/tiled_img_gfx\\tim_gfx_data.asm",
+    "debugPath": "tim_gfx.debug.json",
+    "romPath": "../bin/TIM_GFX.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}

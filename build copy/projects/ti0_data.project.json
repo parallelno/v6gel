@@ -1,0 +1,9 @@
+{
+    "name": "ti0_data",
+    "asmPath": "../debug/tiled_img_data\\ti0_data_data.asm",
+    "debugPath": "ti0_data.debug.json",
+    "romPath": "../bin/TI0_DATA.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}

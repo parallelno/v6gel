@@ -1,0 +1,9 @@
+{
+    "name": "tim_data",
+    "asmPath": "../debug/tiled_img_data\\tim_data_data.asm",
+    "debugPath": "tim_data.debug.json",
+    "romPath": "../bin/TIM_DATA.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}

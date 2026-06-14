@@ -1,0 +1,9 @@
+{
+    "name": "font",
+    "asmPath": "../debug/font\\font_data.asm",
+    "debugPath": "font.debug.json",
+    "romPath": "../bin/FONT.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}

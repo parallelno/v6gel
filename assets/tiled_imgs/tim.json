@@ -1,0 +1,6 @@
+{
+	"path_png" : "tiled/art/ti0.png",
+	"palette_path" : "../palettes/pal_lv1.json",
+	"asset_type" : "tiled_img",
+	"path" : "tiled/tim.tmj"
+}

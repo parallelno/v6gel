@@ -1,0 +1,778 @@
+{
+	"palette" :	[
+		{"x": 0,	"y" : 0},
+		{"x": 16,	"y" : 0},
+		{"x": 32,	"y" : 0},
+		{"x": 48,	"y" : 0},
+		{"x": 64,	"y" : 0},
+		{"x": 80,	"y" : 0},
+		{"x": 96,	"y" : 0},
+		{"x": 112,	"y" : 0},
+		{"x": 128,	"y" : 0},
+		{"x": 144,	"y" : 0},
+		{"x": 160,	"y" : 0},
+		{"x": 176,	"y" : 0},
+		{"x": 192,	"y" : 0},
+		{"x": 208,	"y" : 0},
+		{"x": 224,	"y" : 0},
+		{"x": 240,	"y" : 0}
+	],
+	"asset_type" : "font",
+	"path_png" : "art/font.png",
+	"comment" : "rus font uses a custom charset below",
+	"gfx_ptrs" : [
+		"а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к", "л", "м", "н", "о",
+		"п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я",
+		"А", "Б", "В", "Г", "Д", "Е", "Е", "Ж", "З", "И", "И", "К", "Л", "М", "Н", "О",
+		"П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю", "Я",
+		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+		"period", "comma", "colon", "parent_r",
+		"parent_l", "quote", "exclamation", "question", "dash", "ampersand", "space"
+	],
+	"backgrount_color_pos" : [0, 0],
+	"spacing" : 1,
+	"gfx" : [
+		{
+			"name" : "0",
+			"x" : 8,
+			"y"	: 135,
+			"width" : 5,
+			"height" : 9,
+			"offset_y": 0
+		},
+		{
+			"name" : "1",
+			"x" : 24,
+			"y"	: 135,
+			"width" : 2,
+			"height" : 9,
+			"offset_y": 0
+		},
+		{
+			"name" : "2",
+			"x" : 40,
+			"y"	: 135,
+			"width" : 5,
+			"height" : 9,
+			"offset_y": 0
+		},
+		{
+			"name" : "3",
+			"x" : 56,
+			"y"	: 135,
+			"width" : 5,
+			"height" : 9,
+			"offset_y": 0
+		},
+		{
+			"name" : "4",
+			"x" : 72,
+			"y"	: 135,
+			"width" : 5,
+			"height" : 9,
+			"offset_y": 0
+		},
+		{
+			"name" : "5",
+			"x" : 88,
+			"y"	: 135,
+			"width" : 5,
+			"height" : 9,
+			"offset_y": 0
+		},
+		{
+			"name" : "6",
+			"x" : 104,
+			"y"	: 135,
+			"width" : 5,
+			"height" : 9,
+			"offset_y": 0
+		},
+		{
+			"name" : "7",
+			"x" : 120,
+			"y"	: 135,
+			"width" : 4,
+			"height" : 9,
+			"offset_y": 0
+		},
+		{
+			"name" : "8",
+			"x" : 136,
+			"y"	: 135,
+			"width" : 5,
+			"height" : 9,
+			"offset_y": 0
+		},
+		{
+			"name" : "9",
+			"x" : 152,
+			"y"	: 135,
+			"width" : 5,
+			"height" : 9,
+			"offset_y": 0
+		},
+		{
+			"name" : "space",
+			"x" : 24,
+			"y"	: 144,
+			"width" : 4,
+			"height" : 1,
+			"offset_y": 0
+		},
+		{
+			"name" : "exclamation",
+			"x" : 120,
+			"y"	: 54,
+			"width" : 1,
+			"height" : 10,
+			"offset_y": 0
+		},
+		{
+			"name" : "ampersand",
+			"x" : 168,
+			"y"	: 55,
+			"width" : 8,
+			"height" : 9,
+			"offset_y": 0
+		},
+		{
+			"name" : "quote",
+			"x" : 104,
+			"y"	: 54,
+			"width" : 2,
+			"height" : 2,
+			"offset_y": 6
+		},
+		{
+			"name" : "parent_l",
+			"x" : 88,
+			"y"	: 56,
+			"width" : 3,
+			"height" : 8,
+			"offset_y": 0
+		},
+		{
+			"name" : "parent_r",
+			"x" : 72,
+			"y"	: 56,
+			"width" : 3,
+			"height" : 8,
+			"offset_y": 0
+		},
+		{
+			"name" : "comma",
+			"x" : 23,
+			"y"	: 63,
+			"width" : 2,
+			"height" : 2,
+			"offset_y": -1
+		},
+		{
+			"name" : "dash",
+			"x" : 152,
+			"y"	: 60,
+			"width" : 5,
+			"height" : 1,
+			"offset_y": 3
+		},
+		{
+			"name" : "period",
+			"x" : 8,
+			"y"	: 63,
+			"width" : 1,
+			"height" : 1,
+			"offset_y": 0
+		},
+		{
+			"name" : "colon",
+			"x" : 40,
+			"y"	: 59,
+			"width" : 1,
+			"height" : 4,
+			"offset_y": 1
+		},
+		{
+			"name" : "question",
+			"x" : 136,
+			"y"	: 54,
+			"width" : 5,
+			"height" : 10,
+			"offset_y": 0
+		},
+		{
+			"name" : "а",
+			"x" : 8,
+			"y"	: 218,
+			"width" : 4,
+			"height" : 6,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "б",
+			"x" : 24,
+			"y"	: 216,
+			"width" : 4,
+			"height" : 8,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "в",
+			"x" : 40,
+			"y"	: 216,
+			"width" : 4,
+			"height" : 8,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "г",
+			"x" : 56,
+			"y"	: 218,
+			"width" : 4,
+			"height" : 6,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "д",
+			"x" : 71,
+			"y"	: 218,
+			"width" : 4,
+			"height" : 7,
+			"offset_x": -1,
+			"offset_y": -1
+		},
+		{
+			"name" : "е",
+			"x" : 88,
+			"y"	: 218,
+			"width" : 4,
+			"height" : 6,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "ё",
+			"x" : 104,
+			"y"	: 216,
+			"width" : 4,
+			"height" : 8,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "ж",
+			"x" : 120,
+			"y"	: 218,
+			"width" : 5,
+			"height" : 6,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "з",
+			"x" : 135,
+			"y"	: 218,
+			"width" : 4,
+			"height" : 8,
+			"offset_x": -1,
+			"offset_y": -2
+		},
+		{
+			"name" : "и",
+			"x" : 152,
+			"y"	: 218,
+			"width" : 5,
+			"height" : 6,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "й",
+			"x" : 168,
+			"y"	: 216,
+			"width" : 5,
+			"height" : 8,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "к",
+			"x" : 184,
+			"y"	: 218,
+			"width" : 5,
+			"height" : 6,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "л",
+			"x" : 197,
+			"y"	: 218,
+			"width" : 4,
+			"height" : 8,
+			"offset_x": -3,
+			"offset_y": -2
+		},
+		{
+			"name" : "м",
+			"x" : 216,
+			"y"	: 218,
+			"width" : 6,
+			"height" : 6,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "н",
+			"x" : 232,
+			"y"	: 218,
+			"width" : 4,
+			"height" : 6,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "о",
+			"x" : 248,
+			"y"	: 218,
+			"width" : 5,
+			"height" : 6,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "п",
+			"x" : 8,
+			"y"	: 234,
+			"width" : 4,
+			"height" : 6,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "р",
+			"x" : 23,
+			"y"	: 234,
+			"width" : 4,
+			"height" : 10,
+			"offset_x": -1,
+			"offset_y": -4
+		},
+		{
+			"name" : "с",
+			"x" : 40,
+			"y"	: 234,
+			"width" : 4,
+			"height" : 6,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "т",
+			"x" : 56,
+			"y"	: 234,
+			"width" : 6,
+			"height" : 6,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "у",
+			"x" : 71,
+			"y"	: 234,
+			"width" : 4,
+			"height" : 8,
+			"offset_x": -1,
+			"offset_y": -2
+		},
+		{
+			"name" : "ф",
+			"x" : 88,
+			"y"	: 231,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": -1
+		},
+		{
+			"name" : "х",
+			"x" : 104,
+			"y"	: 234,
+			"width" : 4,
+			"height" : 6,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "ц",
+			"x" : 120,
+			"y"	: 234,
+			"width" : 5,
+			"height" : 8,
+			"offset_x": 0,
+			"offset_y": -2
+		},
+		{
+			"name" : "ч",
+			"x" : 136,
+			"y"	: 234,
+			"width" : 5,
+			"height" : 6,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "ш",
+			"x" : 152,
+			"y"	: 234,
+			"width" : 5,
+			"height" : 6,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "щ",
+			"x" : 168,
+			"y"	: 234,
+			"width" : 6,
+			"height" : 8,
+			"offset_x": 0,
+			"offset_y": -2
+		},
+		{
+			"name" : "ъ",
+			"x" : 183,
+			"y"	: 234,
+			"width" : 5,
+			"height" : 6,
+			"offset_x": -1,
+			"offset_y": 0
+		},
+		{
+			"name" : "ы",
+			"x" : 200,
+			"y"	: 234,
+			"width" : 7,
+			"height" : 6,
+			"offset_x": -1,
+			"offset_y": 0
+		},
+		{
+			"name" : "ь",
+			"x" : 216,
+			"y"	: 234,
+			"width" : 4,
+			"height" : 6,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "э",
+			"x" : 8,
+			"y"	: 250,
+			"width" : 4,
+			"height" : 6,
+			"offset_y": 0
+		},
+		{
+			"name" : "ю",
+			"x" : 24,
+			"y"	: 250,
+			"width" : 6,
+			"height" : 6,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "я",
+			"x" : 39,
+			"y"	: 250,
+			"width" : 4,
+			"height" : 8,
+			"offset_x": -1,
+			"offset_y": -2
+		},
+		{
+			"name" : "А",
+			"x" : 8,
+			"y"	: 167,
+			"width" : 6,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Б",
+			"x" : 24,
+			"y"	: 167,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": -1,
+			"offset_y": 0
+		},
+		{
+			"name" : "В",
+			"x" : 40,
+			"y"	: 167,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": -1,
+			"offset_y": 0
+		},
+		{
+			"name" : "Г",
+			"x" : 56,
+			"y"	: 167,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Д",
+			"x" : 71,
+			"y"	: 167,
+			"width" : 6,
+			"height" : 10,
+			"offset_x": 0,
+			"offset_y": -1
+		},
+		{
+			"name" : "Е",
+			"x" : 88,
+			"y"	: 167,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Ж",
+			"x" : 120,
+			"y"	: 167,
+			"width" : 7,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "З",
+			"x" : 135,
+			"y"	: 167,
+			"width" : 6,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "И",
+			"x" : 152,
+			"y"	: 167,
+			"width" : 6,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "К",
+			"x" : 184,
+			"y"	: 167,
+			"width" : 6,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Л",
+			"x" : 197,
+			"y"	: 167,
+			"width" : 6,
+			"height" : 11,
+			"offset_x": -2,
+			"offset_y": -2
+		},
+		{
+			"name" : "М",
+			"x" : 216,
+			"y"	: 166,
+			"width" : 8,
+			"height" : 10,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Н",
+			"x" : 232,
+			"y"	: 167,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "О",
+			"x" : 248,
+			"y"	: 167,
+			"width" : 6,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "П",
+			"x" : 8,
+			"y"	: 183,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Р",
+			"x" : 24,
+			"y"	: 183,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "С",
+			"x" : 40,
+			"y"	: 183,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Т",
+			"x" : 56,
+			"y"	: 183,
+			"width" : 7,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "У",
+			"x" : 71,
+			"y"	: 183,
+			"width" : 7,
+			"height" : 11,
+			"offset_x": -1,
+			"offset_y": -2
+		},
+		{
+			"name" : "Ф",
+			"x" : 88,
+			"y"	: 182,
+			"width" : 7,
+			"height" : 11,
+			"offset_x": 0,
+			"offset_y": -1
+		},
+		{
+			"name" : "Х",
+			"x" : 104,
+			"y"	: 183,
+			"width" : 6,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Ц",
+			"x" : 120,
+			"y"	: 183,
+			"width" : 7,
+			"height" : 11,
+			"offset_x": 0,
+			"offset_y": -2
+		},
+		{
+			"name" : "Ч",
+			"x" : 136,
+			"y"	: 183,
+			"width" : 7,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Ш",
+			"x" : 152,
+			"y"	: 183,
+			"width" : 8,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Щ",
+			"x" : 168,
+			"y"	: 183,
+			"width" : 7,
+			"height" : 11,
+			"offset_x": 0,
+			"offset_y": -2
+		},
+		{
+			"name" : "Ъ",
+			"x" : 183,
+			"y"	: 183,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": -1,
+			"offset_y": 0
+		},
+		{
+			"name" : "Ы",
+			"x" : 200,
+			"y"	: 183,
+			"width" : 8,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Ь",
+			"x" : 216,
+			"y"	: 183,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Э",
+			"x" : 8,
+			"y"	: 199,
+			"width" : 5,
+			"height" : 9,
+			"offset_y": 0
+		},
+		{
+			"name" : "Ю",
+			"x" : 24,
+			"y"	: 199,
+			"width" : 8,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Я",
+			"x" : 39,
+			"y"	: 199,
+			"width" : 5,
+			"height" : 11,
+			"offset_x": -2,
+			"offset_y": -2
+		}
+	]
+}

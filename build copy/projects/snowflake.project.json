@@ -1,0 +1,9 @@
+{
+    "name": "snowflake",
+    "asmPath": "../debug/sprite\\snowflake_data.asm",
+    "debugPath": "snowflake.debug.json",
+    "romPath": "../bin/SNOWFLAK.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}

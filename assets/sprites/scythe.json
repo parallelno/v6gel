@@ -1,0 +1,63 @@
+{
+	"palette_path" : "../palettes/pal_lv1.json",
+	"asset_type" : "sprite",	
+	"path_png" : "art/sprites_projectiles.png",
+	"preshifted_sprites" : 4,
+	"mask" : true,
+	"anims" : {
+		"run"	: {
+			"frames" : ["run0", "run1", "run2", "run3"],
+			"loop" : true
+		}
+	},
+	"sprites" : [
+		{
+			"name" : "run0",
+			"x" : 0,
+			"y"	: 40,
+			"width" : 16,
+			"height" : 5,
+			"offset_y" : 4,
+			"mask_x" : 16,
+			"mask_y" : 40,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "run1",
+			"x" : 0,
+			"y"	: 52,
+			"width" : 16,
+			"height" : 12,
+			"offset_y" : 0,
+			"mask_x" : 16,
+			"mask_y" : 52,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "run2",
+			"x" : 0,
+			"y"	: 70,
+			"width" : 16,
+			"height" : 6,
+			"offset_y" : 4,
+			"mask_x" : 16,
+			"mask_y" : 70,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "run3",
+			"x" : 0,
+			"y"	: 84,
+			"width" : 16,
+			"height" : 12,
+			"offset_y" : 0,
+			"mask_x" : 16,
+			"mask_y" : 84,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		}		
+	]
+}

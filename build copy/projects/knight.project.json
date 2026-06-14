@@ -1,0 +1,9 @@
+{
+    "name": "knight",
+    "asmPath": "../debug/sprite\\knight_data.asm",
+    "debugPath": "knight.debug.json",
+    "romPath": "../bin/KNIGHT.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}

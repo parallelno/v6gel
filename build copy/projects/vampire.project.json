@@ -1,0 +1,9 @@
+{
+    "name": "vampire",
+    "asmPath": "../debug/sprite\\vampire_data.asm",
+    "debugPath": "vampire.debug.json",
+    "romPath": "../bin/VAMPIRE.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}

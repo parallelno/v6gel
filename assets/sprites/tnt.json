@@ -1,0 +1,39 @@
+{
+	"palette_path" : "../palettes/pal_lv1.json",
+	"asset_type" : "sprite",	
+	"path_png" : "art/sprites_projectiles.png",
+	"preshifted_sprites" : 4,
+	"mask" : true,
+	"anims" : {
+		"run"	: {
+			"frames" : ["idle0", "idle1"],
+			"loop" : true
+		}
+	},
+	"sprites" : [
+		{
+			"name" : "idle0",
+			"x" : 0,
+			"y"	: 117,
+			"width" : 8,
+			"height" : 11,
+			"offset_y" : 4,
+			"mask_x" : 8,
+			"mask_y" : 117, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "idle1",  
+			"x" : 16,
+			"y"	: 115,
+			"width" : 8,
+			"height" : 13,
+			"offset_y" : 4,
+			"mask_x" : 24,
+			"mask_y" : 115,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		}
+	]
+}

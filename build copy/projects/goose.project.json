@@ -1,0 +1,9 @@
+{
+    "name": "goose",
+    "asmPath": "../debug/sprite\\goose_data.asm",
+    "debugPath": "goose.debug.json",
+    "romPath": "../bin/GOOSE.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}

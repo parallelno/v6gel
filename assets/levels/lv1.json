@@ -1,0 +1,14 @@
+{
+	"path_png" : "tiled/art/lv1.png",
+	"palette_path" : "../palettes/pal_lv1.json",
+	"asset_type" : "level",
+	"hero_start_pos" : {
+		"x" : 100,
+		"y" : 110
+	},
+	"rooms" : [
+		{"path" : "tiled/lv1_room00.tmj"},
+		{"path" : "tiled/lv1_room01.tmj"},
+		{"path" : "tiled/lv1_room02.tmj"}
+	]
+}

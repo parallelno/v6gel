@@ -1,0 +1,621 @@
+{
+    "labels": {
+        "_tnt_sprites": {
+            "addr": "0x0000",
+            "src": "../debug/sprite/tnt_data.asm",
+            "line": 1
+        },
+        "_tnt_idle0_0_relative": {
+            "addr": "0x0002",
+            "src": "../debug/sprite/tnt_data.asm",
+            "line": 3
+        },
+        "_tnt_idle0_1_relative": {
+            "addr": "0x0034",
+            "src": "../debug/sprite/tnt_data.asm",
+            "line": 11
+        },
+        "_tnt_idle0_2_relative": {
+            "addr": "0x0092",
+            "src": "../debug/sprite/tnt_data.asm",
+            "line": 22
+        },
+        "_tnt_idle0_3_relative": {
+            "addr": "0x00F0",
+            "src": "../debug/sprite/tnt_data.asm",
+            "line": 33
+        },
+        "_tnt_idle1_0_relative": {
+            "addr": "0x014E",
+            "src": "../debug/sprite/tnt_data.asm",
+            "line": 44
+        },
+        "_tnt_idle1_1_relative": {
+            "addr": "0x0188",
+            "src": "../debug/sprite/tnt_data.asm",
+            "line": 53
+        },
+        "_tnt_idle1_2_relative": {
+            "addr": "0x01F6",
+            "src": "../debug/sprite/tnt_data.asm",
+            "line": 65
+        },
+        "_tnt_idle1_3_relative": {
+            "addr": "0x0264",
+            "src": "../debug/sprite/tnt_data.asm",
+            "line": 77
+        }
+    },
+    "consts": {},
+    "macros": {},
+    "projectFile": "tnt.project.json",
+    "lineAddresses": {
+        "../debug/sprite/tnt_data.asm": {
+            "2": [
+                "0x0000"
+            ],
+            "4": [
+                "0x0002"
+            ],
+            "5": [
+                "0x0004"
+            ],
+            "6": [
+                "0x0006"
+            ],
+            "7": [
+                "0x0016"
+            ],
+            "8": [
+                "0x0026"
+            ],
+            "10": [
+                "0x0032"
+            ],
+            "12": [
+                "0x0034"
+            ],
+            "13": [
+                "0x0036"
+            ],
+            "14": [
+                "0x0038"
+            ],
+            "15": [
+                "0x0048"
+            ],
+            "16": [
+                "0x0058"
+            ],
+            "17": [
+                "0x0068"
+            ],
+            "18": [
+                "0x0078"
+            ],
+            "19": [
+                "0x0088"
+            ],
+            "21": [
+                "0x0090"
+            ],
+            "23": [
+                "0x0092"
+            ],
+            "24": [
+                "0x0094"
+            ],
+            "25": [
+                "0x0096"
+            ],
+            "26": [
+                "0x00A6"
+            ],
+            "27": [
+                "0x00B6"
+            ],
+            "28": [
+                "0x00C6"
+            ],
+            "29": [
+                "0x00D6"
+            ],
+            "30": [
+                "0x00E6"
+            ],
+            "32": [
+                "0x00EE"
+            ],
+            "34": [
+                "0x00F0"
+            ],
+            "35": [
+                "0x00F2"
+            ],
+            "36": [
+                "0x00F4"
+            ],
+            "37": [
+                "0x0104"
+            ],
+            "38": [
+                "0x0114"
+            ],
+            "39": [
+                "0x0124"
+            ],
+            "40": [
+                "0x0134"
+            ],
+            "41": [
+                "0x0144"
+            ],
+            "43": [
+                "0x014C"
+            ],
+            "45": [
+                "0x014E"
+            ],
+            "46": [
+                "0x0150"
+            ],
+            "47": [
+                "0x0152"
+            ],
+            "48": [
+                "0x0162"
+            ],
+            "49": [
+                "0x0172"
+            ],
+            "50": [
+                "0x0182"
+            ],
+            "52": [
+                "0x0186"
+            ],
+            "54": [
+                "0x0188"
+            ],
+            "55": [
+                "0x018A"
+            ],
+            "56": [
+                "0x018C"
+            ],
+            "57": [
+                "0x019C"
+            ],
+            "58": [
+                "0x01AC"
+            ],
+            "59": [
+                "0x01BC"
+            ],
+            "60": [
+                "0x01CC"
+            ],
+            "61": [
+                "0x01DC"
+            ],
+            "62": [
+                "0x01EC"
+            ],
+            "64": [
+                "0x01F4"
+            ],
+            "66": [
+                "0x01F6"
+            ],
+            "67": [
+                "0x01F8"
+            ],
+            "68": [
+                "0x01FA"
+            ],
+            "69": [
+                "0x020A"
+            ],
+            "70": [
+                "0x021A"
+            ],
+            "71": [
+                "0x022A"
+            ],
+            "72": [
+                "0x023A"
+            ],
+            "73": [
+                "0x024A"
+            ],
+            "74": [
+                "0x025A"
+            ],
+            "76": [
+                "0x0262"
+            ],
+            "78": [
+                "0x0264"
+            ],
+            "79": [
+                "0x0266"
+            ],
+            "80": [
+                "0x0268"
+            ],
+            "81": [
+                "0x0278"
+            ],
+            "82": [
+                "0x0288"
+            ],
+            "83": [
+                "0x0298"
+            ],
+            "84": [
+                "0x02A8"
+            ],
+            "85": [
+                "0x02B8"
+            ],
+            "86": [
+                "0x02C8"
+            ]
+        }
+    },
+    "dataLines": {
+        "../debug/sprite/tnt_data.asm": {
+            "2": {
+                "addr": "0x0000",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "4": {
+                "addr": "0x0002",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "5": {
+                "addr": "0x0004",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "6": {
+                "addr": "0x0006",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "7": {
+                "addr": "0x0016",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "8": {
+                "addr": "0x0026",
+                "byteLength": 12,
+                "unitBytes": 1
+            },
+            "10": {
+                "addr": "0x0032",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "12": {
+                "addr": "0x0034",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "13": {
+                "addr": "0x0036",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "14": {
+                "addr": "0x0038",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "15": {
+                "addr": "0x0048",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "16": {
+                "addr": "0x0058",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "17": {
+                "addr": "0x0068",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "18": {
+                "addr": "0x0078",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "19": {
+                "addr": "0x0088",
+                "byteLength": 8,
+                "unitBytes": 1
+            },
+            "21": {
+                "addr": "0x0090",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "23": {
+                "addr": "0x0092",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "24": {
+                "addr": "0x0094",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "25": {
+                "addr": "0x0096",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "26": {
+                "addr": "0x00A6",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "27": {
+                "addr": "0x00B6",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "28": {
+                "addr": "0x00C6",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "29": {
+                "addr": "0x00D6",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "30": {
+                "addr": "0x00E6",
+                "byteLength": 8,
+                "unitBytes": 1
+            },
+            "32": {
+                "addr": "0x00EE",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "34": {
+                "addr": "0x00F0",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "35": {
+                "addr": "0x00F2",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "36": {
+                "addr": "0x00F4",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "37": {
+                "addr": "0x0104",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "38": {
+                "addr": "0x0114",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "39": {
+                "addr": "0x0124",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "40": {
+                "addr": "0x0134",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "41": {
+                "addr": "0x0144",
+                "byteLength": 8,
+                "unitBytes": 1
+            },
+            "43": {
+                "addr": "0x014C",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "45": {
+                "addr": "0x014E",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "46": {
+                "addr": "0x0150",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "47": {
+                "addr": "0x0152",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "48": {
+                "addr": "0x0162",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "49": {
+                "addr": "0x0172",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "50": {
+                "addr": "0x0182",
+                "byteLength": 4,
+                "unitBytes": 1
+            },
+            "52": {
+                "addr": "0x0186",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "54": {
+                "addr": "0x0188",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "55": {
+                "addr": "0x018A",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "56": {
+                "addr": "0x018C",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "57": {
+                "addr": "0x019C",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "58": {
+                "addr": "0x01AC",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "59": {
+                "addr": "0x01BC",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "60": {
+                "addr": "0x01CC",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "61": {
+                "addr": "0x01DC",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "62": {
+                "addr": "0x01EC",
+                "byteLength": 8,
+                "unitBytes": 1
+            },
+            "64": {
+                "addr": "0x01F4",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "66": {
+                "addr": "0x01F6",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "67": {
+                "addr": "0x01F8",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "68": {
+                "addr": "0x01FA",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "69": {
+                "addr": "0x020A",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "70": {
+                "addr": "0x021A",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "71": {
+                "addr": "0x022A",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "72": {
+                "addr": "0x023A",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "73": {
+                "addr": "0x024A",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "74": {
+                "addr": "0x025A",
+                "byteLength": 8,
+                "unitBytes": 1
+            },
+            "76": {
+                "addr": "0x0262",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "78": {
+                "addr": "0x0264",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "79": {
+                "addr": "0x0266",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "80": {
+                "addr": "0x0268",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "81": {
+                "addr": "0x0278",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "82": {
+                "addr": "0x0288",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "83": {
+                "addr": "0x0298",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "84": {
+                "addr": "0x02A8",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "85": {
+                "addr": "0x02B8",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "86": {
+                "addr": "0x02C8",
+                "byteLength": 8,
+                "unitBytes": 1
+            }
+        }
+    },
+    "breakpoints": {}
+}

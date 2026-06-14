@@ -1,0 +1,9 @@
+{
+    "name": "hero",
+    "asmPath": "../debug/sprite\\hero_data.asm",
+    "debugPath": "hero.debug.json",
+    "romPath": "../bin/HERO.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}

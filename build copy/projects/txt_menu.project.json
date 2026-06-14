@@ -1,0 +1,9 @@
+{
+    "name": "txt_menu",
+    "asmPath": "../debug/text_eng\\txt_menu_data.asm",
+    "debugPath": "txt_menu.debug.json",
+    "romPath": "../bin/TXT_MENU.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}

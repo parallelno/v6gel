@@ -1,0 +1,196 @@
+{
+	"palette_path" : "../palettes/pal_lv1.json",
+	"asset_type" : "sprite",	
+	"path_png" : "art/sprites_hero.png",
+	"preshifted_sprites" : 8,
+	"mask" : true,
+	"anims" : {
+		"idle_l"	: {
+			"frames" : ["idle0_l", "idle0_l", "idle0_l", "run2_l"],
+			"loop" : true
+		},
+		"run_l"	: {
+			"frames" : ["run0_l", "run1_l", "run2_l", "run3_l"],
+			"loop" : true
+		},
+		"attk_l"	: {
+			"frames" : ["attk0_l", "attk1_l"],
+			"loop" : false
+		},		
+		"idle_r"	: {
+			"frames" : ["idle0_r", "idle0_r", "idle0_r", "run2_r"],
+			"loop" : true
+		},
+		"run_r"	: {
+			"frames" : ["run0_r", "run1_r", "run2_r", "run3_r"],
+			"loop" : true
+		},
+		"attk_r"	: {
+			"frames" : ["attk0_r", "attk1_r"],
+			"loop" : false
+		}
+	},
+	"sprites" : [
+		{
+			"name" : "idle0_l",
+			"x" : 0,
+			"y"	: 48,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 16,
+			"mask_y" : 48,
+			"mask_alpha" : 0,
+			"mask_color" : 1,
+			"mirrored" : false
+		},
+		{
+			"name" : "run0_l",
+			"x" : 0,
+			"y"	: 128,
+			"width" : 16,
+			"height" : 16,
+			"mask_x" : 16,
+			"mask_y" : 128,
+			"mask_alpha" : 0,
+			"mask_color" : 1,
+			"mirrored" : false
+		},
+		{
+			"name" : "run1_l",
+			"x" : 0, 
+			"y"	: 144,
+			"width" : 16,
+			"height" : 16,
+			"mask_x" : 16,
+			"mask_y" : 144,
+			"mask_alpha" : 0,
+			"mask_color" : 1,
+			"mirrored" : false
+		},
+		{
+			"name" : "run2_l",
+			"x" : 0,
+			"y"	: 161,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 16,
+			"mask_y" : 161,
+			"mask_alpha" : 0,
+			"mask_color" : 1,
+			"mirrored" : false
+		},
+		{
+			"name" : "run3_l",
+			"x" : 0,
+			"y"	: 177,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 16,
+			"mask_y" : 177,
+			"mask_alpha" : 0,
+			"mask_color" : 1,
+			"mirrored" : false
+		},
+		{
+			"name" : "attk0_l",
+			"x" : 0,
+			"y"	: 224,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 16,
+			"mask_y" : 224,
+			"mask_alpha" : 0,
+			"mask_color" : 1,
+			"mirrored" : false
+		},
+		{
+			"name" : "attk1_l",
+			"x" : 0,
+			"y"	: 240,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 16,
+			"mask_y" : 240,
+			"mask_alpha" : 0,
+			"mask_color" : 1,
+			"mirrored" : false
+		},
+		{
+			"name" : "idle0_r",
+			"x" : 0,
+			"y"	: 32,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 16,
+			"mask_y" : 32,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "run0_r",
+			"x" : 0,
+			"y"	: 64,
+			"width" : 16,
+			"height" : 16,
+			"mask_x" : 16,
+			"mask_y" : 64,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "run1_r",
+			"x" : 0, 
+			"y"	: 80,
+			"width" : 16,
+			"height" : 16,
+			"mask_x" : 16,
+			"mask_y" : 80,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "run2_r",
+			"x" : 0,
+			"y"	: 97,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 16,
+			"mask_y" : 97,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "run3_r",
+			"x" : 0,
+			"y"	: 113,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 16,
+			"mask_y" : 113,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "attk0_r",
+			"x" : 0,
+			"y"	: 192,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 16,
+			"mask_y" : 192,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "attk1_r",
+			"x" : 0,
+			"y"	: 208,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 16,
+			"mask_y" : 208,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		}		
+	]
+}

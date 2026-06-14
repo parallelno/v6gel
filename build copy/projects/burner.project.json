@@ -1,0 +1,9 @@
+{
+    "name": "burner",
+    "asmPath": "../debug/sprite\\burner_data.asm",
+    "debugPath": "burner.debug.json",
+    "romPath": "../bin/BURNER.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}

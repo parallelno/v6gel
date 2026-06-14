@@ -1,0 +1,684 @@
+{
+    "labels": {
+        "_main_menu_settings": {
+            "addr": "0x0002",
+            "src": "../debug/text_eng/txt_menu_data.asm",
+            "line": 15
+        },
+        "_main_menu_license": {
+            "addr": "0x002A",
+            "src": "../debug/text_eng/txt_menu_data.asm",
+            "line": 25
+        },
+        "_scores_screen_score_title": {
+            "addr": "0x0057",
+            "src": "../debug/text_eng/txt_menu_data.asm",
+            "line": 35
+        },
+        "_scores_screen_buff": {
+            "addr": "0x0069",
+            "src": "../debug/text_eng/txt_menu_data.asm",
+            "line": 42
+        },
+        "_options_screen_setting_on": {
+            "addr": "0x0091",
+            "src": "../debug/text_eng/txt_menu_data.asm",
+            "line": 52
+        },
+        "_options_screen_setting_off": {
+            "addr": "0x009A",
+            "src": "../debug/text_eng/txt_menu_data.asm",
+            "line": 59
+        },
+        "_options_screen_settings": {
+            "addr": "0x00A4",
+            "src": "../debug/text_eng/txt_menu_data.asm",
+            "line": 66
+        },
+        "_options_screen_settings_names": {
+            "addr": "0x00B3",
+            "src": "../debug/text_eng/txt_menu_data.asm",
+            "line": 73
+        },
+        "_options_screen_return": {
+            "addr": "0x01A7",
+            "src": "../debug/text_eng/txt_menu_data.asm",
+            "line": 90
+        },
+        "_options_screen_dots": {
+            "addr": "0x01C5",
+            "src": "../debug/text_eng/txt_menu_data.asm",
+            "line": 97
+        },
+        "_options_screen_change_settings": {
+            "addr": "0x01F4",
+            "src": "../debug/text_eng/txt_menu_data.asm",
+            "line": 104
+        },
+        "_options_screen_control_preset_key": {
+            "addr": "0x020A",
+            "src": "../debug/text_eng/txt_menu_data.asm",
+            "line": 111
+        },
+        "_options_screen_control_preset_joy": {
+            "addr": "0x0215",
+            "src": "../debug/text_eng/txt_menu_data.asm",
+            "line": 118
+        },
+        "_options_screen_controls_keyboard": {
+            "addr": "0x0221",
+            "src": "../debug/text_eng/txt_menu_data.asm",
+            "line": 125
+        },
+        "_options_screen_controls_joystic": {
+            "addr": "0x0255",
+            "src": "../debug/text_eng/txt_menu_data.asm",
+            "line": 138
+        },
+        "_credits_screen_credits": {
+            "addr": "0x028C",
+            "src": "../debug/text_eng/txt_menu_data.asm",
+            "line": 154
+        }
+    },
+    "consts": {
+        "_LINE_BREAK_": {
+            "value": 106,
+            "hex": "0x006A",
+            "line": 1,
+            "src": "../debug/text_eng/txt_menu_data.asm"
+        },
+        "_PARAG_BREAK_": {
+            "value": 255,
+            "hex": "0x00FF",
+            "line": 2,
+            "src": "../debug/text_eng/txt_menu_data.asm"
+        },
+        "_EOD_": {
+            "value": 0,
+            "hex": "0x0000",
+            "line": 3,
+            "src": "../debug/text_eng/txt_menu_data.asm"
+        }
+    },
+    "macros": {
+        "TEXT": {
+            "src": "../debug/text_eng/txt_menu_data.asm",
+            "line": 4,
+            "params": [
+                "string",
+                "end_code"
+            ]
+        }
+    },
+    "projectFile": "txt_menu.project.json",
+    "lineAddresses": {
+        "../debug/text_eng/txt_menu_data.asm": {
+            "1": [
+                "0x0000"
+            ],
+            "2": [
+                "0x0000"
+            ],
+            "3": [
+                "0x0000"
+            ],
+            "5": [
+                "0x0006",
+                "0x0011",
+                "0x0019",
+                "0x0020",
+                "0x002E",
+                "0x005B",
+                "0x006D",
+                "0x0095",
+                "0x009E",
+                "0x00A8",
+                "0x00B7",
+                "0x00BD",
+                "0x00C1",
+                "0x00D4",
+                "0x00F7",
+                "0x0114",
+                "0x0133",
+                "0x0150",
+                "0x0171",
+                "0x018C",
+                "0x01AB",
+                "0x01C9",
+                "0x01F8",
+                "0x020E",
+                "0x0219",
+                "0x0225",
+                "0x022A",
+                "0x0231",
+                "0x0238",
+                "0x0240",
+                "0x0248",
+                "0x024D",
+                "0x0259",
+                "0x025E",
+                "0x0265",
+                "0x026C",
+                "0x0274",
+                "0x027C",
+                "0x0284",
+                "0x0290",
+                "0x02BA",
+                "0x02E3",
+                "0x0306",
+                "0x031E",
+                "0x0347",
+                "0x0369",
+                "0x038F",
+                "0x03AF",
+                "0x03D3",
+                "0x03F6",
+                "0x041B",
+                "0x0447"
+            ],
+            "6": [
+                "0x0006",
+                "0x0011",
+                "0x0019",
+                "0x0020",
+                "0x002E",
+                "0x005B",
+                "0x006D",
+                "0x0095",
+                "0x009E",
+                "0x00A8",
+                "0x00B7",
+                "0x00BD",
+                "0x00C1",
+                "0x00D4",
+                "0x00F7",
+                "0x0114",
+                "0x0133",
+                "0x0150",
+                "0x0171",
+                "0x018C",
+                "0x01AB",
+                "0x01C9",
+                "0x01F8",
+                "0x020E",
+                "0x0219",
+                "0x0225",
+                "0x022A",
+                "0x0231",
+                "0x0238",
+                "0x0240",
+                "0x0248",
+                "0x024D",
+                "0x0259",
+                "0x025E",
+                "0x0265",
+                "0x026C",
+                "0x0274",
+                "0x027C",
+                "0x0284",
+                "0x0290",
+                "0x02BA",
+                "0x02E3",
+                "0x0306",
+                "0x031E",
+                "0x0347",
+                "0x0369",
+                "0x038F",
+                "0x03AF",
+                "0x03D3",
+                "0x03F6",
+                "0x041B",
+                "0x0447"
+            ],
+            "7": [
+                "0x0010",
+                "0x0018",
+                "0x001F",
+                "0x0027",
+                "0x0054",
+                "0x0066",
+                "0x008E",
+                "0x0097",
+                "0x00A1",
+                "0x00B0",
+                "0x00BC",
+                "0x00C0",
+                "0x00D3",
+                "0x00F6",
+                "0x0113",
+                "0x0132",
+                "0x014F",
+                "0x0170",
+                "0x018B",
+                "0x01A4",
+                "0x01C2",
+                "0x01F1",
+                "0x0207",
+                "0x0212",
+                "0x021E",
+                "0x0229",
+                "0x0230",
+                "0x0237",
+                "0x023F",
+                "0x0247",
+                "0x024C",
+                "0x0252",
+                "0x025D",
+                "0x0264",
+                "0x026B",
+                "0x0273",
+                "0x027B",
+                "0x0283",
+                "0x0289",
+                "0x02B9",
+                "0x02E2",
+                "0x0305",
+                "0x031D",
+                "0x0346",
+                "0x0368",
+                "0x038E",
+                "0x03AE",
+                "0x03D2",
+                "0x03F5",
+                "0x041A",
+                "0x0446",
+                "0x0471"
+            ],
+            "14": [
+                "0x0000"
+            ],
+            "16": [
+                "0x0002"
+            ],
+            "17": [
+                "0x0004"
+            ],
+            "24": [
+                "0x0028"
+            ],
+            "26": [
+                "0x002A"
+            ],
+            "27": [
+                "0x002C"
+            ],
+            "34": [
+                "0x0055"
+            ],
+            "36": [
+                "0x0057"
+            ],
+            "37": [
+                "0x0059"
+            ],
+            "41": [
+                "0x0067"
+            ],
+            "43": [
+                "0x0069"
+            ],
+            "44": [
+                "0x006B"
+            ],
+            "51": [
+                "0x008F"
+            ],
+            "53": [
+                "0x0091"
+            ],
+            "54": [
+                "0x0093"
+            ],
+            "58": [
+                "0x0098"
+            ],
+            "60": [
+                "0x009A"
+            ],
+            "61": [
+                "0x009C"
+            ],
+            "65": [
+                "0x00A2"
+            ],
+            "67": [
+                "0x00A4"
+            ],
+            "68": [
+                "0x00A6"
+            ],
+            "72": [
+                "0x00B1"
+            ],
+            "74": [
+                "0x00B3"
+            ],
+            "75": [
+                "0x00B5"
+            ],
+            "89": [
+                "0x01A5"
+            ],
+            "91": [
+                "0x01A7"
+            ],
+            "92": [
+                "0x01A9"
+            ],
+            "96": [
+                "0x01C3"
+            ],
+            "98": [
+                "0x01C5"
+            ],
+            "99": [
+                "0x01C7"
+            ],
+            "103": [
+                "0x01F2"
+            ],
+            "105": [
+                "0x01F4"
+            ],
+            "106": [
+                "0x01F6"
+            ],
+            "110": [
+                "0x0208"
+            ],
+            "112": [
+                "0x020A"
+            ],
+            "113": [
+                "0x020C"
+            ],
+            "117": [
+                "0x0213"
+            ],
+            "119": [
+                "0x0215"
+            ],
+            "120": [
+                "0x0217"
+            ],
+            "124": [
+                "0x021F"
+            ],
+            "126": [
+                "0x0221"
+            ],
+            "127": [
+                "0x0223"
+            ],
+            "137": [
+                "0x0253"
+            ],
+            "139": [
+                "0x0255"
+            ],
+            "140": [
+                "0x0257"
+            ],
+            "153": [
+                "0x028A"
+            ],
+            "155": [
+                "0x028C"
+            ],
+            "156": [
+                "0x028E"
+            ]
+        }
+    },
+    "dataLines": {
+        "../debug/text_eng/txt_menu_data.asm": {
+            "7": {
+                "addr": "0x0471",
+                "byteLength": 1,
+                "unitBytes": 1
+            },
+            "14": {
+                "addr": "0x0000",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "16": {
+                "addr": "0x0002",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "17": {
+                "addr": "0x0004",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "24": {
+                "addr": "0x0028",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "26": {
+                "addr": "0x002A",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "27": {
+                "addr": "0x002C",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "34": {
+                "addr": "0x0055",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "36": {
+                "addr": "0x0057",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "37": {
+                "addr": "0x0059",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "41": {
+                "addr": "0x0067",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "43": {
+                "addr": "0x0069",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "44": {
+                "addr": "0x006B",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "51": {
+                "addr": "0x008F",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "53": {
+                "addr": "0x0091",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "54": {
+                "addr": "0x0093",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "58": {
+                "addr": "0x0098",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "60": {
+                "addr": "0x009A",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "61": {
+                "addr": "0x009C",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "65": {
+                "addr": "0x00A2",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "67": {
+                "addr": "0x00A4",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "68": {
+                "addr": "0x00A6",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "72": {
+                "addr": "0x00B1",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "74": {
+                "addr": "0x00B3",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "75": {
+                "addr": "0x00B5",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "89": {
+                "addr": "0x01A5",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "91": {
+                "addr": "0x01A7",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "92": {
+                "addr": "0x01A9",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "96": {
+                "addr": "0x01C3",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "98": {
+                "addr": "0x01C5",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "99": {
+                "addr": "0x01C7",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "103": {
+                "addr": "0x01F2",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "105": {
+                "addr": "0x01F4",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "106": {
+                "addr": "0x01F6",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "110": {
+                "addr": "0x0208",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "112": {
+                "addr": "0x020A",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "113": {
+                "addr": "0x020C",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "117": {
+                "addr": "0x0213",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "119": {
+                "addr": "0x0215",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "120": {
+                "addr": "0x0217",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "124": {
+                "addr": "0x021F",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "126": {
+                "addr": "0x0221",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "127": {
+                "addr": "0x0223",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "137": {
+                "addr": "0x0253",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "139": {
+                "addr": "0x0255",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "140": {
+                "addr": "0x0257",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "153": {
+                "addr": "0x028A",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "155": {
+                "addr": "0x028C",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "156": {
+                "addr": "0x028E",
+                "byteLength": 2,
+                "unitBytes": 1
+            }
+        }
+    },
+    "breakpoints": {}
+}

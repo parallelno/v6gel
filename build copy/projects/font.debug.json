@@ -1,0 +1,2944 @@
+{
+    "labels": {
+        "_font_gfx": {
+            "addr": "0x0000",
+            "src": "../debug/font/font_data.asm",
+            "line": 1
+        },
+        "_font_0": {
+            "addr": "0x0002",
+            "src": "../debug/font/font_data.asm",
+            "line": 3
+        },
+        "_font_1": {
+            "addr": "0x001A",
+            "src": "../debug/font/font_data.asm",
+            "line": 9
+        },
+        "_font_2": {
+            "addr": "0x0032",
+            "src": "../debug/font/font_data.asm",
+            "line": 15
+        },
+        "_font_3": {
+            "addr": "0x004A",
+            "src": "../debug/font/font_data.asm",
+            "line": 21
+        },
+        "_font_4": {
+            "addr": "0x0062",
+            "src": "../debug/font/font_data.asm",
+            "line": 27
+        },
+        "_font_5": {
+            "addr": "0x007A",
+            "src": "../debug/font/font_data.asm",
+            "line": 33
+        },
+        "_font_6": {
+            "addr": "0x0092",
+            "src": "../debug/font/font_data.asm",
+            "line": 39
+        },
+        "_font_7": {
+            "addr": "0x00AA",
+            "src": "../debug/font/font_data.asm",
+            "line": 45
+        },
+        "_font_8": {
+            "addr": "0x00C2",
+            "src": "../debug/font/font_data.asm",
+            "line": 51
+        },
+        "_font_9": {
+            "addr": "0x00DA",
+            "src": "../debug/font/font_data.asm",
+            "line": 57
+        },
+        "_font_space": {
+            "addr": "0x00F2",
+            "src": "../debug/font/font_data.asm",
+            "line": 63
+        },
+        "_font_exclamation": {
+            "addr": "0x00FA",
+            "src": "../debug/font/font_data.asm",
+            "line": 69
+        },
+        "_font_d_quote": {
+            "addr": "0x0114",
+            "src": "../debug/font/font_data.asm",
+            "line": 75
+        },
+        "_font_ampersand": {
+            "addr": "0x011C",
+            "src": "../debug/font/font_data.asm",
+            "line": 81
+        },
+        "_font_hash": {
+            "addr": "0x0134",
+            "src": "../debug/font/font_data.asm",
+            "line": 87
+        },
+        "_font_dollar": {
+            "addr": "0x013C",
+            "src": "../debug/font/font_data.asm",
+            "line": 93
+        },
+        "_font_percent": {
+            "addr": "0x0144",
+            "src": "../debug/font/font_data.asm",
+            "line": 99
+        },
+        "_font_ampercent": {
+            "addr": "0x014C",
+            "src": "../debug/font/font_data.asm",
+            "line": 105
+        },
+        "_font_quote": {
+            "addr": "0x0154",
+            "src": "../debug/font/font_data.asm",
+            "line": 111
+        },
+        "_font_parent_l": {
+            "addr": "0x015E",
+            "src": "../debug/font/font_data.asm",
+            "line": 117
+        },
+        "_font_parent_r": {
+            "addr": "0x0174",
+            "src": "../debug/font/font_data.asm",
+            "line": 123
+        },
+        "_font_comma": {
+            "addr": "0x018A",
+            "src": "../debug/font/font_data.asm",
+            "line": 129
+        },
+        "_font_dash": {
+            "addr": "0x0194",
+            "src": "../debug/font/font_data.asm",
+            "line": 135
+        },
+        "_font_period": {
+            "addr": "0x019C",
+            "src": "../debug/font/font_data.asm",
+            "line": 141
+        },
+        "_font_colon": {
+            "addr": "0x01A4",
+            "src": "../debug/font/font_data.asm",
+            "line": 147
+        },
+        "_font_equal": {
+            "addr": "0x01B2",
+            "src": "../debug/font/font_data.asm",
+            "line": 153
+        },
+        "_font_question": {
+            "addr": "0x01BA",
+            "src": "../debug/font/font_data.asm",
+            "line": 159
+        },
+        "_font_A": {
+            "addr": "0x01D4",
+            "src": "../debug/font/font_data.asm",
+            "line": 165
+        },
+        "_font_B": {
+            "addr": "0x01EC",
+            "src": "../debug/font/font_data.asm",
+            "line": 171
+        },
+        "_font_C": {
+            "addr": "0x0204",
+            "src": "../debug/font/font_data.asm",
+            "line": 177
+        },
+        "_font_D": {
+            "addr": "0x021C",
+            "src": "../debug/font/font_data.asm",
+            "line": 183
+        },
+        "_font_E": {
+            "addr": "0x0234",
+            "src": "../debug/font/font_data.asm",
+            "line": 189
+        },
+        "_font_F": {
+            "addr": "0x024C",
+            "src": "../debug/font/font_data.asm",
+            "line": 195
+        },
+        "_font_G": {
+            "addr": "0x0264",
+            "src": "../debug/font/font_data.asm",
+            "line": 201
+        },
+        "_font_H": {
+            "addr": "0x0280",
+            "src": "../debug/font/font_data.asm",
+            "line": 207
+        },
+        "_font_I": {
+            "addr": "0x0298",
+            "src": "../debug/font/font_data.asm",
+            "line": 213
+        },
+        "_font_J": {
+            "addr": "0x02B0",
+            "src": "../debug/font/font_data.asm",
+            "line": 219
+        },
+        "_font_K": {
+            "addr": "0x02C8",
+            "src": "../debug/font/font_data.asm",
+            "line": 225
+        },
+        "_font_L": {
+            "addr": "0x02E0",
+            "src": "../debug/font/font_data.asm",
+            "line": 231
+        },
+        "_font_M": {
+            "addr": "0x02F8",
+            "src": "../debug/font/font_data.asm",
+            "line": 237
+        },
+        "_font_N": {
+            "addr": "0x0312",
+            "src": "../debug/font/font_data.asm",
+            "line": 243
+        },
+        "_font_O": {
+            "addr": "0x032A",
+            "src": "../debug/font/font_data.asm",
+            "line": 249
+        },
+        "_font_P": {
+            "addr": "0x0342",
+            "src": "../debug/font/font_data.asm",
+            "line": 255
+        },
+        "_font_Q": {
+            "addr": "0x035A",
+            "src": "../debug/font/font_data.asm",
+            "line": 261
+        },
+        "_font_R": {
+            "addr": "0x0374",
+            "src": "../debug/font/font_data.asm",
+            "line": 267
+        },
+        "_font_S": {
+            "addr": "0x0390",
+            "src": "../debug/font/font_data.asm",
+            "line": 273
+        },
+        "_font_T": {
+            "addr": "0x03A8",
+            "src": "../debug/font/font_data.asm",
+            "line": 279
+        },
+        "_font_U": {
+            "addr": "0x03C0",
+            "src": "../debug/font/font_data.asm",
+            "line": 285
+        },
+        "_font_V": {
+            "addr": "0x03D8",
+            "src": "../debug/font/font_data.asm",
+            "line": 291
+        },
+        "_font_W": {
+            "addr": "0x03F0",
+            "src": "../debug/font/font_data.asm",
+            "line": 297
+        },
+        "_font_X": {
+            "addr": "0x0408",
+            "src": "../debug/font/font_data.asm",
+            "line": 303
+        },
+        "_font_Y": {
+            "addr": "0x0420",
+            "src": "../debug/font/font_data.asm",
+            "line": 309
+        },
+        "_font_Z": {
+            "addr": "0x0438",
+            "src": "../debug/font/font_data.asm",
+            "line": 315
+        },
+        "_font_a": {
+            "addr": "0x0450",
+            "src": "../debug/font/font_data.asm",
+            "line": 321
+        },
+        "_font_b": {
+            "addr": "0x0462",
+            "src": "../debug/font/font_data.asm",
+            "line": 327
+        },
+        "_font_c": {
+            "addr": "0x0478",
+            "src": "../debug/font/font_data.asm",
+            "line": 333
+        },
+        "_font_d": {
+            "addr": "0x048A",
+            "src": "../debug/font/font_data.asm",
+            "line": 339
+        },
+        "_font_e": {
+            "addr": "0x04A0",
+            "src": "../debug/font/font_data.asm",
+            "line": 345
+        },
+        "_font_f": {
+            "addr": "0x04B2",
+            "src": "../debug/font/font_data.asm",
+            "line": 351
+        },
+        "_font_g": {
+            "addr": "0x04CA",
+            "src": "../debug/font/font_data.asm",
+            "line": 357
+        },
+        "_font_h": {
+            "addr": "0x04E0",
+            "src": "../debug/font/font_data.asm",
+            "line": 363
+        },
+        "_font_i": {
+            "addr": "0x04F2",
+            "src": "../debug/font/font_data.asm",
+            "line": 369
+        },
+        "_font_j": {
+            "addr": "0x0508",
+            "src": "../debug/font/font_data.asm",
+            "line": 375
+        },
+        "_font_k": {
+            "addr": "0x0524",
+            "src": "../debug/font/font_data.asm",
+            "line": 381
+        },
+        "_font_l": {
+            "addr": "0x0536",
+            "src": "../debug/font/font_data.asm",
+            "line": 387
+        },
+        "_font_m": {
+            "addr": "0x0548",
+            "src": "../debug/font/font_data.asm",
+            "line": 393
+        },
+        "_font_n": {
+            "addr": "0x055A",
+            "src": "../debug/font/font_data.asm",
+            "line": 399
+        },
+        "_font_o": {
+            "addr": "0x056C",
+            "src": "../debug/font/font_data.asm",
+            "line": 405
+        },
+        "_font_p": {
+            "addr": "0x057E",
+            "src": "../debug/font/font_data.asm",
+            "line": 411
+        },
+        "_font_q": {
+            "addr": "0x0598",
+            "src": "../debug/font/font_data.asm",
+            "line": 417
+        },
+        "_font_r": {
+            "addr": "0x05AC",
+            "src": "../debug/font/font_data.asm",
+            "line": 423
+        },
+        "_font_s": {
+            "addr": "0x05C2",
+            "src": "../debug/font/font_data.asm",
+            "line": 429
+        },
+        "_font_t": {
+            "addr": "0x05D4",
+            "src": "../debug/font/font_data.asm",
+            "line": 435
+        },
+        "_font_u": {
+            "addr": "0x05EE",
+            "src": "../debug/font/font_data.asm",
+            "line": 441
+        },
+        "_font_v": {
+            "addr": "0x0600",
+            "src": "../debug/font/font_data.asm",
+            "line": 447
+        },
+        "_font_w": {
+            "addr": "0x0612",
+            "src": "../debug/font/font_data.asm",
+            "line": 453
+        },
+        "_font_x": {
+            "addr": "0x0624",
+            "src": "../debug/font/font_data.asm",
+            "line": 459
+        },
+        "_font_y": {
+            "addr": "0x0636",
+            "src": "../debug/font/font_data.asm",
+            "line": 465
+        },
+        "_font_z": {
+            "addr": "0x0648",
+            "src": "../debug/font/font_data.asm",
+            "line": 471
+        }
+    },
+    "consts": {},
+    "macros": {},
+    "projectFile": "font.project.json",
+    "lineAddresses": {
+        "../debug/font/font_data.asm": {
+            "2": [
+                "0x0000"
+            ],
+            "4": [
+                "0x0002"
+            ],
+            "5": [
+                "0x0004"
+            ],
+            "6": [
+                "0x0016"
+            ],
+            "8": [
+                "0x0018"
+            ],
+            "10": [
+                "0x001A"
+            ],
+            "11": [
+                "0x001C"
+            ],
+            "12": [
+                "0x002E"
+            ],
+            "14": [
+                "0x0030"
+            ],
+            "16": [
+                "0x0032"
+            ],
+            "17": [
+                "0x0034"
+            ],
+            "18": [
+                "0x0046"
+            ],
+            "20": [
+                "0x0048"
+            ],
+            "22": [
+                "0x004A"
+            ],
+            "23": [
+                "0x004C"
+            ],
+            "24": [
+                "0x005E"
+            ],
+            "26": [
+                "0x0060"
+            ],
+            "28": [
+                "0x0062"
+            ],
+            "29": [
+                "0x0064"
+            ],
+            "30": [
+                "0x0076"
+            ],
+            "32": [
+                "0x0078"
+            ],
+            "34": [
+                "0x007A"
+            ],
+            "35": [
+                "0x007C"
+            ],
+            "36": [
+                "0x008E"
+            ],
+            "38": [
+                "0x0090"
+            ],
+            "40": [
+                "0x0092"
+            ],
+            "41": [
+                "0x0094"
+            ],
+            "42": [
+                "0x00A6"
+            ],
+            "44": [
+                "0x00A8"
+            ],
+            "46": [
+                "0x00AA"
+            ],
+            "47": [
+                "0x00AC"
+            ],
+            "48": [
+                "0x00BE"
+            ],
+            "50": [
+                "0x00C0"
+            ],
+            "52": [
+                "0x00C2"
+            ],
+            "53": [
+                "0x00C4"
+            ],
+            "54": [
+                "0x00D6"
+            ],
+            "56": [
+                "0x00D8"
+            ],
+            "58": [
+                "0x00DA"
+            ],
+            "59": [
+                "0x00DC"
+            ],
+            "60": [
+                "0x00EE"
+            ],
+            "62": [
+                "0x00F0"
+            ],
+            "64": [
+                "0x00F2"
+            ],
+            "65": [
+                "0x00F4"
+            ],
+            "66": [
+                "0x00F6"
+            ],
+            "68": [
+                "0x00F8"
+            ],
+            "70": [
+                "0x00FA"
+            ],
+            "71": [
+                "0x00FC"
+            ],
+            "72": [
+                "0x0110"
+            ],
+            "74": [
+                "0x0112"
+            ],
+            "76": [
+                "0x0114"
+            ],
+            "77": [
+                "0x0116"
+            ],
+            "78": [
+                "0x0118"
+            ],
+            "80": [
+                "0x011A"
+            ],
+            "82": [
+                "0x011C"
+            ],
+            "83": [
+                "0x011E"
+            ],
+            "84": [
+                "0x0130"
+            ],
+            "86": [
+                "0x0132"
+            ],
+            "88": [
+                "0x0134"
+            ],
+            "89": [
+                "0x0136"
+            ],
+            "90": [
+                "0x0138"
+            ],
+            "92": [
+                "0x013A"
+            ],
+            "94": [
+                "0x013C"
+            ],
+            "95": [
+                "0x013E"
+            ],
+            "96": [
+                "0x0140"
+            ],
+            "98": [
+                "0x0142"
+            ],
+            "100": [
+                "0x0144"
+            ],
+            "101": [
+                "0x0146"
+            ],
+            "102": [
+                "0x0148"
+            ],
+            "104": [
+                "0x014A"
+            ],
+            "106": [
+                "0x014C"
+            ],
+            "107": [
+                "0x014E"
+            ],
+            "108": [
+                "0x0150"
+            ],
+            "110": [
+                "0x0152"
+            ],
+            "112": [
+                "0x0154"
+            ],
+            "113": [
+                "0x0156"
+            ],
+            "114": [
+                "0x015A"
+            ],
+            "116": [
+                "0x015C"
+            ],
+            "118": [
+                "0x015E"
+            ],
+            "119": [
+                "0x0160"
+            ],
+            "120": [
+                "0x0170"
+            ],
+            "122": [
+                "0x0172"
+            ],
+            "124": [
+                "0x0174"
+            ],
+            "125": [
+                "0x0176"
+            ],
+            "126": [
+                "0x0186"
+            ],
+            "128": [
+                "0x0188"
+            ],
+            "130": [
+                "0x018A"
+            ],
+            "131": [
+                "0x018C"
+            ],
+            "132": [
+                "0x0190"
+            ],
+            "134": [
+                "0x0192"
+            ],
+            "136": [
+                "0x0194"
+            ],
+            "137": [
+                "0x0196"
+            ],
+            "138": [
+                "0x0198"
+            ],
+            "140": [
+                "0x019A"
+            ],
+            "142": [
+                "0x019C"
+            ],
+            "143": [
+                "0x019E"
+            ],
+            "144": [
+                "0x01A0"
+            ],
+            "146": [
+                "0x01A2"
+            ],
+            "148": [
+                "0x01A4"
+            ],
+            "149": [
+                "0x01A6"
+            ],
+            "150": [
+                "0x01AE"
+            ],
+            "152": [
+                "0x01B0"
+            ],
+            "154": [
+                "0x01B2"
+            ],
+            "155": [
+                "0x01B4"
+            ],
+            "156": [
+                "0x01B6"
+            ],
+            "158": [
+                "0x01B8"
+            ],
+            "160": [
+                "0x01BA"
+            ],
+            "161": [
+                "0x01BC"
+            ],
+            "162": [
+                "0x01D0"
+            ],
+            "164": [
+                "0x01D2"
+            ],
+            "166": [
+                "0x01D4"
+            ],
+            "167": [
+                "0x01D6"
+            ],
+            "168": [
+                "0x01E8"
+            ],
+            "170": [
+                "0x01EA"
+            ],
+            "172": [
+                "0x01EC"
+            ],
+            "173": [
+                "0x01EE"
+            ],
+            "174": [
+                "0x0200"
+            ],
+            "176": [
+                "0x0202"
+            ],
+            "178": [
+                "0x0204"
+            ],
+            "179": [
+                "0x0206"
+            ],
+            "180": [
+                "0x0218"
+            ],
+            "182": [
+                "0x021A"
+            ],
+            "184": [
+                "0x021C"
+            ],
+            "185": [
+                "0x021E"
+            ],
+            "186": [
+                "0x0230"
+            ],
+            "188": [
+                "0x0232"
+            ],
+            "190": [
+                "0x0234"
+            ],
+            "191": [
+                "0x0236"
+            ],
+            "192": [
+                "0x0248"
+            ],
+            "194": [
+                "0x024A"
+            ],
+            "196": [
+                "0x024C"
+            ],
+            "197": [
+                "0x024E"
+            ],
+            "198": [
+                "0x0260"
+            ],
+            "200": [
+                "0x0262"
+            ],
+            "202": [
+                "0x0264"
+            ],
+            "203": [
+                "0x0266"
+            ],
+            "204": [
+                "0x027C"
+            ],
+            "206": [
+                "0x027E"
+            ],
+            "208": [
+                "0x0280"
+            ],
+            "209": [
+                "0x0282"
+            ],
+            "210": [
+                "0x0294"
+            ],
+            "212": [
+                "0x0296"
+            ],
+            "214": [
+                "0x0298"
+            ],
+            "215": [
+                "0x029A"
+            ],
+            "216": [
+                "0x02AC"
+            ],
+            "218": [
+                "0x02AE"
+            ],
+            "220": [
+                "0x02B0"
+            ],
+            "221": [
+                "0x02B2"
+            ],
+            "222": [
+                "0x02C4"
+            ],
+            "224": [
+                "0x02C6"
+            ],
+            "226": [
+                "0x02C8"
+            ],
+            "227": [
+                "0x02CA"
+            ],
+            "228": [
+                "0x02DC"
+            ],
+            "230": [
+                "0x02DE"
+            ],
+            "232": [
+                "0x02E0"
+            ],
+            "233": [
+                "0x02E2"
+            ],
+            "234": [
+                "0x02F4"
+            ],
+            "236": [
+                "0x02F6"
+            ],
+            "238": [
+                "0x02F8"
+            ],
+            "239": [
+                "0x02FA"
+            ],
+            "240": [
+                "0x030E"
+            ],
+            "242": [
+                "0x0310"
+            ],
+            "244": [
+                "0x0312"
+            ],
+            "245": [
+                "0x0314"
+            ],
+            "246": [
+                "0x0326"
+            ],
+            "248": [
+                "0x0328"
+            ],
+            "250": [
+                "0x032A"
+            ],
+            "251": [
+                "0x032C"
+            ],
+            "252": [
+                "0x033E"
+            ],
+            "254": [
+                "0x0340"
+            ],
+            "256": [
+                "0x0342"
+            ],
+            "257": [
+                "0x0344"
+            ],
+            "258": [
+                "0x0356"
+            ],
+            "260": [
+                "0x0358"
+            ],
+            "262": [
+                "0x035A"
+            ],
+            "263": [
+                "0x035C"
+            ],
+            "264": [
+                "0x0370"
+            ],
+            "266": [
+                "0x0372"
+            ],
+            "268": [
+                "0x0374"
+            ],
+            "269": [
+                "0x0376"
+            ],
+            "270": [
+                "0x038C"
+            ],
+            "272": [
+                "0x038E"
+            ],
+            "274": [
+                "0x0390"
+            ],
+            "275": [
+                "0x0392"
+            ],
+            "276": [
+                "0x03A4"
+            ],
+            "278": [
+                "0x03A6"
+            ],
+            "280": [
+                "0x03A8"
+            ],
+            "281": [
+                "0x03AA"
+            ],
+            "282": [
+                "0x03BC"
+            ],
+            "284": [
+                "0x03BE"
+            ],
+            "286": [
+                "0x03C0"
+            ],
+            "287": [
+                "0x03C2"
+            ],
+            "288": [
+                "0x03D4"
+            ],
+            "290": [
+                "0x03D6"
+            ],
+            "292": [
+                "0x03D8"
+            ],
+            "293": [
+                "0x03DA"
+            ],
+            "294": [
+                "0x03EC"
+            ],
+            "296": [
+                "0x03EE"
+            ],
+            "298": [
+                "0x03F0"
+            ],
+            "299": [
+                "0x03F2"
+            ],
+            "300": [
+                "0x0404"
+            ],
+            "302": [
+                "0x0406"
+            ],
+            "304": [
+                "0x0408"
+            ],
+            "305": [
+                "0x040A"
+            ],
+            "306": [
+                "0x041C"
+            ],
+            "308": [
+                "0x041E"
+            ],
+            "310": [
+                "0x0420"
+            ],
+            "311": [
+                "0x0422"
+            ],
+            "312": [
+                "0x0434"
+            ],
+            "314": [
+                "0x0436"
+            ],
+            "316": [
+                "0x0438"
+            ],
+            "317": [
+                "0x043A"
+            ],
+            "318": [
+                "0x044C"
+            ],
+            "320": [
+                "0x044E"
+            ],
+            "322": [
+                "0x0450"
+            ],
+            "323": [
+                "0x0452"
+            ],
+            "324": [
+                "0x045E"
+            ],
+            "326": [
+                "0x0460"
+            ],
+            "328": [
+                "0x0462"
+            ],
+            "329": [
+                "0x0464"
+            ],
+            "330": [
+                "0x0474"
+            ],
+            "332": [
+                "0x0476"
+            ],
+            "334": [
+                "0x0478"
+            ],
+            "335": [
+                "0x047A"
+            ],
+            "336": [
+                "0x0486"
+            ],
+            "338": [
+                "0x0488"
+            ],
+            "340": [
+                "0x048A"
+            ],
+            "341": [
+                "0x048C"
+            ],
+            "342": [
+                "0x049C"
+            ],
+            "344": [
+                "0x049E"
+            ],
+            "346": [
+                "0x04A0"
+            ],
+            "347": [
+                "0x04A2"
+            ],
+            "348": [
+                "0x04AE"
+            ],
+            "350": [
+                "0x04B0"
+            ],
+            "352": [
+                "0x04B2"
+            ],
+            "353": [
+                "0x04B4"
+            ],
+            "354": [
+                "0x04C6"
+            ],
+            "356": [
+                "0x04C8"
+            ],
+            "358": [
+                "0x04CA"
+            ],
+            "359": [
+                "0x04CC"
+            ],
+            "360": [
+                "0x04DC"
+            ],
+            "362": [
+                "0x04DE"
+            ],
+            "364": [
+                "0x04E0"
+            ],
+            "365": [
+                "0x04E2"
+            ],
+            "366": [
+                "0x04EE"
+            ],
+            "368": [
+                "0x04F0"
+            ],
+            "370": [
+                "0x04F2"
+            ],
+            "371": [
+                "0x04F4"
+            ],
+            "372": [
+                "0x0504"
+            ],
+            "374": [
+                "0x0506"
+            ],
+            "376": [
+                "0x0508"
+            ],
+            "377": [
+                "0x050A"
+            ],
+            "378": [
+                "0x0520"
+            ],
+            "380": [
+                "0x0522"
+            ],
+            "382": [
+                "0x0524"
+            ],
+            "383": [
+                "0x0526"
+            ],
+            "384": [
+                "0x0532"
+            ],
+            "386": [
+                "0x0534"
+            ],
+            "388": [
+                "0x0536"
+            ],
+            "389": [
+                "0x0538"
+            ],
+            "390": [
+                "0x0544"
+            ],
+            "392": [
+                "0x0546"
+            ],
+            "394": [
+                "0x0548"
+            ],
+            "395": [
+                "0x054A"
+            ],
+            "396": [
+                "0x0556"
+            ],
+            "398": [
+                "0x0558"
+            ],
+            "400": [
+                "0x055A"
+            ],
+            "401": [
+                "0x055C"
+            ],
+            "402": [
+                "0x0568"
+            ],
+            "404": [
+                "0x056A"
+            ],
+            "406": [
+                "0x056C"
+            ],
+            "407": [
+                "0x056E"
+            ],
+            "408": [
+                "0x057A"
+            ],
+            "410": [
+                "0x057C"
+            ],
+            "412": [
+                "0x057E"
+            ],
+            "413": [
+                "0x0580"
+            ],
+            "414": [
+                "0x0594"
+            ],
+            "416": [
+                "0x0596"
+            ],
+            "418": [
+                "0x0598"
+            ],
+            "419": [
+                "0x059A"
+            ],
+            "420": [
+                "0x05A8"
+            ],
+            "422": [
+                "0x05AA"
+            ],
+            "424": [
+                "0x05AC"
+            ],
+            "425": [
+                "0x05AE"
+            ],
+            "426": [
+                "0x05BE"
+            ],
+            "428": [
+                "0x05C0"
+            ],
+            "430": [
+                "0x05C2"
+            ],
+            "431": [
+                "0x05C4"
+            ],
+            "432": [
+                "0x05D0"
+            ],
+            "434": [
+                "0x05D2"
+            ],
+            "436": [
+                "0x05D4"
+            ],
+            "437": [
+                "0x05D6"
+            ],
+            "438": [
+                "0x05EA"
+            ],
+            "440": [
+                "0x05EC"
+            ],
+            "442": [
+                "0x05EE"
+            ],
+            "443": [
+                "0x05F0"
+            ],
+            "444": [
+                "0x05FC"
+            ],
+            "446": [
+                "0x05FE"
+            ],
+            "448": [
+                "0x0600"
+            ],
+            "449": [
+                "0x0602"
+            ],
+            "450": [
+                "0x060E"
+            ],
+            "452": [
+                "0x0610"
+            ],
+            "454": [
+                "0x0612"
+            ],
+            "455": [
+                "0x0614"
+            ],
+            "456": [
+                "0x0620"
+            ],
+            "458": [
+                "0x0622"
+            ],
+            "460": [
+                "0x0624"
+            ],
+            "461": [
+                "0x0626"
+            ],
+            "462": [
+                "0x0632"
+            ],
+            "464": [
+                "0x0634"
+            ],
+            "466": [
+                "0x0636"
+            ],
+            "467": [
+                "0x0638"
+            ],
+            "468": [
+                "0x0644"
+            ],
+            "470": [
+                "0x0646"
+            ],
+            "472": [
+                "0x0648"
+            ],
+            "473": [
+                "0x064A"
+            ],
+            "474": [
+                "0x0656"
+            ]
+        }
+    },
+    "dataLines": {
+        "../debug/font/font_data.asm": {
+            "2": {
+                "addr": "0x0000",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "4": {
+                "addr": "0x0002",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "5": {
+                "addr": "0x0004",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "6": {
+                "addr": "0x0016",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "8": {
+                "addr": "0x0018",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "10": {
+                "addr": "0x001A",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "11": {
+                "addr": "0x001C",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "12": {
+                "addr": "0x002E",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "14": {
+                "addr": "0x0030",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "16": {
+                "addr": "0x0032",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "17": {
+                "addr": "0x0034",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "18": {
+                "addr": "0x0046",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "20": {
+                "addr": "0x0048",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "22": {
+                "addr": "0x004A",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "23": {
+                "addr": "0x004C",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "24": {
+                "addr": "0x005E",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "26": {
+                "addr": "0x0060",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "28": {
+                "addr": "0x0062",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "29": {
+                "addr": "0x0064",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "30": {
+                "addr": "0x0076",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "32": {
+                "addr": "0x0078",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "34": {
+                "addr": "0x007A",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "35": {
+                "addr": "0x007C",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "36": {
+                "addr": "0x008E",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "38": {
+                "addr": "0x0090",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "40": {
+                "addr": "0x0092",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "41": {
+                "addr": "0x0094",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "42": {
+                "addr": "0x00A6",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "44": {
+                "addr": "0x00A8",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "46": {
+                "addr": "0x00AA",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "47": {
+                "addr": "0x00AC",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "48": {
+                "addr": "0x00BE",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "50": {
+                "addr": "0x00C0",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "52": {
+                "addr": "0x00C2",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "53": {
+                "addr": "0x00C4",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "54": {
+                "addr": "0x00D6",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "56": {
+                "addr": "0x00D8",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "58": {
+                "addr": "0x00DA",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "59": {
+                "addr": "0x00DC",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "60": {
+                "addr": "0x00EE",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "62": {
+                "addr": "0x00F0",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "64": {
+                "addr": "0x00F2",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "65": {
+                "addr": "0x00F4",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "66": {
+                "addr": "0x00F6",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "68": {
+                "addr": "0x00F8",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "70": {
+                "addr": "0x00FA",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "71": {
+                "addr": "0x00FC",
+                "byteLength": 20,
+                "unitBytes": 2
+            },
+            "72": {
+                "addr": "0x0110",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "74": {
+                "addr": "0x0112",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "76": {
+                "addr": "0x0114",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "77": {
+                "addr": "0x0116",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "78": {
+                "addr": "0x0118",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "80": {
+                "addr": "0x011A",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "82": {
+                "addr": "0x011C",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "83": {
+                "addr": "0x011E",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "84": {
+                "addr": "0x0130",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "86": {
+                "addr": "0x0132",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "88": {
+                "addr": "0x0134",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "89": {
+                "addr": "0x0136",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "90": {
+                "addr": "0x0138",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "92": {
+                "addr": "0x013A",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "94": {
+                "addr": "0x013C",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "95": {
+                "addr": "0x013E",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "96": {
+                "addr": "0x0140",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "98": {
+                "addr": "0x0142",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "100": {
+                "addr": "0x0144",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "101": {
+                "addr": "0x0146",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "102": {
+                "addr": "0x0148",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "104": {
+                "addr": "0x014A",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "106": {
+                "addr": "0x014C",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "107": {
+                "addr": "0x014E",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "108": {
+                "addr": "0x0150",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "110": {
+                "addr": "0x0152",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "112": {
+                "addr": "0x0154",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "113": {
+                "addr": "0x0156",
+                "byteLength": 4,
+                "unitBytes": 2
+            },
+            "114": {
+                "addr": "0x015A",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "116": {
+                "addr": "0x015C",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "118": {
+                "addr": "0x015E",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "119": {
+                "addr": "0x0160",
+                "byteLength": 16,
+                "unitBytes": 2
+            },
+            "120": {
+                "addr": "0x0170",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "122": {
+                "addr": "0x0172",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "124": {
+                "addr": "0x0174",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "125": {
+                "addr": "0x0176",
+                "byteLength": 16,
+                "unitBytes": 2
+            },
+            "126": {
+                "addr": "0x0186",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "128": {
+                "addr": "0x0188",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "130": {
+                "addr": "0x018A",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "131": {
+                "addr": "0x018C",
+                "byteLength": 4,
+                "unitBytes": 2
+            },
+            "132": {
+                "addr": "0x0190",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "134": {
+                "addr": "0x0192",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "136": {
+                "addr": "0x0194",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "137": {
+                "addr": "0x0196",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "138": {
+                "addr": "0x0198",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "140": {
+                "addr": "0x019A",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "142": {
+                "addr": "0x019C",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "143": {
+                "addr": "0x019E",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "144": {
+                "addr": "0x01A0",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "146": {
+                "addr": "0x01A2",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "148": {
+                "addr": "0x01A4",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "149": {
+                "addr": "0x01A6",
+                "byteLength": 8,
+                "unitBytes": 2
+            },
+            "150": {
+                "addr": "0x01AE",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "152": {
+                "addr": "0x01B0",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "154": {
+                "addr": "0x01B2",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "155": {
+                "addr": "0x01B4",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "156": {
+                "addr": "0x01B6",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "158": {
+                "addr": "0x01B8",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "160": {
+                "addr": "0x01BA",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "161": {
+                "addr": "0x01BC",
+                "byteLength": 20,
+                "unitBytes": 2
+            },
+            "162": {
+                "addr": "0x01D0",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "164": {
+                "addr": "0x01D2",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "166": {
+                "addr": "0x01D4",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "167": {
+                "addr": "0x01D6",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "168": {
+                "addr": "0x01E8",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "170": {
+                "addr": "0x01EA",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "172": {
+                "addr": "0x01EC",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "173": {
+                "addr": "0x01EE",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "174": {
+                "addr": "0x0200",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "176": {
+                "addr": "0x0202",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "178": {
+                "addr": "0x0204",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "179": {
+                "addr": "0x0206",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "180": {
+                "addr": "0x0218",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "182": {
+                "addr": "0x021A",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "184": {
+                "addr": "0x021C",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "185": {
+                "addr": "0x021E",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "186": {
+                "addr": "0x0230",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "188": {
+                "addr": "0x0232",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "190": {
+                "addr": "0x0234",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "191": {
+                "addr": "0x0236",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "192": {
+                "addr": "0x0248",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "194": {
+                "addr": "0x024A",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "196": {
+                "addr": "0x024C",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "197": {
+                "addr": "0x024E",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "198": {
+                "addr": "0x0260",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "200": {
+                "addr": "0x0262",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "202": {
+                "addr": "0x0264",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "203": {
+                "addr": "0x0266",
+                "byteLength": 22,
+                "unitBytes": 2
+            },
+            "204": {
+                "addr": "0x027C",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "206": {
+                "addr": "0x027E",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "208": {
+                "addr": "0x0280",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "209": {
+                "addr": "0x0282",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "210": {
+                "addr": "0x0294",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "212": {
+                "addr": "0x0296",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "214": {
+                "addr": "0x0298",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "215": {
+                "addr": "0x029A",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "216": {
+                "addr": "0x02AC",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "218": {
+                "addr": "0x02AE",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "220": {
+                "addr": "0x02B0",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "221": {
+                "addr": "0x02B2",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "222": {
+                "addr": "0x02C4",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "224": {
+                "addr": "0x02C6",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "226": {
+                "addr": "0x02C8",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "227": {
+                "addr": "0x02CA",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "228": {
+                "addr": "0x02DC",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "230": {
+                "addr": "0x02DE",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "232": {
+                "addr": "0x02E0",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "233": {
+                "addr": "0x02E2",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "234": {
+                "addr": "0x02F4",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "236": {
+                "addr": "0x02F6",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "238": {
+                "addr": "0x02F8",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "239": {
+                "addr": "0x02FA",
+                "byteLength": 20,
+                "unitBytes": 2
+            },
+            "240": {
+                "addr": "0x030E",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "242": {
+                "addr": "0x0310",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "244": {
+                "addr": "0x0312",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "245": {
+                "addr": "0x0314",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "246": {
+                "addr": "0x0326",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "248": {
+                "addr": "0x0328",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "250": {
+                "addr": "0x032A",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "251": {
+                "addr": "0x032C",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "252": {
+                "addr": "0x033E",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "254": {
+                "addr": "0x0340",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "256": {
+                "addr": "0x0342",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "257": {
+                "addr": "0x0344",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "258": {
+                "addr": "0x0356",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "260": {
+                "addr": "0x0358",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "262": {
+                "addr": "0x035A",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "263": {
+                "addr": "0x035C",
+                "byteLength": 20,
+                "unitBytes": 2
+            },
+            "264": {
+                "addr": "0x0370",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "266": {
+                "addr": "0x0372",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "268": {
+                "addr": "0x0374",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "269": {
+                "addr": "0x0376",
+                "byteLength": 22,
+                "unitBytes": 2
+            },
+            "270": {
+                "addr": "0x038C",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "272": {
+                "addr": "0x038E",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "274": {
+                "addr": "0x0390",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "275": {
+                "addr": "0x0392",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "276": {
+                "addr": "0x03A4",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "278": {
+                "addr": "0x03A6",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "280": {
+                "addr": "0x03A8",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "281": {
+                "addr": "0x03AA",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "282": {
+                "addr": "0x03BC",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "284": {
+                "addr": "0x03BE",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "286": {
+                "addr": "0x03C0",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "287": {
+                "addr": "0x03C2",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "288": {
+                "addr": "0x03D4",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "290": {
+                "addr": "0x03D6",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "292": {
+                "addr": "0x03D8",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "293": {
+                "addr": "0x03DA",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "294": {
+                "addr": "0x03EC",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "296": {
+                "addr": "0x03EE",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "298": {
+                "addr": "0x03F0",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "299": {
+                "addr": "0x03F2",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "300": {
+                "addr": "0x0404",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "302": {
+                "addr": "0x0406",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "304": {
+                "addr": "0x0408",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "305": {
+                "addr": "0x040A",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "306": {
+                "addr": "0x041C",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "308": {
+                "addr": "0x041E",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "310": {
+                "addr": "0x0420",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "311": {
+                "addr": "0x0422",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "312": {
+                "addr": "0x0434",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "314": {
+                "addr": "0x0436",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "316": {
+                "addr": "0x0438",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "317": {
+                "addr": "0x043A",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "318": {
+                "addr": "0x044C",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "320": {
+                "addr": "0x044E",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "322": {
+                "addr": "0x0450",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "323": {
+                "addr": "0x0452",
+                "byteLength": 12,
+                "unitBytes": 2
+            },
+            "324": {
+                "addr": "0x045E",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "326": {
+                "addr": "0x0460",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "328": {
+                "addr": "0x0462",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "329": {
+                "addr": "0x0464",
+                "byteLength": 16,
+                "unitBytes": 2
+            },
+            "330": {
+                "addr": "0x0474",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "332": {
+                "addr": "0x0476",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "334": {
+                "addr": "0x0478",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "335": {
+                "addr": "0x047A",
+                "byteLength": 12,
+                "unitBytes": 2
+            },
+            "336": {
+                "addr": "0x0486",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "338": {
+                "addr": "0x0488",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "340": {
+                "addr": "0x048A",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "341": {
+                "addr": "0x048C",
+                "byteLength": 16,
+                "unitBytes": 2
+            },
+            "342": {
+                "addr": "0x049C",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "344": {
+                "addr": "0x049E",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "346": {
+                "addr": "0x04A0",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "347": {
+                "addr": "0x04A2",
+                "byteLength": 12,
+                "unitBytes": 2
+            },
+            "348": {
+                "addr": "0x04AE",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "350": {
+                "addr": "0x04B0",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "352": {
+                "addr": "0x04B2",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "353": {
+                "addr": "0x04B4",
+                "byteLength": 18,
+                "unitBytes": 2
+            },
+            "354": {
+                "addr": "0x04C6",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "356": {
+                "addr": "0x04C8",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "358": {
+                "addr": "0x04CA",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "359": {
+                "addr": "0x04CC",
+                "byteLength": 16,
+                "unitBytes": 2
+            },
+            "360": {
+                "addr": "0x04DC",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "362": {
+                "addr": "0x04DE",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "364": {
+                "addr": "0x04E0",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "365": {
+                "addr": "0x04E2",
+                "byteLength": 12,
+                "unitBytes": 2
+            },
+            "366": {
+                "addr": "0x04EE",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "368": {
+                "addr": "0x04F0",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "370": {
+                "addr": "0x04F2",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "371": {
+                "addr": "0x04F4",
+                "byteLength": 16,
+                "unitBytes": 2
+            },
+            "372": {
+                "addr": "0x0504",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "374": {
+                "addr": "0x0506",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "376": {
+                "addr": "0x0508",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "377": {
+                "addr": "0x050A",
+                "byteLength": 22,
+                "unitBytes": 2
+            },
+            "378": {
+                "addr": "0x0520",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "380": {
+                "addr": "0x0522",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "382": {
+                "addr": "0x0524",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "383": {
+                "addr": "0x0526",
+                "byteLength": 12,
+                "unitBytes": 2
+            },
+            "384": {
+                "addr": "0x0532",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "386": {
+                "addr": "0x0534",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "388": {
+                "addr": "0x0536",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "389": {
+                "addr": "0x0538",
+                "byteLength": 12,
+                "unitBytes": 2
+            },
+            "390": {
+                "addr": "0x0544",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "392": {
+                "addr": "0x0546",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "394": {
+                "addr": "0x0548",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "395": {
+                "addr": "0x054A",
+                "byteLength": 12,
+                "unitBytes": 2
+            },
+            "396": {
+                "addr": "0x0556",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "398": {
+                "addr": "0x0558",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "400": {
+                "addr": "0x055A",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "401": {
+                "addr": "0x055C",
+                "byteLength": 12,
+                "unitBytes": 2
+            },
+            "402": {
+                "addr": "0x0568",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "404": {
+                "addr": "0x056A",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "406": {
+                "addr": "0x056C",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "407": {
+                "addr": "0x056E",
+                "byteLength": 12,
+                "unitBytes": 2
+            },
+            "408": {
+                "addr": "0x057A",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "410": {
+                "addr": "0x057C",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "412": {
+                "addr": "0x057E",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "413": {
+                "addr": "0x0580",
+                "byteLength": 20,
+                "unitBytes": 2
+            },
+            "414": {
+                "addr": "0x0594",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "416": {
+                "addr": "0x0596",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "418": {
+                "addr": "0x0598",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "419": {
+                "addr": "0x059A",
+                "byteLength": 14,
+                "unitBytes": 2
+            },
+            "420": {
+                "addr": "0x05A8",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "422": {
+                "addr": "0x05AA",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "424": {
+                "addr": "0x05AC",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "425": {
+                "addr": "0x05AE",
+                "byteLength": 16,
+                "unitBytes": 2
+            },
+            "426": {
+                "addr": "0x05BE",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "428": {
+                "addr": "0x05C0",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "430": {
+                "addr": "0x05C2",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "431": {
+                "addr": "0x05C4",
+                "byteLength": 12,
+                "unitBytes": 2
+            },
+            "432": {
+                "addr": "0x05D0",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "434": {
+                "addr": "0x05D2",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "436": {
+                "addr": "0x05D4",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "437": {
+                "addr": "0x05D6",
+                "byteLength": 20,
+                "unitBytes": 2
+            },
+            "438": {
+                "addr": "0x05EA",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "440": {
+                "addr": "0x05EC",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "442": {
+                "addr": "0x05EE",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "443": {
+                "addr": "0x05F0",
+                "byteLength": 12,
+                "unitBytes": 2
+            },
+            "444": {
+                "addr": "0x05FC",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "446": {
+                "addr": "0x05FE",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "448": {
+                "addr": "0x0600",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "449": {
+                "addr": "0x0602",
+                "byteLength": 12,
+                "unitBytes": 2
+            },
+            "450": {
+                "addr": "0x060E",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "452": {
+                "addr": "0x0610",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "454": {
+                "addr": "0x0612",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "455": {
+                "addr": "0x0614",
+                "byteLength": 12,
+                "unitBytes": 2
+            },
+            "456": {
+                "addr": "0x0620",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "458": {
+                "addr": "0x0622",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "460": {
+                "addr": "0x0624",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "461": {
+                "addr": "0x0626",
+                "byteLength": 12,
+                "unitBytes": 2
+            },
+            "462": {
+                "addr": "0x0632",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "464": {
+                "addr": "0x0634",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "466": {
+                "addr": "0x0636",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "467": {
+                "addr": "0x0638",
+                "byteLength": 12,
+                "unitBytes": 2
+            },
+            "468": {
+                "addr": "0x0644",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "470": {
+                "addr": "0x0646",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "472": {
+                "addr": "0x0648",
+                "byteLength": 2,
+                "unitBytes": 1
+            },
+            "473": {
+                "addr": "0x064A",
+                "byteLength": 12,
+                "unitBytes": 2
+            },
+            "474": {
+                "addr": "0x0656",
+                "byteLength": 2,
+                "unitBytes": 1
+            }
+        }
+    },
+    "breakpoints": {}
+}

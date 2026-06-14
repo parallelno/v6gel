@@ -1,0 +1,9 @@
+{
+    "name": "lv1_data",
+    "asmPath": "../debug/level_data\\lv1_data_data.asm",
+    "debugPath": "lv1_data.debug.json",
+    "romPath": "../bin/LV1_DATA.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}

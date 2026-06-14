@@ -1,0 +1,9 @@
+{
+    "name": "song01",
+    "asmPath": "../debug/music\\song01_data.asm",
+    "debugPath": "song01.debug.json",
+    "romPath": "../bin/SONG01.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}

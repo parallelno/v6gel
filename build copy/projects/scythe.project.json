@@ -1,0 +1,9 @@
+{
+    "name": "scythe",
+    "asmPath": "../debug/sprite\\scythe_data.asm",
+    "debugPath": "scythe.debug.json",
+    "romPath": "../bin/SCYTHE.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}

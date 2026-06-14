@@ -1,0 +1,9 @@
+{
+    "name": "backs0",
+    "asmPath": "../debug/back\\backs0_data.asm",
+    "debugPath": "backs0.debug.json",
+    "romPath": "../bin/BACKS0.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}

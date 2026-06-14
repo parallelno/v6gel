@@ -1,0 +1,9 @@
+{
+    "name": "pal_lv0",
+    "asmPath": "../debug/palette\\pal_lv0_data.asm",
+    "debugPath": "pal_lv0.debug.json",
+    "romPath": "../bin/PAL_LV0.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}

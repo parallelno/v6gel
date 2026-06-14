@@ -1,0 +1,9 @@
+{
+    "name": "npc",
+    "asmPath": "../debug/sprite\\npc_data.asm",
+    "debugPath": "npc.debug.json",
+    "romPath": "../bin/NPC.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}

@@ -1,0 +1,194 @@
+{
+    "labels": {
+        "_pal_lv0_palette_relative": {
+            "addr": "0x0002",
+            "src": "../debug/palette/pal_lv0_data.asm",
+            "line": 2
+        },
+        "_pal_lv0_palette_fade_to_black_relative": {
+            "addr": "0x0014",
+            "src": "../debug/palette/pal_lv0_data.asm",
+            "line": 10
+        }
+    },
+    "consts": {},
+    "macros": {},
+    "projectFile": "pal_lv0.project.json",
+    "lineAddresses": {
+        "../debug/palette/pal_lv0_data.asm": {
+            "1": [
+                "0x0000"
+            ],
+            "4": [
+                "0x0002"
+            ],
+            "5": [
+                "0x0006"
+            ],
+            "6": [
+                "0x000A"
+            ],
+            "7": [
+                "0x000E"
+            ],
+            "9": [
+                "0x0012"
+            ],
+            "11": [
+                "0x0014"
+            ],
+            "12": [
+                "0x0015"
+            ],
+            "13": [
+                "0x0017"
+            ],
+            "14": [
+                "0x0027"
+            ],
+            "15": [
+                "0x0029"
+            ],
+            "16": [
+                "0x0039"
+            ],
+            "17": [
+                "0x003B"
+            ],
+            "18": [
+                "0x004B"
+            ],
+            "19": [
+                "0x004D"
+            ],
+            "20": [
+                "0x005D"
+            ],
+            "21": [
+                "0x005F"
+            ],
+            "22": [
+                "0x006F"
+            ],
+            "23": [
+                "0x0071"
+            ],
+            "24": [
+                "0x0081"
+            ],
+            "25": [
+                "0x0083"
+            ]
+        }
+    },
+    "dataLines": {
+        "../debug/palette/pal_lv0_data.asm": {
+            "1": {
+                "addr": "0x0000",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "4": {
+                "addr": "0x0002",
+                "byteLength": 4,
+                "unitBytes": 1
+            },
+            "5": {
+                "addr": "0x0006",
+                "byteLength": 4,
+                "unitBytes": 1
+            },
+            "6": {
+                "addr": "0x000A",
+                "byteLength": 4,
+                "unitBytes": 1
+            },
+            "7": {
+                "addr": "0x000E",
+                "byteLength": 4,
+                "unitBytes": 1
+            },
+            "9": {
+                "addr": "0x0012",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "11": {
+                "addr": "0x0014",
+                "byteLength": 1,
+                "unitBytes": 1
+            },
+            "12": {
+                "addr": "0x0015",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "13": {
+                "addr": "0x0017",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "14": {
+                "addr": "0x0027",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "15": {
+                "addr": "0x0029",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "16": {
+                "addr": "0x0039",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "17": {
+                "addr": "0x003B",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "18": {
+                "addr": "0x004B",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "19": {
+                "addr": "0x004D",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "20": {
+                "addr": "0x005D",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "21": {
+                "addr": "0x005F",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "22": {
+                "addr": "0x006F",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "23": {
+                "addr": "0x0071",
+                "byteLength": 16,
+                "unitBytes": 1
+            },
+            "24": {
+                "addr": "0x0081",
+                "byteLength": 2,
+                "unitBytes": 2
+            },
+            "25": {
+                "addr": "0x0083",
+                "byteLength": 16,
+                "unitBytes": 1
+            }
+        }
+    },
+    "breakpoints": {}
+}

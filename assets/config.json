@@ -1,0 +1,166 @@
+{
+	"game_name" : "guimos_jdundel",
+	"asset_type" : "config",
+	"consts" : [
+		"DEBUG = 1",
+		"TEXT_MONOSPACED_CHARS = 0",
+		"LOCALIZATION = 0"
+	],
+	"scripts": [
+		{
+			"active": false,
+			"code": "local pc = GetPC()\nif pc ~= 0x2B9F then return end\n\nlocal x = GetByteGlobal(0x75f0 + 18)\nlocal y = GetByteGlobal(0x75f0 + 20)\n\nlocal cx = GetD()\nlocal cy = GetE()\n\nlocal cw = GetB()\nlocal ch = GetC()\n\nDrawRect(1, x, y, 15, 16, 0xFFFFFFA0)\nDrawRect(2, cx, cy, cw, ch, 0x00FF00F0)\n",
+			"comment": "Draw Tile Collision",
+			"id": 3
+		},
+		{
+			"active": false,
+			"code": "local pc = GetPC()\nif pc ~= 0x3f2a then return end\n\nlocal cx = GetH()\nlocal cy = GetL()\n\nlocal cw = GetA()\nlocal ch = GetC()\n\nDrawRect(3, cx, cy, cw, ch, 0xFF0000F0)",
+			"comment": "Draw Char Collision",
+			"id": 2
+		},
+		{
+			"active": true,
+			"code": "local pc = GetPC()\nif pc ~= 0x6B8 then return end\n\nlocal fpsL = GetByteGlobal(0x6B9)\nlocal fpsH = GetByteGlobal(0x6BA)\n\nlocal fps = fpsH * 256 + fpsL\n\nDrawText(0, string.format(\"FPS %d\", fps), 10, 10, 0xFFFFFFFF, false)\n",
+			"comment": "FPS",
+			"id": 1
+		},
+		{
+			"active": false,
+			"code": "local sp = GetSP()\nif sp > 0x7FBE and sp < 0x7FFE then return end\nlocal opcode = GetOpcode()\nif opcode > 0x4F then return end\nif opcode > 0x0E and opcode < 0x40 then return end\n\nlocal opcodesToSkip = {\n    [0x00] = true,\n    [0x02] = true,\n    [0x07] = true,\n    [0x08] = true,\n    [0x09] = true,\n    [0x0A] = true,\n}\nif opcodesToSkip[opcode] then return end\nif not GetINTE() then return end\nif GetByteGlobal(0x38) ~= 0xC3 or GetByteGlobal(0x39) ~= 0x78 or GetByteGlobal(0x3A) ~= 0x05 then return end\n\nprint(\"Warning! Overrideing BC in a stack critical section\")\nprint(string.format(\"PC = %04X\", GetPC()))\nprint(string.format(\"Opcode = %02X\", GetOpcode()))\nBreak()",
+			"comment": "BC updated in the stack critical section",
+			"id": 0
+		}
+	],
+	"dependencies" :
+	{
+		"exporters": {
+			"sprite" : "scripts/export/export_sprite.py",
+			"back" : "scripts/export/export_back.py",
+			"decal" : "scripts/export/export_decal.py",
+			"level_data" : "scripts/export/export_level_data.py",
+			"level_gfx" : "scripts/export/export_level_gfx.py",
+			"music" : "scripts/export/export_music.py",
+			"font" : "scripts/export/export_font.py",
+			"tiled_img_data" : "scripts/export/export_tiled_img_data.py",
+			"tiled_img_gfx" : "scripts/export/export_tiled_img_gfx.py",
+			"text_eng" : "scripts/export/export_text.py",
+			"text_rus" : "scripts/export/export_text.py",
+			"palette" : "scripts/export/export_palette.py"
+		},
+		"scripts" : [
+			"assets/config.json",
+			"scripts/export/export_config.py",
+			"scripts/export/export_config_utils.py",
+			"scripts/generate_asset_projects.py",
+			"scripts/utils/build.py",
+			"scripts/utils/common.py",
+			"scripts/utils/common_gfx.py",
+			"scripts/export/export_level_utils.py",
+			"scripts/export/export_tiled_img_utils.py"
+		]
+	},
+	"export_dir" :
+	{
+		"code" : "code/"
+	},
+	"packer_path" : "tools/zx0salvador.exe -v -classic",
+	"build_db_path" : "build/build.db",
+	"basefdd_path" : "assets/basefdd/rds308.fdd",
+	"ram_disk_reserve" :
+	[
+		{
+			"name" : "BACKBUFF2",
+			"bank_idx" : 0,
+			"addr" : "0xA000",
+			"len" : "0x6000",
+			"comment" : "to restore a background in the backbuffer"
+		},
+		{
+			"name" : "BACKBUFF",
+			"bank_idx" : 1,
+			"addr" : "0xA000",
+			"len" : "0x6000",
+			"comment" : "to avoid sprite flickering when it's consecutively erased/rendered"
+		}
+	],
+	"types_alignment" :
+	{
+		"music" : 256
+	},
+	"loaded_after_stack" :
+	[
+		"music",
+		"level_data"
+	],
+	"permanent_load_name" : "permanent",
+	"loads" : {
+		"permanent" :
+		[
+			"assets/fonts/eng/font.json",
+
+			"assets/backs/backs0.json",
+			"assets/decals/decals0.json",
+
+			"assets/sprites/vfx4.json",
+			"assets/sprites/vfx.json",
+
+			"assets/sprites/bomb.json",
+
+			"assets/music/song01.json",
+
+			"assets/palettes/pal_menu.json",
+			"assets/palettes/pal_lv1.json"
+
+		],
+		"menu" :
+		[
+			"assets/tiled_imgs/tim_data.json",
+			"assets/tiled_imgs/tim_gfx.json",
+			"assets/text/txt_menu.json"
+		],
+		"level0" :
+		[
+			"assets/tiled_imgs/ti0_data.json",
+			"assets/tiled_imgs/ti0_gfx.json",
+			"assets/sprites/hero.json",
+			"assets/sprites/burner.json",
+			"assets/sprites/skeleton.json",
+			"assets/sprites/knight.json",
+			"assets/sprites/firepool.json",
+			"assets/sprites/sword.json",
+			"assets/sprites/scythe.json",
+			"assets/sprites/snowflake.json",
+
+
+			"assets/sprites/npc.json",
+			"assets/sprites/npc4.json",
+			"assets/sprites/cat.json",
+			"assets/sprites/goose.json",
+
+			"assets/levels/lv0_data.json",
+			"assets/levels/lv0_gfx.json",
+			"assets/text/txt_lv0.json",
+			"assets/palettes/pal_lv0.json"
+		],
+		"level1" :
+		[
+			"assets/tiled_imgs/ti0_data.json",
+			"assets/tiled_imgs/ti0_gfx.json",
+			"assets/sprites/hero.json",
+			"assets/sprites/burner.json",
+			"assets/sprites/skeleton.json",
+			"assets/sprites/knight.json",
+			"assets/sprites/firepool.json",
+			"assets/sprites/sword.json",
+			"assets/sprites/scythe.json",
+			"assets/sprites/snowflake.json",
+
+			"assets/sprites/vampire.json",
+			"assets/sprites/tnt.json",
+
+			"assets/levels/lv1_data.json",
+			"assets/levels/lv1_gfx.json"
+		]
+	}
+}

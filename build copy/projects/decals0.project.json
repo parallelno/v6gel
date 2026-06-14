@@ -1,0 +1,9 @@
+{
+    "name": "decals0",
+    "asmPath": "../debug/decal\\decals0_data.asm",
+    "debugPath": "decals0.debug.json",
+    "romPath": "../bin/DECALS0.BIN",
+    "romAlign": 2,
+    "cpu": "i8080",
+    "settings": {}
+}
