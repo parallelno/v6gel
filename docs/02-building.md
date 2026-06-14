@@ -124,6 +124,6 @@ python scripts\clear.py [path] [--all]
   the runtime can copy data in 16-bit words.
 - **v6asm is case-insensitive** for labels and macro names; the exporters mangle
   potentially colliding names (e.g. font glyph labels) accordingly.
-- **Text encoding** is currently performed in the exporter (Python) rather than
-  via the assembler's `.text "screencodecommodore"` directive — see
-  [Asset Pipeline → Text](03-asset-pipeline.md#text) for the reason.
+- **Text encoding** is handled by v6asm via the `.encoding
+  "screencodecommodore"` / `.text` directives (wrapped in a `TEXT` macro) — see
+  [Asset Pipeline → Text](03-asset-pipeline.md#text).

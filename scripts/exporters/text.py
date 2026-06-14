@@ -76,7 +76,17 @@ def _data_to_asm(ctx, localization):
 
 	asm = f"_LINE_BREAK_ = {LINE_BREAK}\n"
 	asm += f"_PARAG_BREAK_ = {PARAG_BREAK}\n"
-	asm += f"_EOD_ = {EOD}\n\n"
+	asm += f"_EOD_ = {EOD}\n"
+	if localization != consts.LOCAL_RUS:
+		# Let v6asm own the screencode mapping via .text/.encoding so it is never
+		# duplicated in Python. "mixed"/"upper" both fold A-Z/a-z to 1-26 and keep
+		# the 0x20-0x3F range (space, punctuation, digits) as-is.
+		asm += ".macro TEXT (string, end_code = _EOD_)\n"
+		asm += '.encoding "screencodecommodore", "mixed"\n'
+		asm += "			.text string\n"
+		asm += "			.byte end_code\n"
+		asm += ".endmacro\n"
+	asm += "\n"
 
 	for comment in asset_j["text"]:
 		labels_text = asset_j["text"][comment]
@@ -113,10 +123,12 @@ def _data_to_asm(ctx, localization):
 
 				if localization == consts.LOCAL_RUS:
 					data = _rus_text_to_data(text, ctx.meta_path)
+					text_block_asm += common.bytes_to_asm(data)
+					text_block_asm += f"			.byte {command}\n"
 				else:
-					data = _eng_text_to_data(text, ctx.meta_path)
-				text_block_asm += common.bytes_to_asm(data)
-				text_block_asm += f"			.byte {command}\n"
+					# v6asm encodes the literal via the TEXT macro (.text/.encoding).
+					escaped = text.replace("\\", "\\\\").replace('"', '\\"')
+					text_block_asm += f'			TEXT("{escaped}", {command})\n'
 
 				text_block_asm += break_line
 				text_block_len += len(text) + 1  # +1 for the trailing key-code
@@ -154,33 +166,4 @@ def _rus_text_to_data(text, meta_path):
 		if char_ not in RUS_CHARSET:
 			error(f"unsupported RUS char: {char_!r}", f"{meta_path}: {text}")
 		result.append(RUS_CHARSET[char_])
-	return result
-
-
-def _eng_text_to_data(text, meta_path):
-	"""Translate ASCII text to the engine's screen codes (case-insensitive).
-
-	Follows the standard Commodore screen-code table: ``@`` -> 0, letters
-	(either case) -> 1-26, and the ``0x20-0x3F`` range (space, punctuation,
-	digits) -> its own ASCII value. This matches the byte layout the project's
-	font and golden data expect.
-
-	NOTE: this duplicates what ``.text "screencodecommodore"`` *should* do, but
-	v6asm currently mis-encodes the ``0x21-0x3F`` range (it subtracts 0x20, so
-	``'2'`` becomes 0x12 instead of 0x32). Switch back to ``.text`` once that
-	v6asm encoding bug is fixed.
-	"""
-	result = []
-	for char_ in text:
-		o = ord(char_)
-		if "A" <= char_ <= "Z":
-			result.append(o - ord("A") + 1)
-		elif "a" <= char_ <= "z":
-			result.append(o - ord("a") + 1)
-		elif char_ == "@":
-			result.append(0)
-		elif 0x20 <= o <= 0x3F:
-			result.append(o)
-		else:
-			error(f"unsupported ENG char: {char_!r}", f"{meta_path}: {text}")
 	return result

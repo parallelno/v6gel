@@ -100,14 +100,12 @@ Localized string blocks. Each named block stores a screen position and one or
 more lines terminated by control codes (`_LINE_BREAK_` `0x6A`, `_PARAG_BREAK_`
 `0xFF`, `_EOD_` `0`). Localization is selected by the asset type.
 
-**Encoding note.** English text is translated to the engine's screen codes
-**in the exporter** (`@`→0, letters→1–26, the `0x20–0x3F` range maps to itself).
-Although v6asm offers `.text "screencodecommodore"`, its current implementation
-mis-encodes the `0x21–0x3F` range (it subtracts `0x20`, so `'2'` becomes `0x12`
-instead of `0x32`), which does not match the project's font and golden data. The
-exporter therefore performs the translation directly until that assembler bug is
-fixed, at which point the `.text` directive can be used instead. Russian text
-uses a custom charset table and is emitted as raw bytes.
+**Encoding.** English text is encoded to the engine's screen codes by **v6asm
+itself** via a small `TEXT` macro that wraps the `.encoding
+"screencodecommodore", "mixed"` and `.text` directives (`@`→0, letters→1–26, the
+`0x20–0x3F` range of space/punctuation/digits maps to itself). Keeping the
+mapping in the assembler avoids duplicating it in the exporter. Russian text uses
+a custom charset table and is emitted as raw bytes.
 
 ## Adding a new asset
 
