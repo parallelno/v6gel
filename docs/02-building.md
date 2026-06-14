@@ -7,7 +7,7 @@ commands you will actually run.
 
 ```
 art (PNG) ─┐
-Tiled maps ─┤   v6export        v6loads            v6fdd
+Tiled maps ┤   v6export        v6loads            v6fdd
 YM music  ─┤   (per asset)     (pack + link)      (image)
 JSON meta ─┘
             │      │                 │                 │

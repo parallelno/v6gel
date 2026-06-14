@@ -1,9 +1,0 @@
-{
-    "name": "skeleton",
-    "asmPath": "../debug/sprite\\skeleton_data.asm",
-    "debugPath": "skeleton.debug.json",
-    "romPath": "../bin/SKELETON.BIN",
-    "romAlign": 2,
-    "cpu": "i8080",
-    "settings": {}
-}

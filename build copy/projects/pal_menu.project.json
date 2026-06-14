@@ -1,9 +1,0 @@
-{
-    "name": "pal_menu",
-    "asmPath": "../debug/palette\\pal_menu_data.asm",
-    "debugPath": "pal_menu.debug.json",
-    "romPath": "../bin/PAL_MENU.BIN",
-    "romAlign": 2,
-    "cpu": "i8080",
-    "settings": {}
-}

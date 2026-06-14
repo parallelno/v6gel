@@ -1,9 +1,0 @@
-{
-    "name": "tnt",
-    "asmPath": "../debug/sprite\\tnt_data.asm",
-    "debugPath": "tnt.debug.json",
-    "romPath": "../bin/TNT.BIN",
-    "romAlign": 2,
-    "cpu": "i8080",
-    "settings": {}
-}

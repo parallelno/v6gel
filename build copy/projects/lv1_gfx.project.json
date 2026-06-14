@@ -1,9 +1,0 @@
-{
-    "name": "lv1_gfx",
-    "asmPath": "../debug/level_gfx\\lv1_gfx_data.asm",
-    "debugPath": "lv1_gfx.debug.json",
-    "romPath": "../bin/LV1_GFX.BIN",
-    "romAlign": 2,
-    "cpu": "i8080",
-    "settings": {}
-}

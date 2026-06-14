@@ -1,9 +1,0 @@
-{
-    "name": "firepool",
-    "asmPath": "../debug/sprite\\firepool_data.asm",
-    "debugPath": "firepool.debug.json",
-    "romPath": "../bin/FIREPOOL.BIN",
-    "romAlign": 2,
-    "cpu": "i8080",
-    "settings": {}
-}

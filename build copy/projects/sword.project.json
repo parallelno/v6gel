@@ -1,9 +1,0 @@
-{
-    "name": "sword",
-    "asmPath": "../debug/sprite\\sword_data.asm",
-    "debugPath": "sword.debug.json",
-    "romPath": "../bin/SWORD.BIN",
-    "romAlign": 2,
-    "cpu": "i8080",
-    "settings": {}
-}

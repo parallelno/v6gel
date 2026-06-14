@@ -1,9 +1,0 @@
-{
-    "name": "cat",
-    "asmPath": "../debug/sprite\\cat_data.asm",
-    "debugPath": "cat.debug.json",
-    "romPath": "../bin/CAT.BIN",
-    "romAlign": 2,
-    "cpu": "i8080",
-    "settings": {}
-}

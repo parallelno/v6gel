@@ -1,9 +1,0 @@
-{
-    "name": "vfx4",
-    "asmPath": "../debug/sprite\\vfx4_data.asm",
-    "debugPath": "vfx4.debug.json",
-    "romPath": "../bin/VFX4.BIN",
-    "romAlign": 2,
-    "cpu": "i8080",
-    "settings": {}
-}

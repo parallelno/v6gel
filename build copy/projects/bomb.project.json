@@ -1,9 +1,0 @@
-{
-    "name": "bomb",
-    "asmPath": "../debug/sprite\\bomb_data.asm",
-    "debugPath": "bomb.debug.json",
-    "romPath": "../bin/BOMB.BIN",
-    "romAlign": 2,
-    "cpu": "i8080",
-    "settings": {}
-}

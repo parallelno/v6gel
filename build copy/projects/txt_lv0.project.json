@@ -1,9 +1,0 @@
-{
-    "name": "txt_lv0",
-    "asmPath": "../debug/text_eng\\txt_lv0_data.asm",
-    "debugPath": "txt_lv0.debug.json",
-    "romPath": "../bin/TXT_LV0.BIN",
-    "romAlign": 2,
-    "cpu": "i8080",
-    "settings": {}
-}

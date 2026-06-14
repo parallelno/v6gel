@@ -5,14 +5,14 @@
 **v6gel** is a game engine library for the **Vector-06c**, a Soviet-era 8-bit home
 computer based on the i8080 CPU. It gives newcomers a practical, well-factored
 foundation for writing **performant** games in classic 8080/Z80-style assembly —
-and, where convenient, in **C** (via the V6C toolchain) — without having to
+and, where convenient, in **C** (via the [V6C](https://github.com/parallelno/v6llvmc) toolchain) — without having to
 reinvent sprite blitting, tile maps, music playback, input handling, or
 RAM-disk asset streaming from scratch.
 
 The repository bundles three things:
 
-1. **The runtime library** (`v6/`) — assembly modules you `.include` / link into
-   your game: graphics, sound, controls, OS/file I/O, and utilities.
+1. **The runtime library** (`v6/`) — assembly modules you compile into .o file,
+   then link with your game: graphics, sound, controls, OS/file I/O, and utilities.
 2. **The asset pipeline** (`scripts/`) — Python CLI tools that turn artist-facing
    source files (PNG, Tiled maps, YM music) into compact binary blobs plus the
    assembly metadata that links them into your program.
@@ -54,7 +54,7 @@ scripts/       The asset pipeline (Python 3).
 
 assets/        Source assets (PNG art, Tiled maps, YM music, JSON metadata).
 samples/       Minimal example projects.
-tools/         External tools (AY emulator, FDD tool, ZX0 compressor).
+tools/         External tools (AY emulator, ZX0 compressor).
 docs/          This documentation hub.
 ```
 
@@ -62,12 +62,13 @@ docs/          This documentation hub.
 
 | Requirement | Purpose |
 |-------------|---------|
-| **v6asm** | The assembler used for both the library and exported asset data. Built from the `v6asm` Rust workspace (`cargo build --release`). |
-| **v6fdd** | Packs blobs into a bootable `.fdd` floppy image. Ships in the same `v6asm` workspace. |
-| **Python 3.10+** | Runs the asset pipeline. |
+| [**v6asm**](https://github.com/parallelno/v6asm) | The assembler used for both the library and exported asset data. |
+| **v6fdd** | Packs blobs into a bootable `.fdd` floppy image. Ships in the same [`v6asm`](https://github.com/parallelno/v6asm) workspace. |
+| [**Python 3.10+**](https://www.python.org/downloads/) | Runs the asset pipeline. |
 | **Pillow** | Python imaging library — decodes source PNGs (`pip install Pillow`). |
 | **lhafile** | Reads packed archives used by some source assets (`pip install lhafile`). |
-| **zx0 (`zx0salvador.exe`)** | ZX0 compressor used for format-intrinsic and optional transport compression. Bundled under `tools/zx0/`. |
-| **A Vector-06c emulator** | To run the resulting `.fdd` image. |
+| [**zx0salvador**](https://github.com/emmanuel-marty/salvador/releases/tag/1.4.2) | ZX0 compressor used for format-intrinsic and optional transport compression. Bundled under `tools/zx0/`. |
+| [**Devector**](https://github.com/parallelno/Devector) | An emulator  designed to simplify the development process and speed up the work. |
+| [**v6emul**](https://github.com/parallelno/v6emul) | A command-line emulator for the Vector-06C Soviet PC. Suitable for quick debug iterations. |
 
 See [Building & Tooling](02-building.md) for exact commands and configuration.
