@@ -1,9 +1,8 @@
-# V6 Documentation Hub
+# v6gel Documentation Hub
 
-Welcome to the documentation for the **V6 game engine library** for the
+Welcome to the documentation for the **v6gel game engine library** for the
 Vector-06c. This hub links to topic-focused guides covering the engine, the
 asset pipeline, and how to build everything.
-
 New here? Start with the [Project Overview](01-overview.md), then read
 [Building & Tooling](02-building.md).
 
@@ -11,10 +10,10 @@ New here? Start with the [Project Overview](01-overview.md), then read
 
 | # | Topic | Description |
 |---|-------|-------------|
-| 1 | [Project Overview](01-overview.md) | What V6 is, its goals, repository structure, and prerequisites. |
+| 1 | [Project Overview](01-overview.md) | What v6gel is, its goals, repository structure, and prerequisites. |
 | 2 | [Building & Tooling](02-building.md) | How to build the library and assets; the tools the pipeline requires; CLI commands and flags. |
 | 3 | [Asset Pipeline & Data Layout](03-asset-pipeline.md) | Source vs exported formats, the build config, and every asset type. |
-| 4 | [V6 Library Reference](04-engine-library.md) | The engine's public API: graphics, sound, controls, OS/files, and utilities. |
+| 4 | [v6gel Library Reference](04-engine-library.md) | The engine's public API: graphics, sound, controls, OS/files, and utilities. |
 
 ## Quick links
 

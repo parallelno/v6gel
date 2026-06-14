@@ -1,4 +1,4 @@
-# 4. V6 Library Reference
+# 4. v6gel Library Reference
 
 The runtime library lives in `v6/` and is assembled by `v6/build.bat` into
 `out/v6.o`. `v6.asm` `.include`s every subsystem and provides the crt0 startup

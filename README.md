@@ -1,10 +1,10 @@
-# V6 — Game Engine Library for the Vector-06c
+# v6gel — V6 Game Engine Library for the Vector-06c
 
 > A practical, performance-focused engine library that helps newcomers build
 > fast games for the **Vector-06c** 8-bit computer in classic 8080/Z80-style
 > assembly — and in **C** via the V6C toolchain.
 
-V6 bundles a hand-tuned runtime library, a complete asset pipeline that turns
+v6gel bundles a hand-tuned runtime library, a complete asset pipeline that turns
 artist-facing source files into compact runtime blobs, and sample projects to
 get you started quickly.
 
@@ -29,7 +29,7 @@ get you started quickly.
 | [Project Overview](docs/01-overview.md) | Goals, repository structure, prerequisites. |
 | [Building & Tooling](docs/02-building.md) | Build commands and the tools the pipeline needs. |
 | [Asset Pipeline & Data Layout](docs/03-asset-pipeline.md) | Source and exported formats, per asset type. |
-| [V6 Library Reference](docs/04-engine-library.md) | The engine's public API. |
+| [v6gel Library Reference](docs/04-engine-library.md) | The engine's public API. |
 
 ## Quick start
 

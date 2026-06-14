@@ -1,8 +1,8 @@
 # 1. Project Overview
 
-## What is V6?
+## What is v6gel?
 
-**V6** is a game engine library for the **Vector-06c**, a Soviet-era 8-bit home
+**v6gel** is a game engine library for the **Vector-06c**, a Soviet-era 8-bit home
 computer based on the i8080 CPU. It gives newcomers a practical, well-factored
 foundation for writing **performant** games in classic 8080/Z80-style assembly —
 and, where convenient, in **C** (via the V6C toolchain) — without having to
