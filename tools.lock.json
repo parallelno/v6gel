@@ -3,19 +3,19 @@
 	"tools": {
 		"v6asm": {
 			"description": "v6asm assembler + v6fdd FDD packer (shipped together).",
-			"version": "2026.06.10",
+			"version": "2026.06.14",
 			"dest": "v6asm",
 			"platforms": {
 				"windows-x86_64": {
-					"url": "https://github.com/parallelno/v6asm/releases/download/v2026.06.10/v6asm-2026.06.10-windows-x86_64.zip",
+					"url": "https://github.com/parallelno/v6asm/releases/download/v2026.06.14/v6asm-2026.06.14-windows-x86_64.zip",
 					"sha256": null
 				},
 				"linux-x86_64": {
-					"url": "https://github.com/parallelno/v6asm/releases/download/v2026.06.10/v6asm-2026.06.10-linux-x86_64.tar.gz",
+					"url": "https://github.com/parallelno/v6asm/releases/download/v2026.06.14/v6asm-2026.06.14-linux-x86_64.tar.gz",
 					"sha256": null
 				},
 				"macos-x86_64": {
-					"url": "https://github.com/parallelno/v6asm/releases/download/v2026.06.10/v6asm-2026.06.10-macos-x86_64.tar.gz",
+					"url": "https://github.com/parallelno/v6asm/releases/download/v2026.06.14/v6asm-2026.06.14-macos-x86_64.tar.gz",
 					"sha256": null
 				}
 			}
