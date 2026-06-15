@@ -33,11 +33,15 @@ get you started quickly.
 
 ## Quick start
 
-Prerequisites: **v6asm** and **v6fdd** (from the `v6asm` workspace), **Python
-3.10+** with **Pillow** and **lhafile**, and the bundled **zx0** compressor. See
-the [Project Overview](docs/01-overview.md#prerequisites) for details.
+Prerequisites: **Python 3.10+**. Everything else (the **v6asm**/**v6fdd**
+toolchain, the **zx0** compressor, the **V6C** compiler, and the emulators) is
+fetched for you by the bundled installer.
 
 ```bat
+REM 0. Install the Python deps and the external tools.
+pip install -e .
+python install_tools.py
+
 REM 1. Build the engine library.
 cd v6
 build.bat
@@ -48,9 +52,15 @@ python scripts\build_assets.py assets\config.json -o build\release ^
     --fdd-template assets\basefdd\rds308.fdd
 ```
 
+The tools land in `tools/` (gitignored) and are discovered automatically — no
+`PATH` or environment setup required. Run `python install_tools.py --list` to
+see what is available and what is already installed, or pass tool names (e.g.
+`python install_tools.py v6asm zx0`) to install a subset.
+
 The result is `build\release\config.fdd`, ready to boot in a Vector-06c
 emulator. For iterating on a single asset, use `v6export` directly — see
 [Building & Tooling](docs/02-building.md#one-asset-at-a-time--v6export).
+
 
 ## Repository layout
 

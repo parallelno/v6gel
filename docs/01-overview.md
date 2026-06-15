@@ -60,15 +60,31 @@ docs/          This documentation hub.
 
 ## Prerequisites
 
-| Requirement | Purpose |
-|-------------|---------|
-| [**v6asm**](https://github.com/parallelno/v6asm) | The assembler used for both the library and exported asset data. |
-| **v6fdd** | Packs blobs into a bootable `.fdd` floppy image. Ships in the same [`v6asm`](https://github.com/parallelno/v6asm) workspace. |
-| [**Python 3.10+**](https://www.python.org/downloads/) | Runs the asset pipeline. |
-| **Pillow** | Python imaging library — decodes source PNGs (`pip install Pillow`). |
-| **lhafile** | Reads packed archives used by some source assets (`pip install lhafile`). |
-| [**zx0salvador**](https://github.com/emmanuel-marty/salvador/releases/tag/1.4.2) | ZX0 compressor used for format-intrinsic and optional transport compression. Bundled under `tools/zx0/`. |
-| [**Devector**](https://github.com/parallelno/Devector) | An emulator  designed to simplify the development process and speed up the work. |
-| [**v6emul**](https://github.com/parallelno/v6emul) | A command-line emulator for the Vector-06C Soviet PC. Suitable for quick debug iterations. |
+The only thing you need to install by hand is **Python 3.10+**. The Python
+dependencies and every external tool are installed for you:
+
+```bat
+pip install -e .            REM Pillow, lhafile (the pipeline's Python deps)
+python install_tools.py     REM v6asm, v6fdd, zx0, V6C, emulators -> tools/
+```
+
+`install_tools.py` reads [`tools.lock.json`](../tools.lock.json) and downloads
+each tool's pinned release for your OS into `tools/` (gitignored). The pipeline
+discovers them there automatically — no `PATH` or environment variables needed.
+Use `--list` to inspect state or pass tool names to install a subset.
+
+The tools it manages:
+
+| Tool | Purpose |
+|------|---------|
+| [**v6asm** / **v6fdd**](https://github.com/parallelno/v6asm) | The assembler (engine + asset data) and the bootable-`.fdd` packer. |
+| [**zx0** (salvador)](https://github.com/emmanuel-marty/salvador) | ZX0 compressor, used inside some formats and as optional transport compression. |
+| [**V6C**](https://github.com/parallelno/v6llvmc) | LLVM/Clang toolchain for compiling C to the Vector-06c. |
+| [**Devector**](https://github.com/parallelno/Devector) | GUI emulator/debugger. |
+| [**v6emul**](https://github.com/parallelno/v6emul) | Command-line emulator for quick debug iterations. |
+
+To point the pipeline at tools you manage yourself instead, pass `--asm` /
+`--packer` / `--v6fdd`, or set the `V6ASM` / `ZX0` / `V6FDD` environment
+variables.
 
 See [Building & Tooling](02-building.md) for exact commands and configuration.

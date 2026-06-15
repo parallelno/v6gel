@@ -24,9 +24,11 @@ JSON meta ─┘
 | **v6fdd** | Builds the floppy image from a template plus the stored blobs. |
 | **v6export.py / v6loads.py / build_assets.py** | The Python orchestration described below. |
 
-The external binary paths default to a local `v6asm` checkout; override them with
-CLI flags (`--asm`, `--packer`, `--v6fdd`, `--fdd-template`) when your layout
-differs.
+The external binary paths are discovered automatically: the pipeline looks for a
+tool given by a CLI flag first, then an environment variable (`V6ASM`, `V6FDD`,
+`ZX0`), then the bundled `tools/<name>/` directory populated by
+`install_tools.py`, and finally your system `PATH`. Override any tool explicitly
+with `--asm`, `--packer`, or `--v6fdd` when your layout differs.
 
 ## Building the engine library
 

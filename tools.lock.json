@@ -1,0 +1,76 @@
+{
+	"_comment": "Tool download manifest for install_tools.py. Binaries land in tools/<dest>/ (gitignored). Pin a sha256 (lowercase hex) to enable integrity verification; null means 'warn but allow'. Platform keys: windows-x86_64, linux-x86_64, macos-x86_64.",
+	"tools": {
+		"v6asm": {
+			"description": "v6asm assembler + v6fdd FDD packer (shipped together).",
+			"version": "2026.06.10",
+			"dest": "v6asm",
+			"platforms": {
+				"windows-x86_64": {
+					"url": "https://github.com/parallelno/v6asm/releases/download/v2026.06.10/v6asm-2026.06.10-windows-x86_64.zip",
+					"sha256": null
+				},
+				"linux-x86_64": {
+					"url": "https://github.com/parallelno/v6asm/releases/download/v2026.06.10/v6asm-2026.06.10-linux-x86_64.tar.gz",
+					"sha256": null
+				},
+				"macos-x86_64": {
+					"url": "https://github.com/parallelno/v6asm/releases/download/v2026.06.10/v6asm-2026.06.10-macos-x86_64.tar.gz",
+					"sha256": null
+				}
+			}
+		},
+		"zx0": {
+			"description": "zx0 (salvador) ZX0 compressor. Windows release only.",
+			"version": "1.4.2",
+			"dest": "zx0",
+			"platforms": {
+				"windows-x86_64": {
+					"url": "https://github.com/emmanuel-marty/salvador/releases/download/1.4.2/salvador_win64_1.4.2.zip",
+					"sha256": null
+				}
+			}
+		},
+		"v6llvmc": {
+			"description": "V6C LLVM/Clang toolchain (compile C for the Vector-06c). Windows release only; ~120 MB.",
+			"version": "2026.06.08",
+			"dest": "v6llvmc",
+			"platforms": {
+				"windows-x86_64": {
+					"url": "https://github.com/parallelno/v6llvmc/releases/download/v2026.06.08/v6c-2026.06.08-windows-x64.zip",
+					"sha256": null
+				}
+			}
+		},
+		"devector": {
+			"description": "Devector GUI emulator/debugger. Windows release only.",
+			"version": "9.5.0",
+			"dest": "devector",
+			"platforms": {
+				"windows-x86_64": {
+					"url": "https://github.com/parallelno/Devector/releases/download/v9.5.0/devector-windows-x64.zip",
+					"sha256": null
+				}
+			}
+		},
+		"v6emul": {
+			"description": "v6emul command-line emulator for quick debug iterations.",
+			"version": "1.0.0",
+			"dest": "v6emul",
+			"platforms": {
+				"windows-x86_64": {
+					"url": "https://github.com/parallelno/v6emul/releases/download/v1.0.0/v6emul-2026.04.28-windows-x86_64.zip",
+					"sha256": null
+				},
+				"linux-x86_64": {
+					"url": "https://github.com/parallelno/v6emul/releases/download/v1.0.0/v6emul-2026.04.28-linux-x86_64.tar.gz",
+					"sha256": null
+				},
+				"macos-x86_64": {
+					"url": "https://github.com/parallelno/v6emul/releases/download/v1.0.0/v6emul-2026.04.28-macos-x86_64.tar.gz",
+					"sha256": null
+				}
+			}
+		}
+	}
+}
