@@ -21,7 +21,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 package-dir = { "" = "scripts" }
-packages = ["exporters", "utils"]
+packages = ["exporters", "utils", "loadgen"]
 py-modules = ["v6export", "v6loads", "build_assets", "clear"]
 
 [tool.ruff]

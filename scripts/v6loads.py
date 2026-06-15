@@ -26,178 +26,14 @@ _SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
 if _SCRIPTS_DIR not in sys.path:
 	sys.path.insert(0, _SCRIPTS_DIR)
 
+from loadgen import config, manifest, ramdisk
 from utils import common, consts
 from utils.log import ExportError, TextColor, error, printc
-from exporters.context import AssetManifest
-
-
-# ---------------------------------------------------------------------------
-# Asset records (built from config "loads" grouping + manifests)
-# ---------------------------------------------------------------------------
-def _collect_assets(config_j, manifest_dir):
-	"""Build the flat asset list the packer/codegen operate on."""
-	special_types = config_j.get("loaded_after_stack", [])
-	types_alignment = config_j.get("types_alignment", {})
-	assets = []
-	for load_name, asset_paths in config_j["loads"].items():
-		for asset_path in asset_paths:
-			name = common.path_to_basename(asset_path)
-			manifest_path = os.path.join(manifest_dir, name + consts.EXT_MANIFEST)
-			if not os.path.exists(manifest_path):
-				error("manifest not found", manifest_path)
-			manifest = AssetManifest.read(manifest_path)
-
-			if not os.path.exists(manifest.bin_path):
-				error("asset blob not found", manifest.bin_path)
-
-			asset_type = manifest.asset_type
-			after_stack = asset_type in special_types
-			align = types_alignment.get(asset_type, consts.WORD_LEN)
-
-			assets.append({
-				"type": asset_type,
-				"load_name": load_name,
-				"name": name,
-				"bin_path": manifest.bin_path,
-				"asm_meta_path": manifest.meta_asm_path,
-				"asset_j_path": asset_path,
-				"len": manifest.bin_len,
-				"after_stack": after_stack,
-				"align": align,
-			})
-	return assets
-
-
-# ---------------------------------------------------------------------------
-# RAM Disk layout / packing
-# ---------------------------------------------------------------------------
-def get_ram_disk_layout(config_j):
-	segments = {}
-	for bank_idx in range(consts.RAM_DISK_BANKS_MAX):
-		# segment before the stack
-		seg_name0 = f"bank{bank_idx} addr0"
-		segments[seg_name0] = {
-			"bank_idx": bank_idx,
-			"start_addr": 0,
-			"load_addr": 0,
-			"non_permanent_load_addr": 0,
-			"len": consts.RAM_DISK_SEGMENT_LEN - consts.ALL_STACKS_LEN,
-		}
-
-		# segment after the stack
-		seg_name1 = f"bank{bank_idx} addr8000"
-		seg_len1 = consts.RAM_DISK_SEGMENT_LEN
-		reservation = next(
-			(x for x in config_j["ram_disk_reserve"] if x["bank_idx"] == bank_idx), None
-		)
-		if reservation is not None and "len" in reservation:
-			seg_len1 -= common.hex_str_to_int(reservation["len"])
-
-		segments[seg_name1] = {
-			"bank_idx": bank_idx,
-			"start_addr": consts.SCR_ADDR,
-			"load_addr": consts.SCR_ADDR,
-			"non_permanent_load_addr": consts.SCR_ADDR,
-			"len": seg_len1,
-		}
-
-	return segments
-
-
-def pack_files(load_name, assets, segments):
-	special = []
-	regular = []
-	for asset in assets:
-		if asset["load_name"] != load_name:
-			continue
-		(special if asset["after_stack"] else regular).append(asset)
-
-	# Sort by size descending (largest first).
-	special = sorted(special, key=lambda x: x["len"], reverse=True)
-	regular = sorted(regular, key=lambda x: x["len"], reverse=True)
-
-	seg_space = {}
-	for seg_name, seg in segments.items():
-		reserved = seg["non_permanent_load_addr"] - seg["start_addr"]
-		seg_space[seg_name] = seg["len"] - reserved
-
-	allocation = {seg_name: [] for seg_name in segments}
-	after_stack_segs = [
-		name for name, s in segments.items() if s["start_addr"] == consts.SCR_ADDR
-	]
-
-	# Step 1: place after-stack-only files in the high segments.
-	for asset in special:
-		placed = False
-		for seg_name in sorted(after_stack_segs, key=lambda x: seg_space[x], reverse=True):
-			align = asset["align"]
-			alignment_offset = (align - segments[seg_name]["load_addr"] % align) % align
-			if asset["len"] + alignment_offset <= seg_space[seg_name]:
-				asset["addr"] = segments[seg_name]["load_addr"] + alignment_offset
-				segments[seg_name]["load_addr"] += asset["len"] + alignment_offset
-				allocation[seg_name].append(asset)
-				seg_space[seg_name] -= asset["len"] + alignment_offset
-				placed = True
-				break
-		if not placed:
-			return None, None, (
-				"can't fit after-stack files into the high segments. "
-				f"bin_path:{asset['bin_path']}"
-			)
-
-	# Step 2: place regular files into any segment (tightest fit first).
-	for asset in regular:
-		placed = False
-		for seg_name in sorted(seg_space.keys(), key=lambda x: seg_space[x]):
-			if asset["len"] <= seg_space[seg_name]:
-				asset["addr"] = segments[seg_name]["load_addr"]
-				segments[seg_name]["load_addr"] += asset["len"]
-				allocation[seg_name].append(asset)
-				seg_space[seg_name] -= asset["len"]
-				placed = True
-				break
-		if not placed:
-			return None, None, (
-				f"can't fit file into the RAM Disk. bin_path:{asset['bin_path']}"
-			)
-
-	free_space = sum(seg_space.values())
-	return allocation, free_space, None
 
 
 # ---------------------------------------------------------------------------
 # Code generation
 # ---------------------------------------------------------------------------
-def get_usage_report(load_name, allocation, free_space, segments):
-	total_used = 0
-	report = f"### `{load_name}` RAM Disk usage:\n"
-	total_reserved = 0
-	seg_report = ""
-	for seg_name, seg in allocation.items():
-		seg_report += f"- {seg_name}\n"
-		used_len = 0
-		for asset in seg:
-			bin_file_name = os.path.basename(asset["bin_path"])
-			seg_report += (
-				f"	* {bin_file_name}: addr: {asset['addr']}, len: `{asset['len']}`\n"
-			)
-			used_len += asset["len"]
-
-		non_perm_load_addr = segments[seg_name]["non_permanent_load_addr"]
-		start_addr = segments[seg_name]["start_addr"]
-		reserved = non_perm_load_addr - start_addr
-		total_reserved += reserved
-
-		free = segments[seg_name]["len"] - used_len - reserved
-		seg_report += "\n"
-		seg_report += f"  `Used: {used_len}, Free: {free}`\n\n"
-		total_used += used_len
-
-	report += "\n"
-	report += f"> Used: `{total_used}`, Free Space: `{free_space}`\n\n"
-	report += seg_report
-	report += "\n---\n"
-	return report
 
 
 def get_load_asm(load_name, allocation, segments):
@@ -350,7 +186,7 @@ def export_loads(config_j, assets, build_code_dir):
 	if os.path.exists(load_path):
 		os.remove(load_path)
 
-	segments = get_ram_disk_layout(config_j)
+	segments = ramdisk.get_ram_disk_layout(config_j)
 
 	asm = "memusage_loads:\n"
 	report_asm = ""
@@ -362,10 +198,10 @@ def export_loads(config_j, assets, build_code_dir):
 	perm_load = loads.get(perm_load_name)
 	if perm_load:
 		loads.pop(perm_load_name)
-		allocation, free_space, error_s = pack_files(perm_load_name, assets, segments)
+		allocation, free_space, error_s = ramdisk.pack_files(perm_load_name, assets, segments)
 		if error_s:
 			error(error_s)
-		report_asm += get_usage_report(perm_load_name, allocation, free_space, segments)
+		report_asm += ramdisk.get_usage_report(perm_load_name, allocation, free_space, segments)
 		asm += get_load_asm(perm_load_name, allocation, segments)
 
 	# the free space after the permanent load becomes each load's baseline.
@@ -373,10 +209,10 @@ def export_loads(config_j, assets, build_code_dir):
 		seg["non_permanent_load_addr"] = seg["load_addr"]
 
 	for load_name in loads:
-		allocation, free_space, error_s = pack_files(load_name, assets, segments)
+		allocation, free_space, error_s = ramdisk.pack_files(load_name, assets, segments)
 		if error_s:
 			error(error_s)
-		report_asm += get_usage_report(load_name, allocation, free_space, segments)
+		report_asm += ramdisk.get_usage_report(load_name, allocation, free_space, segments)
 		asm += get_load_asm(load_name, allocation, segments)
 		# reset each segment's load_addr back to the post-permanent baseline.
 		for seg in segments.values():
@@ -466,23 +302,17 @@ def parse_args(argv):
 def main(argv=None):
 	args = parse_args(argv if argv is not None else sys.argv[1:])
 
-	config_j = common.load_json(args.config)
-	if config_j.get("asset_type") != consts.ASSET_TYPE_CONFIG:
-		printc(
-			f"v6loads ERROR: asset_type != '{consts.ASSET_TYPE_CONFIG}': {args.config}",
-			TextColor.RED,
-		)
-		return 1
-
-	code_dir = args.code_dir
-	build_dir = args.build_dir or code_dir
-	bin_dir = args.bin_dir or code_dir
-	os.makedirs(code_dir, exist_ok=True)
-	os.makedirs(build_dir, exist_ok=True)
-	os.makedirs(bin_dir, exist_ok=True)
-
 	try:
-		assets = _collect_assets(config_j, args.manifest_dir)
+		config_j = config.load_build_config(args.config)
+
+		code_dir = args.code_dir
+		build_dir = args.build_dir or code_dir
+		bin_dir = args.bin_dir or code_dir
+		os.makedirs(code_dir, exist_ok=True)
+		os.makedirs(build_dir, exist_ok=True)
+		os.makedirs(bin_dir, exist_ok=True)
+
+		assets = manifest.collect_assets(config_j, args.manifest_dir)
 
 		loads_path, report = export_loads(config_j, assets, code_dir)
 		export_build_includes(assets, [loads_path], build_dir)
