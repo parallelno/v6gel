@@ -26,3 +26,8 @@ __pycache__/
 
 # temporary files
 temp/
+
+# External tools: only the preinstalled ay_emul is tracked. Everything else
+# under tools/ is fetched by install_tools.py and must never be committed.
+/tools/*
+!/tools/ay_emul/
