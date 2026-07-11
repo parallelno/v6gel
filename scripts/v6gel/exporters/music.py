@@ -46,7 +46,7 @@ def export(ctx: ExportContext) -> AssetManifest:
 	)
 
 	with open(ctx.meta_asm_path, "w", encoding="ascii") as f:
-		f.write(asmgen.meta_asm(ctx.stored_path, meta_body))
+		f.write(asmgen.meta_asm(ctx.stored_path, meta_body, ctx.emit_filename))
 
 	return AssetManifest(
 		name=ctx.name,

@@ -35,6 +35,7 @@ class ExportContext:
 	v6asm_path: str  # external assembler used to produce the blob
 	packer_path: str  # external zx0 packer (format-intrinsic compression only)
 	emit_asm: bool = False  # also keep the human-readable *_data.asm (debug)
+	emit_filename: bool = False  # include FILENAME_PTR block in *_meta.asm
 	temp_dir: str = "build/temp/"
 	# Extension (incl. dot) of the file actually stored on the FDD that the
 	# linked meta should reference. The exporter always assembles a raw `.bin`;

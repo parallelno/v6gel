@@ -59,6 +59,11 @@ def parse_args(argv=None):
 		help="also keep the human-readable <name>_data.asm (debug)",
 	)
 	parser.add_argument(
+		"--emit-filename", action="store_true",
+		help="include the FILENAME_PTR block in *_meta.asm (needed when "
+			"the blob is loaded from an FDD; omitted by default for ROM inclusion)",
+	)
+	parser.add_argument(
 		"--stored-ext", dest="stored_ext", default=consts.EXT_BIN,
 		help="extension of the file actually stored on the FDD that the linked "
 			"meta should reference, e.g. '.com' when transport-compressing "
@@ -103,6 +108,7 @@ def build_context(args):
 		v6asm_path=tools.resolve_v6asm(args.v6asm),
 		packer_path=tools.resolve_zx0(args.packer),
 		emit_asm=args.emit_asm,
+		emit_filename=args.emit_filename,
 		temp_dir=args.temp_dir,
 		stored_ext=stored_ext,
 	)

@@ -74,30 +74,36 @@ def assemble(v6asm_path, asm_text, out_bin_path, temp_dir, keep_asm_path=None):
 	return os.path.getsize(out_bin_path)
 
 
-def meta_asm(bin_path, body=""):
+def meta_asm(bin_path, body="", emit_filename=False):
 	"""Build the contents of a ``*_meta.asm`` file for a blob.
 
 	The blob is referenced by its final stored path (``bin_path``); the
 	``.filesize`` directive is resolved by the main build when the file exists.
 	``body`` is the exporter-specific block of pointers/constants.
+
+	``emit_filename`` controls whether the ``<NAME>_FILENAME_PTR`` CP/M
+	filename block is emitted.  It is omitted by default because blobs that are
+	linked directly into the ROM do not need a filename.  Set it to ``True``
+	when the blob will be loaded from an FDD.
 	"""
 	source_name = _basename_no_ext(bin_path)
 	upper = source_name.upper()
-	fname = os.path.basename(bin_path).split(".")
-	name_part = fname[0]
-	ext_part = fname[1] if len(fname) > 1 else ""
 
 	asm = "; fdd blob metadata (linked into the main program)\n"
 	asm += f"; blob file: {bin_path}\n\n"
 	asm += f'{upper}_FILE_LEN .filesize "{bin_path}"\n'
 	asm += f"{upper}_LAST_RECORD_LEN = {upper}_FILE_LEN & 0x7f\n\n"
 
-	asm += f"{upper}_FILENAME_PTR:\n"
-	asm += f'			.byte "{name_part}" ; filename\n'
-	if len(name_part) < consts.CPM_FILENAME_LEN:
-		pad = " " * (consts.CPM_FILENAME_LEN - len(name_part))
-		asm += f'			.byte "{pad}" ; filename padding\n'
-	asm += f'			.byte "{ext_part}" ; extension\n\n'
+	if emit_filename:
+		fname = os.path.basename(bin_path).split(".")
+		name_part = fname[0]
+		ext_part = fname[1] if len(fname) > 1 else ""
+		asm += f"{upper}_FILENAME_PTR:\n"
+		asm += f'			.byte "{name_part}" ; filename\n'
+		if len(name_part) < consts.CPM_FILENAME_LEN:
+			pad = " " * (consts.CPM_FILENAME_LEN - len(name_part))
+			asm += f'			.byte "{pad}" ; filename padding\n'
+		asm += f'			.byte "{ext_part}" ; extension\n\n'
 
 	asm += body
 	return asm
