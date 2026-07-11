@@ -65,7 +65,7 @@ emulator. For iterating on a single asset, use `v6export` directly — see
 ## Repository layout
 
 ```
-v6/        Runtime engine library (assembly).
+engine/    Runtime engine library (assembly).
 scripts/   Asset pipeline (Python): v6export, v6loads, build_assets, exporters.
 assets/    Source assets (PNG art, Tiled maps, YM music, JSON metadata).
 samples/   Minimal example projects.

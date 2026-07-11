@@ -70,8 +70,6 @@ Key rules:
 
 ## 3. Config model (per project)
 
-No global asset list anywhere — **export discovers** the project's `assets/**`.
-
 ### ROM project (`samples/01_rom_c/project.json`)
 ```jsonc
 {

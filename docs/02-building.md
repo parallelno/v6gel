@@ -35,7 +35,7 @@ with `--asm`, `--packer`, or `--v6fdd` when your layout differs.
 The library compiles to a single object file you link with your game:
 
 ```bat
-cd v6
+cd engine
 build.bat
 ```
 

@@ -34,7 +34,7 @@ The repository bundles three things:
 ## Repository structure
 
 ```
-v6/            The runtime engine library (assembly).
+engine/        The runtime engine library (assembly).
   common/        Global constants and macros.
   controls/      Keyboard / joystick input.
   gfx/           Sprites, tiles, backgrounds, decals, tiled images, text.
