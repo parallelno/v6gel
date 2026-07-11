@@ -11,7 +11,7 @@ RAM-disk asset streaming from scratch.
 
 The repository bundles three things:
 
-1. **The runtime library** (`v6/`) — assembly modules you compile into .o file,
+1. **The runtime library** (`engine/`) — assembly modules you compile into .o file,
    then link with your game: graphics, sound, controls, OS/file I/O, and utilities.
 2. **The asset pipeline** (`scripts/`) — Python CLI tools that turn artist-facing
    source files (PNG, Tiled maps, YM music) into compact binary blobs plus the

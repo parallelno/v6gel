@@ -13,8 +13,8 @@ This module knows how to:
 import os
 import subprocess
 
-from utils import consts
-from utils.log import error
+from v6gel.utils import consts
+from v6gel.utils.log import error
 
 
 def cpm_filename(name, ext=consts.EXT_BIN):

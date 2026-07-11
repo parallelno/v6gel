@@ -4,7 +4,7 @@ Port of the original ``export_tiled_img_utils`` with staleness checking removed
 and the ``build`` dependency replaced by ``consts``/``log``.
 """
 
-from utils import common, common_gfx, consts
+from v6gel.utils import common, common_gfx, consts
 
 IMG_TILE_W = 8
 IMG_TILE_H = 8

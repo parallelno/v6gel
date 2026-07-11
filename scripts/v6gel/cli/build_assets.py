@@ -18,14 +18,9 @@ import argparse
 import os
 import sys
 
-_SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
-if _SCRIPTS_DIR not in sys.path:
-	sys.path.insert(0, _SCRIPTS_DIR)
-
-import v6export
-import v6loads
-from utils import asmgen, common, consts, tools
-from utils.log import ExportError, TextColor, printc
+from v6gel.cli import v6export, v6loads
+from v6gel.utils import asmgen, common, consts, tools
+from v6gel.utils.log import ExportError, TextColor, printc
 
 
 def _unique_asset_paths(config_j):

@@ -54,7 +54,7 @@ stack, zeroes `.bss`, installs the interrupt vector, and calls your `main`.
 ### One asset at a time — `v6export`
 
 ```bat
-python scripts\v6export.py <asset.json> -o <meta-dir> --bin-dir <bin-dir> [--emit-asm]
+python -m v6gel.cli.v6export <asset.json> -o <meta-dir> --bin-dir <bin-dir> [--emit-asm]
 ```
 
 `v6export` reads the asset's `asset_type`, dispatches to the matching exporter,
@@ -71,7 +71,7 @@ debugging.
 ### Linking & RAM-disk packing — `v6loads`
 
 ```bat
-python scripts\v6loads.py <config.json> --manifest-dir <dir> -o <code-dir>
+python -m v6gel.cli.v6loads <config.json> --manifest-dir <dir> -o <code-dir>
 ```
 
 `v6loads` reads the build config's `loads` groups plus every manifest and:
@@ -87,7 +87,7 @@ python scripts\v6loads.py <config.json> --manifest-dir <dir> -o <code-dir>
 The driver does everything for a config in one shot:
 
 ```bat
-python scripts\build_assets.py assets\config.json -o build\release ^
+python -m v6gel.cli.build_assets assets\config.json -o build\release ^
     --fdd-template assets\basefdd\rds308.fdd
 ```
 
@@ -117,7 +117,7 @@ build/release/
 ### Cleaning
 
 ```bat
-python scripts\clear.py [path] [--all]
+python -m v6gel.cli.clear [path] [--all]
 ```
 
 ## Notes & gotchas

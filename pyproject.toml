@@ -15,14 +15,19 @@ dev = [
     "ruff>=0.6",
 ]
 
+[project.scripts]
+v6export = "v6gel.cli.v6export:main"
+v6loads = "v6gel.cli.v6loads:main"
+v6build-assets = "v6gel.cli.build_assets:main"
+v6clear = "v6gel.cli.clear:main"
+
 [build-system]
 requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-package-dir = { "" = "scripts" }
-packages = ["exporters", "utils", "loadgen"]
-py-modules = ["v6export", "v6loads", "build_assets", "clear"]
+[tool.setuptools.packages.find]
+where = ["scripts"]
+include = ["v6gel*"]
 
 [tool.ruff]
 line-length = 100

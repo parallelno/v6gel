@@ -2,7 +2,7 @@
 
 import os
 
-from utils import common, consts
+from v6gel.utils import common, consts
 
 
 def get_ram_disk_layout(config_j):

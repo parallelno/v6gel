@@ -4,9 +4,9 @@ Faithful port of the original ``export_text``. The localization is selected
 from the asset type: ``text_eng`` -> English, ``text_rus`` -> Russian.
 """
 
-from utils import asmgen, common, consts
-from utils.log import error
-from exporters.context import AssetManifest, ExportContext
+from v6gel.utils import asmgen, common, consts
+from v6gel.utils.log import error
+from v6gel.exporters.context import AssetManifest, ExportContext
 
 TEXT_LEN_MAX = 512
 

@@ -1,7 +1,7 @@
 """Build config loading and validation for the v6 asset pipeline."""
 
-from utils import common, consts
-from utils.log import ExportError
+from v6gel.utils import common, consts
+from v6gel.utils.log import ExportError
 
 
 def load_build_config(path):

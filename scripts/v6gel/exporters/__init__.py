@@ -5,25 +5,25 @@ The :data:`EXPORTERS` registry maps an ``asset_type`` to its module so the
 ``v6export`` CLI can dispatch generically.
 """
 
-from utils import consts
+from v6gel.utils import consts
 
-from exporters.context import ExportContext, AssetManifest
+from v6gel.exporters.context import ExportContext, AssetManifest
 
 # Imported lazily inside get_exporter to keep optional heavy deps (PIL, lhafile)
 # out of the import path when they are not needed.
 _REGISTRY = {
-	consts.ASSET_TYPE_MUSIC: "exporters.music",
-	consts.ASSET_TYPE_BACK: "exporters.back",
-	consts.ASSET_TYPE_PALETTE: "exporters.palette",
-	consts.ASSET_TYPE_SPRITE: "exporters.sprite",
-	consts.ASSET_TYPE_DECAL: "exporters.decal",
-	consts.ASSET_TYPE_FONT: "exporters.font",
-	consts.ASSET_TYPE_TEXT_ENG: "exporters.text",
-	consts.ASSET_TYPE_TEXT_RUS: "exporters.text",
-	consts.ASSET_TYPE_LEVEL_DATA: "exporters.level_data",
-	consts.ASSET_TYPE_LEVEL_GFX: "exporters.level_gfx",
-	consts.ASSET_TYPE_TILED_IMG_DATA: "exporters.tiled_img_data",
-	consts.ASSET_TYPE_TILED_IMG_GFX: "exporters.tiled_img_gfx",
+	consts.ASSET_TYPE_MUSIC: "v6gel.exporters.music",
+	consts.ASSET_TYPE_BACK: "v6gel.exporters.back",
+	consts.ASSET_TYPE_PALETTE: "v6gel.exporters.palette",
+	consts.ASSET_TYPE_SPRITE: "v6gel.exporters.sprite",
+	consts.ASSET_TYPE_DECAL: "v6gel.exporters.decal",
+	consts.ASSET_TYPE_FONT: "v6gel.exporters.font",
+	consts.ASSET_TYPE_TEXT_ENG: "v6gel.exporters.text",
+	consts.ASSET_TYPE_TEXT_RUS: "v6gel.exporters.text",
+	consts.ASSET_TYPE_LEVEL_DATA: "v6gel.exporters.level_data",
+	consts.ASSET_TYPE_LEVEL_GFX: "v6gel.exporters.level_gfx",
+	consts.ASSET_TYPE_TILED_IMG_DATA: "v6gel.exporters.tiled_img_data",
+	consts.ASSET_TYPE_TILED_IMG_GFX: "v6gel.exporters.tiled_img_gfx",
 }
 
 

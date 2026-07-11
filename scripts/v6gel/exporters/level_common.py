@@ -4,8 +4,8 @@ Port of the original ``export_level_utils`` with the staleness checking removed
 and the ``build`` dependency replaced by ``consts``/``log``.
 """
 
-from utils import common, consts
-from utils.log import error
+from v6gel.utils import common, consts
+from v6gel.utils.log import error
 
 # Tiledata category bases (see v6 level data consts).
 TILEDATA_TELEPORT = 2 * 16

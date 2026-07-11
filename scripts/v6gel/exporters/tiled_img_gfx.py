@@ -7,10 +7,10 @@ from pathlib import Path
 
 from PIL import Image
 
-from utils import asmgen, common, common_gfx, consts
-from utils.log import error
-from exporters import tiled_img_common
-from exporters.context import AssetManifest, ExportContext
+from v6gel.utils import asmgen, common, common_gfx, consts
+from v6gel.utils.log import error
+from v6gel.exporters import tiled_img_common
+from v6gel.exporters.context import AssetManifest, ExportContext
 
 
 def export(ctx: ExportContext) -> AssetManifest:

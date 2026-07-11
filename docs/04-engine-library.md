@@ -1,6 +1,6 @@
 # 4. v6gel Library Reference
 
-The runtime library lives in `v6/` and is assembled by `v6/build.bat` into
+The runtime library lives in `engine/` and is assembled by `engine/build.bat` into
 `out/v6.o`. `v6.asm` `.include`s every subsystem and provides the crt0 startup
 (`_start`) that sets the stack, clears `.bss`, installs the 50 Hz interrupt
 vector, and calls your `main`.

@@ -14,10 +14,10 @@ If none match, a clear :class:`ExportError` tells the user how to fix it.
 import os
 import shutil
 
-from utils.log import ExportError
+from v6gel.utils.log import ExportError
 
-# Repo root = two levels up from this file (scripts/utils/tools.py).
-_REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+# Repo root = three levels up from this file (scripts/v6gel/utils/tools.py).
+_REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 
 # Environment variable names callers can set to point at each tool.
 ENV_V6ASM = "V6ASM"

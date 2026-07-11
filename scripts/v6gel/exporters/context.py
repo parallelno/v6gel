@@ -19,7 +19,7 @@ from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import Any, Optional
 
-from utils import consts
+from v6gel.utils import consts
 
 
 @dataclass
@@ -62,13 +62,13 @@ class ExportContext:
 
 	@property
 	def bin_path(self) -> str:
-		from utils import asmgen
+		from v6gel.utils import asmgen
 		return os.path.join(self.bin_dir, asmgen.cpm_filename(self.name))
 
 	@property
 	def stored_path(self) -> str:
 		"""Path/name the linked meta references (post transport compression)."""
-		from utils import asmgen
+		from v6gel.utils import asmgen
 		return os.path.join(self.bin_dir, asmgen.cpm_filename(self.name, self.stored_ext))
 
 	@property

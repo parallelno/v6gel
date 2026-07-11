@@ -21,13 +21,10 @@ import json
 import os
 import sys
 
-# Allow running both as "python scripts/v6export.py" and from the scripts dir.
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
-import exporters
-from exporters.context import ExportContext
-from utils import consts, tools
-from utils.log import ExportError, TextColor, printc
+import v6gel.exporters as exporters
+from v6gel.exporters.context import ExportContext
+from v6gel.utils import consts, tools
+from v6gel.utils.log import ExportError, TextColor, printc
 
 
 def parse_args(argv=None):

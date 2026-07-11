@@ -1,13 +1,13 @@
 """Background exporter (full-screen, non-animated 4-plane image).
 
 Faithful port of the original ``export_back`` byte layout; only the interface
-(staleness/IO) changed. See ``v6/gfx/v6_back_draw.asm`` for the data format.
+(staleness/IO) changed. See ``engine/gfx/v6_back_draw.asm`` for the data format.
 """
 
 from PIL import Image
 
-from utils import asmgen, common, common_gfx, consts
-from exporters.context import AssetManifest, ExportContext
+from v6gel.utils import asmgen, common, common_gfx, consts
+from v6gel.exporters.context import AssetManifest, ExportContext
 
 
 def export(ctx: ExportContext) -> AssetManifest:

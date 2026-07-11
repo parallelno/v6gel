@@ -36,18 +36,22 @@ V6ASM  ?= tools/v6asm/v6asm$(EXE)
 V6FDD  ?= tools/v6asm/v6fdd$(EXE)
 CLANG  ?= tools/v6llvmc/bin/clang$(EXE)
 
+# Make the v6gel pipeline package importable from the in-repo scripts/ dir for
+# every recipe, so `python -m v6gel.cli.*` works without a separate install.
+export PYTHONPATH := scripts
+
 # --- project paths ---------------------------------------------------------
 CONFIG       := assets/config.json
 BUILD_DIR    := build/release
 FDD_TEMPLATE := assets/basefdd/rds308.fdd
 
-# i8080 / Vector-06c target and stack top (see v6/common/v6_consts.asm).
+# i8080 / Vector-06c target and stack top (see engine/common/v6_consts.asm).
 TARGET    := -target i8080-unknown-v6c
 STACK_TOP := 0x7FFE
 STACK_DEF := -Wl,--defsym=__stack_top=$(STACK_TOP)
 
 # Build artifacts.
-ENGINE_OBJ := v6/out/v6.o
+ENGINE_OBJ := engine/out/v6.o
 SONG_OBJ   := samples/music/out/song01.o
 SONG_DATA  := samples/music/out/song01_data.zx0
 SAMPLE_ROM := samples/01/out/main.rom
@@ -61,12 +65,12 @@ all: engine assets sample ## Build the engine, all assets, and sample 01.
 tools:
 	$(PYTHON) install_tools.py
 
-## engine: assemble the v6 engine library to v6/out/v6.o.
+## engine: assemble the v6 engine library to engine/out/v6.o.
 engine: $(ENGINE_OBJ)
 
-$(ENGINE_OBJ): $(wildcard v6/**/*.asm) v6/v6.asm
-	$(call mkdir,v6/out)
-	cd v6 && "$(abspath $(V6ASM))" v6.asm -o out/v6.o -f obj
+$(ENGINE_OBJ): $(wildcard engine/**/*.asm) engine/v6.asm
+	$(call mkdir,engine/out)
+	cd engine && "$(abspath $(V6ASM))" v6.asm -o out/v6.o -f obj
 
 ## song: assemble + compress the sample song (samples/music).
 song: $(SONG_OBJ)
@@ -78,7 +82,7 @@ $(SONG_OBJ): samples/music/song01.asm samples/music/song01_data.asm
 
 ## assets: export every asset of the config and pack a bootable .fdd.
 assets:
-	$(PYTHON) scripts/build_assets.py $(CONFIG) -o $(BUILD_DIR) --fdd-template $(FDD_TEMPLATE)
+	$(PYTHON) -m v6gel.cli.build_assets $(CONFIG) -o $(BUILD_DIR) --fdd-template $(FDD_TEMPLATE)
 
 ## sample: build sample 01 (needs the engine and the song).
 sample: $(SAMPLE_ROM)
@@ -94,7 +98,7 @@ run: $(SAMPLE_ROM)
 
 ## clean: remove build outputs.
 clean:
-	$(PYTHON) scripts/clear.py
+	$(PYTHON) -m v6gel.cli.clear
 
 ## help: list the available targets.
 help:

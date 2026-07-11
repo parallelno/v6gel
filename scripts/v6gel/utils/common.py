@@ -3,8 +3,8 @@ import json
 import shutil
 import subprocess
 
-from utils import consts
-from utils.log import TextColor, error, printc
+from v6gel.utils import consts
+from v6gel.utils.log import TextColor, error, printc
 
 def combine_bits_to_bytes(_bits):
 	bytes = []

@@ -1,16 +1,16 @@
 """Sprite exporter: 3-plane masked sprites with optional preshifting.
 
 Faithful port of the original ``export_sprite`` data layout (see
-``v6/gfx/v6_sprite_draw.asm``). The dead experimental code paths from the old
+``engine/gfx/v6_sprite_draw.asm``). The dead experimental code paths from the old
 script (alternate row-by-row packers and CPU-cycle estimators) were dropped;
 the surviving packer is generalized to any width that is a multiple of 8.
 """
 
 from PIL import Image
 
-from utils import asmgen, common, common_gfx, consts
-from utils.log import error
-from exporters.context import AssetManifest, ExportContext
+from v6gel.utils import asmgen, common, common_gfx, consts
+from v6gel.utils.log import error
+from v6gel.exporters.context import AssetManifest, ExportContext
 
 VALID_PRESHIFTS = (1, 4, 8)
 

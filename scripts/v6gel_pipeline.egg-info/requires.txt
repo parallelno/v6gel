@@ -1,0 +1,5 @@
+Pillow>=10.0
+lhafile>=0.3.0
+
+[dev]
+ruff>=0.6

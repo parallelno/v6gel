@@ -1,13 +1,13 @@
 """Font exporter: character glyphs with Unicode-aware label mangling.
 
 Faithful port of the original ``export_font`` layout (see
-``v6/gfx/v6_text_ex_draw.asm``).
+``engine/gfx/v6_text_ex_draw.asm``).
 """
 
 from PIL import Image
 
-from utils import asmgen, common, consts
-from exporters.context import AssetManifest, ExportContext
+from v6gel.utils import asmgen, common, consts
+from v6gel.exporters.context import AssetManifest, ExportContext
 
 ENG_ALPHABET_LEN = 26
 GLYPH_WIDTH = 8  # glyph cell width sampled from the PNG

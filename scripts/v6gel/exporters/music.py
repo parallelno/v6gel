@@ -17,9 +17,9 @@ import struct
 
 import lhafile
 
-from utils import asmgen, consts
-from utils.log import error
-from exporters.context import AssetManifest, ExportContext
+from v6gel.utils import asmgen, consts
+from v6gel.utils.log import error
+from v6gel.exporters.context import AssetManifest, ExportContext
 
 # V6 garbage-collected task buffer geometry (must match the runtime).
 GC_BUFFER_SIZE = 0x100

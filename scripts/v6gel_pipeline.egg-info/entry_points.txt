@@ -1,0 +1,5 @@
+[console_scripts]
+v6build-assets = v6gel.cli.build_assets:main
+v6clear = v6gel.cli.clear:main
+v6export = v6gel.cli.v6export:main
+v6loads = v6gel.cli.v6loads:main

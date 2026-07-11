@@ -13,11 +13,7 @@ import os
 import shutil
 import sys
 
-_SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
-if _SCRIPTS_DIR not in sys.path:
-	sys.path.insert(0, _SCRIPTS_DIR)
-
-from utils.log import TextColor, printc
+from v6gel.utils.log import TextColor, printc
 
 
 def parse_args(argv):

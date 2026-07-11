@@ -21,14 +21,9 @@ import argparse
 import os
 import sys
 
-# Allow running both as "python scripts/v6loads.py" and "python -m v6loads".
-_SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
-if _SCRIPTS_DIR not in sys.path:
-	sys.path.insert(0, _SCRIPTS_DIR)
-
-from loadgen import config, manifest, ramdisk
-from utils import common, consts
-from utils.log import ExportError, TextColor, error, printc
+from v6gel.loadgen import config, manifest, ramdisk
+from v6gel.utils import common, consts
+from v6gel.utils.log import ExportError, TextColor, error, printc
 
 
 # ---------------------------------------------------------------------------

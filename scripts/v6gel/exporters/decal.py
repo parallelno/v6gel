@@ -1,13 +1,13 @@
 """Decal exporter: masked 4-plane sprites plus named pointer lists.
 
 Faithful port of the original ``export_decal`` layout (see
-``v6/gfx/v6_decal_draw.asm``).
+``engine/gfx/v6_decal_draw.asm``).
 """
 
 from PIL import Image
 
-from utils import asmgen, common, common_gfx, consts
-from exporters.context import AssetManifest, ExportContext
+from v6gel.utils import asmgen, common, common_gfx, consts
+from v6gel.exporters.context import AssetManifest, ExportContext
 
 
 def export(ctx: ExportContext) -> AssetManifest:

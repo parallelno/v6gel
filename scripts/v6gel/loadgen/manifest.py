@@ -2,9 +2,9 @@
 
 import os
 
-from exporters.context import AssetManifest
-from utils import common, consts
-from utils.log import error
+from v6gel.exporters.context import AssetManifest
+from v6gel.utils import common, consts
+from v6gel.utils.log import error
 
 
 def collect_assets(config_j, manifest_dir):

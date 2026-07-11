@@ -1,7 +1,7 @@
 """Palette exporter (Vector06c colors plus optional fade tables)."""
 
-from utils import asmgen, common, common_gfx, consts
-from exporters.context import AssetManifest, ExportContext
+from v6gel.utils import asmgen, common, common_gfx, consts
+from v6gel.exporters.context import AssetManifest, ExportContext
 
 
 def export(ctx: ExportContext) -> AssetManifest:

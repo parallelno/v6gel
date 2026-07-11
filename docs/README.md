@@ -17,8 +17,8 @@ New here? Start with the [Project Overview](01-overview.md), then read
 
 ## Quick links
 
-- **Build the engine:** [`v6/build.bat`](../v6/build.bat) → see [Building & Tooling](02-building.md#building-the-engine-library)
-- **Build all assets:** `python scripts/build_assets.py assets/config.json -o build/release` → see [Building & Tooling](02-building.md#whole-build--build_assets)
+- **Build the engine:** [`engine/build.bat`](../engine/build.bat) → see [Building & Tooling](02-building.md#building-the-engine-library)
+- **Build all assets:** `python -m v6gel.cli.build_assets assets/config.json -o build/release` → see [Building & Tooling](02-building.md#whole-build--build_assets)
 - **Add a new asset:** [Asset Pipeline → Adding a new asset](03-asset-pipeline.md#adding-a-new-asset)
 
 ---

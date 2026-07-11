@@ -8,9 +8,9 @@ from pathlib import Path
 
 from PIL import Image
 
-from utils import asmgen, common, common_gfx, consts
-from exporters import level_common
-from exporters.context import AssetManifest, ExportContext
+from v6gel.utils import asmgen, common, common_gfx, consts
+from v6gel.exporters import level_common
+from v6gel.exporters.context import AssetManifest, ExportContext
 
 
 def export(ctx: ExportContext) -> AssetManifest:
