@@ -20,7 +20,7 @@ JSON meta ─┘
 | Tool | Role |
 |------|------|
 | **v6asm** | Assembles the engine library and each generated asset data-asm into a raw blob. |
-| **zx0 (`zx0salvador.exe`)** | Compresses data. Used *inside* some formats (music, levels) and, optionally, as a whole-blob transport step. |
+| **zx0 (`salvador.exe`)** | Compresses data. Used *inside* some formats (music, levels) and, optionally, as a whole-blob transport step. |
 | **v6fdd** | Builds the floppy image from a template plus the stored blobs. |
 | **v6export.py / v6loads.py / build_assets.py** | The Python orchestration described below. |
 
@@ -29,6 +29,11 @@ tool given by a CLI flag first, then an environment variable (`V6ASM`, `V6FDD`,
 `ZX0`), then the bundled `tools/<name>/` directory populated by
 `install_tools.py`, and finally your system `PATH`. Override any tool explicitly
 with `--asm`, `--packer`, or `--v6fdd` when your layout differs.
+
+When a path comes from a CLI flag or environment variable the pipeline validates
+that the executable actually exists before use. If it does not, the build stops
+immediately with a clear error message indicating the source of the bad path
+(e.g. `ZX0 environment variable`) rather than crashing inside a subprocess.
 
 ## Building the engine library
 

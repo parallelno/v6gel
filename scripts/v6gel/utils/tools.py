@@ -50,11 +50,29 @@ def _which_any(names):
 	return None
 
 
+def _check_exe(value, source, what, env_var, url):
+	"""Raise :class:`ExportError` if the executable part of *value* cannot be found.
+
+	*value* may contain extra arguments (e.g. ``"salvador.exe -classic"``);
+	only the first token is treated as the executable path.
+	"""
+	exe = value.split()[0]
+	if not (os.path.isfile(exe) or shutil.which(exe)):
+		raise ExportError(
+			f"could not find {what}: '{exe}' (from {source})",
+			f"check the path is correct, or set the {env_var} environment "
+			f"variable / place the tool under the repo's tools/ directory. "
+			f"See {url}",
+		)
+
+
 def _resolve(cli_value, env_var, vendored_subdir, exe_names, what, url):
 	if cli_value:
+		_check_exe(cli_value, f"--{env_var.lower()} flag", what, env_var, url)
 		return cli_value
 	env_value = os.environ.get(env_var)
 	if env_value:
+		_check_exe(env_value, f"{env_var} environment variable", what, env_var, url)
 		return env_value
 	vendored = _vendored(vendored_subdir, exe_names)
 	if vendored:
@@ -88,9 +106,11 @@ def resolve_v6fdd(cli_value=None):
 def resolve_zx0(cli_value=None):
 	"""Resolve the zx0 packer command (executable plus default arguments)."""
 	if cli_value:
+		_check_exe(cli_value, "--packer flag", "the zx0 (salvador) packer", ENV_ZX0, _ZX0_URL)
 		return cli_value
 	env_value = os.environ.get(ENV_ZX0)
 	if env_value:
+		_check_exe(env_value, f"{ENV_ZX0} environment variable", "the zx0 (salvador) packer", ENV_ZX0, _ZX0_URL)
 		return env_value
 	exe = _vendored("zx0", ["zx0salvador.exe", "zx0salvador", "salvador.exe", "salvador"])
 	if exe is None:

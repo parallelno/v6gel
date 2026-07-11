@@ -3,7 +3,7 @@ REM Build v6 library.
 
 REM Tools paths.
 set v6asm=C:\Work\Programming\v6asm\target\release\v6asm
-set zx0=C:\Work\Programming\v6\tools\zx0\zx0salvador.exe -classic
+set zx0=%~dp0..\..\tools\zx0\salvador.exe -classic
 
 
 REM Set the current directory to the location of this script.

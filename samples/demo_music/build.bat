@@ -9,7 +9,7 @@ echo .
 rem === UPDATE PATHS ===========================================================
 rem Tools paths.
 set v6asm=C:\Work\Programming\v6asm\target\release\v6asm
-set zx0=tools\zx0\zx0salvador.exe -classic
+set zx0=tools\zx0\salvador.exe -classic
 set compiler=C:\Work\Programming\v6llvmc\llvm-build\bin\clang
 set emu=C:\Work\Programming\devector\bin\devector
 
