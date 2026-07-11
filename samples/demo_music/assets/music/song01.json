@@ -1,0 +1,5 @@
+{
+	"comment" : "Use tools/ay_emul/ to export the .ym file",
+	"asset_type" : "music",
+	"path_ym" : "song01.ym"
+}
