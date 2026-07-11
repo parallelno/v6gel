@@ -36,6 +36,8 @@ class ExportContext:
 	packer_path: str  # external zx0 packer (format-intrinsic compression only)
 	emit_asm: bool = False  # also keep the human-readable *_data.asm (debug)
 	emit_filename: bool = False  # include FILENAME_PTR block in *_meta.asm
+	emit_obj: bool = False  # also assemble a linkable .o object file
+	obj_dir: Optional[str] = None  # directory for the .o file (default: bin_dir)
 	temp_dir: str = "build/temp/"
 	# Extension (incl. dot) of the file actually stored on the FDD that the
 	# linked meta should reference. The exporter always assembles a raw `.bin`;
@@ -73,6 +75,11 @@ class ExportContext:
 		return os.path.join(self.bin_dir, asmgen.cpm_filename(self.name, self.stored_ext))
 
 	@property
+	def obj_path(self) -> str:
+		base = self.obj_dir if self.obj_dir else self.bin_dir
+		return os.path.join(base, self.name + consts.EXT_OBJ)
+
+	@property
 	def manifest_path(self) -> str:
 		return os.path.join(self.out_dir, self.name + consts.EXT_MANIFEST)
 
@@ -96,6 +103,8 @@ class AssetManifest:
 	ram_disk_align: int = consts.WORD_LEN
 	# Arbitrary exporter-specific extra info for v6loads (init labels etc.):
 	extra: dict = field(default_factory=dict)
+	# Object file produced by --emit-obj (None when not requested):
+	obj_path: Optional[str] = None
 
 	def write(self, path: str) -> None:
 		os.makedirs(os.path.dirname(path) or ".", exist_ok=True)

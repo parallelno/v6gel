@@ -17,7 +17,7 @@ REM Compress the song data using the tools/zx0/ compressor.
 %zx0% out\song01_data.bin out\song01_data.zx0
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-echo Assemble the v6 library.
+echo Assemble the song.
 %v6asm% song01.asm -o out\song01.o -f obj
 if %errorlevel% neq 0 exit /b %errorlevel%
 

@@ -69,9 +69,9 @@ def _build_data_asm(ctx, reg_data, comments):
 	asm += "\n.org 0\n\n"
 	asm += "ADDR_LEN\t\t= 2\n\n"
 	asm += "; runtime buffers:\n"
-	asm += "GC_STREAM_BUFFERS \t\t= 0x8000\n"
-	asm += "GC_MUSIC_REG_PTRS_LEN = GC_TASKS * ADDR_LEN\n"
 	asm += f"GC_TASKS\t\t= {GC_TASKS} ; 14 individual threads for each AY register\n"
+	asm += "GC_MUSIC_REG_PTRS_LEN = GC_TASKS * ADDR_LEN\n"
+	asm += "GC_STREAM_BUFFERS \t\t= 0x8000\n"
 	asm += "\n\n"
 
 	# Compress each AY register stream individually.

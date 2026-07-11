@@ -50,6 +50,7 @@ EXT_FDD = ".fdd"
 EXT_YM = ".ym"
 EXT_JSON = ".json"
 EXT_BAT = ".bat"
+EXT_OBJ = ".o"
 EXT_MANIFEST = ".manifest.json"
 
 # ----------------------------------------------------------------------------

@@ -111,3 +111,34 @@ def meta_asm(bin_path, body="", emit_filename=False):
 
 def _basename_no_ext(path):
 	return os.path.splitext(os.path.basename(path))[0]
+
+
+def obj_asm(name: str, bin_path: str) -> str:
+	"""Generate the wrapper ASM source that embeds a binary blob as an object file.
+
+	The resulting assembly, when assembled with ``-f obj``, produces a linkable
+	object file that exports ``_{name}_data`` pointing at the raw blob bytes.
+	"""
+	global_name = f"_{name}_data"
+	incbin_path = bin_path.replace("\\", "/")
+	asm = f".global {global_name}\n\n"
+	asm += ".opt\n"
+	asm += f"{global_name}:\n"
+	asm += f'.incbin "{incbin_path}"\n'
+	asm += ".endopt\n"
+	return asm
+
+
+def assemble_obj(v6asm_path: str, name: str, bin_path: str, obj_path: str, temp_dir: str) -> None:
+	"""Assemble an object-file wrapper that embeds *bin_path* as ``_{name}_data``."""
+	asm_text = obj_asm(name, bin_path)
+	os.makedirs(temp_dir, exist_ok=True)
+	os.makedirs(os.path.dirname(obj_path) or ".", exist_ok=True)
+	asm_path = os.path.join(temp_dir, name + "_obj" + consts.EXT_ASM)
+	with open(asm_path, "w", encoding="ascii") as f:
+		f.write(asm_text)
+	run([v6asm_path, asm_path, "-o", obj_path, "-f", "obj"])
+	try:
+		os.remove(asm_path)
+	except OSError:
+		pass

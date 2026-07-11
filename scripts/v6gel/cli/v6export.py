@@ -23,7 +23,7 @@ import sys
 
 import v6gel.exporters as exporters
 from v6gel.exporters.context import ExportContext
-from v6gel.utils import consts, tools
+from v6gel.utils import asmgen, consts, tools
 from v6gel.utils.log import ExportError, TextColor, printc
 
 
@@ -57,6 +57,14 @@ def parse_args(argv=None):
 	parser.add_argument(
 		"--emit-asm", action="store_true",
 		help="also keep the human-readable <name>_data.asm (debug)",
+	)
+	parser.add_argument(
+		"--emit-obj", action="store_true",
+		help="also assemble a linkable object file <name>.o that embeds the blob",
+	)
+	parser.add_argument(
+		"--obj-dir", default=None,
+		help="directory for the .o object file (default: bin-dir)",
 	)
 	parser.add_argument(
 		"--emit-filename", action="store_true",
@@ -108,6 +116,8 @@ def build_context(args):
 		v6asm_path=tools.resolve_v6asm(args.v6asm),
 		packer_path=tools.resolve_zx0(args.packer),
 		emit_asm=args.emit_asm,
+		emit_obj=args.emit_obj,
+		obj_dir=args.obj_dir,
 		emit_filename=args.emit_filename,
 		temp_dir=args.temp_dir,
 		stored_ext=stored_ext,
@@ -126,6 +136,12 @@ def main(argv=None):
 			)
 
 		manifest = exporter(ctx)
+		if ctx.emit_obj:
+			obj_path = ctx.obj_path
+			asmgen.assemble_obj(
+				ctx.v6asm_path, ctx.name, ctx.stored_path, obj_path, ctx.temp_dir
+			)
+			manifest.obj_path = obj_path
 		manifest.write(ctx.manifest_path)
 
 		printc(
