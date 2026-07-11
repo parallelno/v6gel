@@ -35,10 +35,8 @@ def export(ctx: ExportContext) -> AssetManifest:
 
 	reg_data, comment1, comment2, comment3 = _read_ym(ym_path)
 
-	data_asm, relative_ptrs, reg_labels = _build_data_asm(
-		ctx, reg_data, (comment1, comment2, comment3)
-	)
-	meta_body = _build_meta_body(ctx.name, relative_ptrs, reg_labels)
+	data_asm = _build_data_asm(ctx, reg_data, (comment1, comment2, comment3))
+	meta_body = _build_meta_body(ctx.name)
 
 	keep_asm = ctx.data_asm_path if ctx.emit_asm else None
 	bin_len = asmgen.assemble(
@@ -55,7 +53,7 @@ def export(ctx: ExportContext) -> AssetManifest:
 		bin_len=bin_len,
 		meta_asm_path=ctx.meta_asm_path,
 		data_asm_path=keep_asm,
-		extra={"ay_reg_data_ptrs": f"{ctx.name}_ay_reg_data_ptrs"},
+		extra={"ay_reg_data_ptrs": f"_{ctx.name}_ay_reg_data_ptrs"},
 	)
 
 
@@ -65,56 +63,51 @@ def export(ctx: ExportContext) -> AssetManifest:
 
 def _build_data_asm(ctx, reg_data, comments):
 	prefix = ctx.name
-	asm = f"; {comments[0]}\n; {comments[1]}\n; {comments[2]}\n"
 
-	relative_ptrs = {}
-	addr = 0
-
-	asm += ".org 0\n"
-	asm += f"GC_BUFFER_SIZE\t= {GC_BUFFER_SIZE}\n"
-	asm += f"GC_TASKS\t\t= {GC_TASKS}\n"
-	asm += f"GC_STACK_SIZE\t= {GC_STACK_SIZE}\n"
-	asm += ".align GC_BUFFER_SIZE\n"
-	asm += "; GC_TASKS buffers, GC_BUFFER_SIZE bytes each. MUST be aligned by 0x100\n"
-	asm += "_v6_gc_buffer:\n"
-	asm += "			.storage GC_BUFFER_SIZE * GC_TASKS, $00\n\n"
-	asm += "_v6_gc_task_stack:\n"
-	asm += "			.storage GC_STACK_SIZE * GC_TASKS, $00\n\n"
-	asm += "_v6_gc_task_stack_end:\n"
-
-	relative_ptrs["_v6_gc_buffer"] = addr
-	addr += GC_BUFFER_SIZE * GC_TASKS
-	addr += GC_STACK_SIZE * GC_TASKS
-	relative_ptrs["_v6_gc_task_stack_end"] = addr
+	asm = "; It will be assembled and compressed, then either linked to the main program or loaded from disk.\n\n"
+	asm += f"; {comments[0]}\n; {comments[1]}\n; {comments[2]}\n"
+	asm += "\n.org 0\n\n"
+	asm += "ADDR_LEN\t\t= 2\n\n"
+	asm += "; runtime buffers:\n"
+	asm += "GC_STREAM_BUFFERS \t\t= 0x8000\n"
+	asm += "GC_MUSIC_REG_PTRS_LEN = GC_TASKS * ADDR_LEN\n"
+	asm += f"GC_TASKS\t\t= {GC_TASKS} ; 14 individual threads for each AY register\n"
+	asm += "\n\n"
 
 	# Compress each AY register stream individually.
-	reg_lens = []
+	packed_channels = []
 	for i, channel in enumerate(reg_data[0:AY_REG_COUNT]):
 		packed = _zx0_compress(ctx, channel, f"{prefix}{i:02d}")
-		name = f"_{prefix}_ay_reg_data{i:02d}_relative"
+		packed_channels.append(packed)
+
+	# Compute pointer formula values (GC area size + cumulative compressed stream offset).
+	# These equal the old-format relative offsets, ensuring the same runtime layout.
+	gc_area_size = GC_BUFFER_SIZE * GC_TASKS + GC_STACK_SIZE * GC_TASKS
+	addr = gc_area_size
+	ptr_values = []
+	for packed in packed_channels:
+		ptr_values.append(addr)
+		addr += len(packed)
+
+	# Emit pointer constant definitions.
+	for i, val in enumerate(ptr_values):
+		asm += f"_{prefix}_ay_reg_data{i:02d}_ptr = 0x{val:04x} + GC_MUSIC_REG_PTRS_LEN + GC_STREAM_BUFFERS\n"
+
+	asm += "\n"
+	asm += f"_{prefix}_ay_reg_data_ptrs:\n"
+	asm += "\t\t\t.word " + ", ".join(f"_{prefix}_ay_reg_data{i:02d}_ptr" for i in range(AY_REG_COUNT))
+	asm += ",\n\n"
+
+	asm += f"\n_{prefix}_ay_reg_data:\n"
+	for i, packed in enumerate(packed_channels):
+		name = f"_{prefix}_ay_reg_data{i:02d}"
 		asm += f"{name}: .byte " + ",".join("$%02x" % b for b in packed) + "\n"
-		reg_lens.append(len(packed))
 
-	reg_labels = []
-	for i, length in enumerate(reg_lens):
-		name = f"_{prefix}_ay_reg_data{i:02d}_relative"
-		relative_ptrs[name] = addr
-		addr += length
-		reg_labels.append(name)
-
-	return asm, relative_ptrs, reg_labels
-
-
-def _build_meta_body(prefix, relative_ptrs, reg_labels):
-	asm = "; relative labels\n"
-	for label, value in relative_ptrs.items():
-		asm += f"{label} = 0x{value:04x}\n"
-	asm += "\n\n"
-
-	asm += f"{prefix}_ay_reg_data_ptrs:\n			.word "
-	asm += ", ".join(reg_labels)
-	asm += "\n\n"
 	return asm
+
+
+def _build_meta_body(prefix):
+	return ""
 
 
 def _zx0_compress(ctx, raw, tag):
