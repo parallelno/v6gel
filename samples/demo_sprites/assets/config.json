@@ -1,0 +1,112 @@
+{
+	"game_name" : "guimos_jdundel",
+	"asset_type" : "config",
+	"consts" : [
+		"DEBUG = 1",
+		"TEXT_MONOSPACED_CHARS = 0",
+		"LOCALIZATION = 0"
+	],
+	"export_dir" :
+	{
+		"code" : "code/"
+	},
+	"packer_path" : "tools/zx0salvador.exe -v -classic",
+	"build_db_path" : "build/build.db",
+	"basefdd_path" : "assets/basefdd/rds308.fdd",
+	"ram_disk_reserve" :
+	[
+		{
+			"name" : "BACKBUFF2",
+			"bank_idx" : 0,
+			"addr" : "0xA000",
+			"len" : "0x6000",
+			"comment" : "to restore a background in the backbuffer"
+		},
+		{
+			"name" : "BACKBUFF",
+			"bank_idx" : 1,
+			"addr" : "0xA000",
+			"len" : "0x6000",
+			"comment" : "to avoid sprite flickering when it's consecutively erased/rendered"
+		}
+	],
+	"types_alignment" :
+	{
+		"music" : 256
+	},
+	"loaded_after_stack" :
+	[
+		"music",
+		"level_data"
+	],
+	"permanent_load_name" : "permanent",
+	"loads" : {
+		"permanent" :
+		[
+			"fonts/eng/font.json",
+
+			"backs/backs0.json",
+			"decals/decals0.json",
+
+			"sprites/vfx4.json",
+			"sprites/vfx.json",
+
+			"sprites/bomb.json",
+
+			"music/song01.json",
+
+			"palettes/pal_menu.json",
+			"palettes/pal_lv1.json"
+
+		],
+		"menu" :
+		[
+			"tiled_imgs/tim_data.json",
+			"tiled_imgs/tim_gfx.json",
+			"text/txt_menu.json"
+		],
+		"level0" :
+		[
+			"tiled_imgs/ti0_data.json",
+			"tiled_imgs/ti0_gfx.json",
+			"sprites/hero.json",
+			"sprites/burner.json",
+			"sprites/skeleton.json",
+			"sprites/knight.json",
+			"sprites/firepool.json",
+			"sprites/sword.json",
+			"sprites/scythe.json",
+			"sprites/snowflake.json",
+
+
+			"sprites/npc.json",
+			"sprites/npc4.json",
+			"sprites/cat.json",
+			"sprites/goose.json",
+
+			"levels/lv0_data.json",
+			"levels/lv0_gfx.json",
+			"text/txt_lv0.json",
+			"palettes/pal_lv0.json"
+		],
+		"level1" :
+		[
+			"tiled_imgs/ti0_data.json",
+			"tiled_imgs/ti0_gfx.json",
+			"sprites/hero.json",
+			"sprites/burner.json",
+			"sprites/skeleton.json",
+			"sprites/knight.json",
+			"sprites/firepool.json",
+			"sprites/sword.json",
+			"sprites/scythe.json",
+			"sprites/snowflake.json",
+
+			"sprites/vampire.json",
+			"sprites/tnt.json",
+
+			"levels/lv1_data.json",
+			"levels/lv1_gfx.json"
+		]
+	}
+}

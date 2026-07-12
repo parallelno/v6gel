@@ -1,0 +1,88 @@
+{
+	"palette_path" : "../palettes/pal_lv1.json",
+	"asset_type" : "sprite",	
+	"path_png" : "art/sprites_sword.png",
+	"preshifted_sprites" : 8,
+	"mask" : true,
+	"anims" : {
+		"delay"		: {
+			"frames" : ["sword_delay"],
+			"loop" : false
+		},
+		"attk_r"	: {
+			"frames" : ["sword_r0", "sword_r1"],
+			"loop" : false
+		},
+		"attk_l"	: {
+			"frames" : ["sword_l0", "sword_l1"],
+			"loop" : false
+		}
+	},
+	"sprites" : [
+		{
+			"name" : "sword_delay",
+			"x" : 16,
+			"y"	: 0,
+			"width" : 8,
+			"height" : 5,
+			"mask_x" : 0,
+			"mask_y" : 0,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},		
+		{
+			"name" : "sword_r0",
+			"x" : 8,
+			"y"	: 32,
+			"width" : 16,
+			"height" : 16,
+			"mask_x" : 8,
+			"mask_y" : 48,
+			"offset_x": 8,
+			"offset_y": 2,
+			"mask_alpha" : 0,
+			"mask_color" : 1		
+		},		
+		{
+			"name" : "sword_r1",
+			"x" : 24,
+			"y"	: 32,
+			"width" : 16,
+			"height" : 16,
+			"mask_x" : 24,
+			"mask_y" : 48,
+			"offset_x": 0,
+			"offset_y": -2,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},				
+		{
+			"name" : "sword_l0",
+			"x" : 8,
+			"y"	: 64,
+			"width" : 16,
+			"height" : 16,
+			"mask_x" : 8,
+			"mask_y" : 80,
+			"offset_x": -8,
+			"offset_y": 2,
+			"mirrored" : false,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "sword_l1",
+			"x" : 32,
+			"y"	: 64,
+			"width" : 16,
+			"height" : 16,
+			"mask_x" : 32,
+			"mask_y" : 80,
+			"offset_x": -16,
+			"offset_y": -2,			
+			"mirrored" : false,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		}		
+	]
+}

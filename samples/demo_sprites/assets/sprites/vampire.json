@@ -1,0 +1,130 @@
+{
+	"palette_path" : "../palettes/pal_lv1.json",
+	"asset_type" : "sprite",
+	"path_png" : "art/sprites_vampire.png",
+	"preshifted_sprites" : 4,
+	"mask" : true,
+	"anims" : {
+		"idle" : {
+			"frames" : ["run_r0", "run_r1", "run_r2", "run_r3", "run_l0", "run_l1", "run_l2", "run_l3"],
+			"loop" : true
+		},
+		"run_r"	: {
+			"frames" : ["run_r0", "run_r1", "run_r2", "run_r3"],
+			"loop" : true
+		},
+		"run_l"	: {
+			"frames" : ["run_l0", "run_l1", "run_l2", "run_l3"],
+			"loop" : true
+		},
+		"cast"	: {
+			"frames" : ["cast_0"],
+			"loop" : true
+		}		
+	},
+	"sprites" : [
+		{
+			"name" : "run_r0",
+			"x" : 0,
+			"y"	: 34,
+			"width" : 16,
+			"height" : 14,
+			"mask_x" : 16,
+			"mask_y" : 34,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "run_r1",
+			"x" : 0, 
+			"y"	: 50,
+			"width" : 16,
+			"height" : 14,
+			"mask_x" : 16,
+			"mask_y" : 50,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "run_r2",
+			"x" : 0,
+			"y"	: 65,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 16,
+			"mask_y" : 65,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "run_r3",
+			"x" : 0,
+			"y"	: 81,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 16,
+			"mask_y" : 81,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "run_l0",
+			"x" : 0,
+			"y"	: 98,
+			"width" : 16,
+			"height" : 14,
+			"mask_x" : 16,
+			"mask_y" : 98,
+			"mask_alpha" : 0,
+			"mask_color" : 1,
+			"mirrored" : false
+		},
+		{
+			"name" : "run_l1",
+			"x" : 0, 
+			"y"	: 114,
+			"width" : 16,
+			"height" : 14,
+			"mask_x" : 16,
+			"mask_y" : 114,
+			"mask_alpha" : 0,
+			"mask_color" : 1,
+			"mirrored" : false
+		},
+		{
+			"name" : "run_l2",
+			"x" : 0,
+			"y"	: 129,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 16,
+			"mask_y" : 129,
+			"mask_alpha" : 0,
+			"mask_color" : 1,
+			"mirrored" : false
+		},
+		{
+			"name" : "run_l3",
+			"x" : 0,
+			"y"	: 145,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 16,
+			"mask_y" : 145,
+			"mask_alpha" : 0,
+			"mask_color" : 1,
+			"mirrored" : false
+		},
+		{
+			"name" : "cast_0",
+			"x" : 0,
+			"y"	: 160,
+			"width" : 16,
+			"height" : 16,
+			"mask_x" : 16,
+			"mask_y" : 160,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		}
+	]
+}

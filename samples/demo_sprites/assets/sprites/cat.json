@@ -1,0 +1,111 @@
+{
+	"palette_path" : "../palettes/pal_lv0.json",
+	"asset_type" : "sprite",	
+	"path_png" : "art/sprites_npc4.png",	
+	"preshifted_sprites" : 4,
+	"mask" : true,	
+	"anims" : {
+		"idle"	: {
+			"frames" : ["idle0", "idle1", "idle0", "idle2"],
+			"loop" : true
+		},
+		"run_r"	: {
+			"frames" : ["run_r0", "run_r1", "run_r2", "run_r3"],
+			"loop" : true
+		},
+		"run_l"	: {
+			"frames" : ["run_l0", "run_l1", "run_l2", "run_l3"],
+			"loop" : true
+		}
+	},
+	"sprites" : [
+		{
+			"name" : "idle0",
+			"x" : 32,
+			"y"	: 67,
+			"width" : 16,
+			"height" : 13,
+			"mask_x" : 48
+		},
+		{
+			"name" : "idle1",
+			"x" : 32,
+			"y"	: 83,
+			"width" : 16,
+			"height" : 13,
+			"mask_x" : 48
+		},
+		{
+			"name" : "idle2",
+			"x" : 32,
+			"y"	: 99,
+			"width" : 16,
+			"height" : 13,
+			"mask_x" : 48
+		},
+		{
+			"name" : "run_r0",
+			"x" : 32,
+			"y"	: 114,
+			"width" : 16,
+			"height" : 14,
+			"mask_x" : 48
+		},
+		{
+			"name" : "run_r1",
+			"x" : 32,
+			"y"	: 131,
+			"width" : 16,
+			"height" : 13,
+			"mask_x" : 48
+		},
+		{
+			"name" : "run_r2",
+			"x" : 32,
+			"y"	: 146,
+			"width" : 16,
+			"height" : 14,
+			"mask_x" : 48
+		},
+		{
+			"name" : "run_r3",
+			"x" : 32,
+			"y"	: 163,
+			"width" : 16,
+			"height" : 13,
+			"mask_x" : 48
+		},
+		{
+			"name" : "run_l0",
+			"x" : 32,
+			"y"	: 178,
+			"width" : 16,
+			"height" : 14,
+			"mask_x" : 48
+		},
+		{
+			"name" : "run_l1",
+			"x" : 32,
+			"y"	: 195,
+			"width" : 16,
+			"height" : 13,
+			"mask_x" : 48
+		},
+		{
+			"name" : "run_l2",
+			"x" : 32,
+			"y"	: 210,
+			"width" : 16,
+			"height" : 14,
+			"mask_x" : 48
+		},
+		{
+			"name" : "run_l3",
+			"x" : 32,
+			"y"	: 227,
+			"width" : 16,
+			"height" : 13,
+			"mask_x" : 48
+		}
+	]
+}

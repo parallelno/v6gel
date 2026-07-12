@@ -1,0 +1,95 @@
+{
+	"palette_path" : "../palettes/pal_lv1.json",
+	"asset_type" : "sprite",
+	"path_png" : "art/sprites_vfx.png",
+	"preshifted_sprites" : 4,
+	"mask" : true,
+	"anims" : {
+		"hit"	: {
+			"frames" : ["hit0", "hit0", "hit1", "hit2", "hit3"],
+			"loop" : false
+		},
+		"hero_death"	: {
+			"frames" : ["hero_death1", "hero_death1", "hero_death1", "hero_death1", "hero_death2", "hero_death2", "hero_death2", "hero_death2", "hero_death2", "hero_death2", "hero_death2", "hero_death2", "hero_death2"],
+			"loop" : false
+		},
+		"spark"	: {
+			"frames" : ["hit0", "hit1", "hit2", "hit3"],
+			"loop" : true
+		}	
+	},
+	"sprites" : [ 
+		{
+			"name" : "hit0",
+			"x" : 0,
+			"y"	: 99,
+			"width" : 16,
+			"height" : 11,
+			"mask_x" : 0,
+			"mask_y" : 115, 			
+			"offset_y": 3 ,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "hit1",
+			"x" : 16,
+			"y"	: 98,
+			"width" : 16,
+			"height" : 12,
+			"mask_x" : 0,
+			"mask_y" : 114, 						
+			"offset_y": 2,
+			"mask_alpha" : 0,
+			"mask_color" : 1			
+		},
+		{
+			"name" : "hit2",
+			"x" : 32,
+			"y"	: 97,
+			"width" : 16,
+			"height" : 14,
+			"mask_x" : 0,
+			"mask_y" : 113, 			
+			"offset_y": 1,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "hit3",
+			"x" : 48,
+			"y"	: 96,
+			"width" : 16,
+			"height" : 16,
+			"mask_x" : 0,
+			"mask_y" : 112, 			
+			"offset_y": 0,
+			"mask_alpha" : 0,
+			"mask_color" : 1			
+		},
+		{
+			"name" : "hero_death1",
+			"x" : 16,
+			"y"	: 132,
+			"width" : 16,
+			"height" : 12,
+			"mask_x" : 16,
+			"mask_y" : 148, 			
+			"offset_y": 0,
+			"mask_alpha" : 0,
+			"mask_color" : 1			
+		},
+		{
+			"name" : "hero_death2",
+			"x" : 32,
+			"y"	: 136,
+			"width" : 16,
+			"height" : 8,
+			"mask_x" : 32,
+			"mask_y" : 152, 			
+			"offset_y": 0,
+			"mask_alpha" : 0,
+			"mask_color" : 1			
+		}
+	]
+}

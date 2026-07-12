@@ -1,0 +1,55 @@
+{
+	"palette_path" : "../palettes/pal_lv1.json",
+	"asset_type" : "sprite",
+	"path_png" : "art/sprites_firepool.png",
+	"preshifted_sprites" : 1,
+	"mask" : true,
+	"anims" : {
+		"idle" : {
+			"frames" : ["idle0", "idle1", "idle2", "idle3", "idle4"],
+			"loop" : true
+		}
+	},
+	"sprites" : [
+		{
+			"name" : "idle0",
+			"x" : 0,
+			"y"	: 20,
+			"width" : 16,
+			"height" : 12,
+			"mask_x" : 16
+		},
+		{
+			"name" : "idle1",
+			"x" : 0,
+			"y"	: 36,
+			"width" : 16,
+			"height" : 12,
+			"mask_x" : 16
+		},
+		{
+			"name" : "idle2",
+			"x" : 0,
+			"y"	: 49,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 16
+		},
+		{
+			"name" : "idle3",
+			"x" : 0,
+			"y"	: 66,
+			"width" : 16,
+			"height" : 14,
+			"mask_x" : 16
+		},
+		{
+			"name" : "idle4",
+			"x" : 0,
+			"y"	: 83,
+			"width" : 16,
+			"height" : 13,
+			"mask_x" : 16
+		}
+	]
+}

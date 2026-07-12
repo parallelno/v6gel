@@ -1,0 +1,185 @@
+{
+	"palette_path" : "../palettes/pal_lv0.json",
+	"asset_type" : "sprite",
+	"path_png" : "art/sprites_npc4.png",
+	"preshifted_sprites" : 4,
+	"mask" : true,
+	"anims" : {
+		"caterpillar_run"	: {
+			"frames" : ["caterpillar_run0", "caterpillar_run1", "caterpillar_run2", "caterpillar_run1"],
+			"loop" : true
+		},
+		"chiken_idle_r" : {
+			"frames" : ["chiken_idle_r0", "chiken_run_r0"],
+			"loop" : true
+		},
+		"chiken_idle_l" : {
+			"frames" : ["chiken_idle_l0", "chiken_run_l0"],
+			"loop" : true
+		},
+		"chiken_run_r" : {
+			"frames" : ["chiken_run_r0", "chiken_run_r1"],
+			"loop" : true
+		},
+		"chiken_run_l" : {
+			"frames" : ["chiken_run_l0", "chiken_run_l1"],
+			"loop" : true
+		},
+		"crow_idle" : {
+			"frames" : ["crow_idle0", "crow_idle1"],
+			"loop" : true
+		},
+		"crow_run_r" : {
+			"frames" : ["crow_run_r0", "crow_run_r1", "crow_run_r2"],
+			"loop" : true
+		},
+		"crow_run_l" : {
+			"frames" : ["crow_run_l0", "crow_run_l1", "crow_run_l2"],
+			"loop" : true
+		}
+	},
+	"sprites" : [
+		{
+			"name" : "caterpillar_run0",
+			"x" : 96,
+			"y"	: 43,
+			"width" : 16,
+			"height" : 5,
+			"offset_x" : 0,
+			"offset_y" : 0,
+			"mask_x" : 112
+		},
+		{
+			"name" : "caterpillar_run1",
+			"x" : 96,
+			"y"	: 58,
+			"width" : 16,
+			"height" : 6,
+			"offset_x" : 0,
+			"offset_y" : 0,
+			"mask_x" : 112
+		},
+		{
+			"name" : "caterpillar_run2",
+			"x" : 96,
+			"y"	: 73,
+			"width" : 16,
+			"height" : 7,
+			"offset_x" : 0,
+			"offset_y" : 0,
+			"mask_x" : 112
+		},
+		{
+			"name" : "chiken_run_r0",
+			"x" : 97,
+			"y"	: 162,
+			"width" : 16,
+			"height" : 14,
+			"mask_x" : 80
+		},
+		{
+			"name" : "chiken_run_r1",
+			"x" : 64,
+			"y"	: 178,
+			"width" : 16,
+			"height" : 14,
+			"mask_x" : 80
+		},
+		{
+			"name" : "chiken_idle_r0",
+			"x" : 64,
+			"y"	: 195,
+			"width" : 16,
+			"height" : 13,
+			"mask_x" : 80
+		},
+		{
+			"name" : "chiken_run_l0",
+			"x" : 64,
+			"y"	: 210,
+			"width" : 16,
+			"height" : 14,
+			"mask_x" : 80
+		},
+		{
+			"name" : "chiken_run_l1",
+			"x" : 64,
+			"y"	: 226,
+			"width" : 16,
+			"height" : 14,
+			"mask_x" : 80
+		},
+		{
+			"name" : "chiken_idle_l0",
+			"x" : 64,
+			"y"	: 243,
+			"width" : 16,
+			"height" : 13,
+			"mask_x" : 80
+		},
+		{
+			"name" : "crow_idle0",
+			"x" : 64,
+			"y"	: 37,
+			"width" : 16,
+			"height" : 11,
+			"mask_x" : 80
+		},
+		{
+			"name" : "crow_idle1",
+			"x" : 64,
+			"y"	: 53,
+			"width" : 16,
+			"height" : 11,
+			"mask_x" : 80
+		},
+		{
+			"name" : "crow_run_r0",
+			"x" : 64,
+			"y"	: 65,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 80
+		},
+		{
+			"name" : "crow_run_r1",
+			"x" : 64,
+			"y"	: 86,
+			"width" : 16,
+			"height" : 10,
+			"mask_x" : 80
+		},
+		{
+			"name" : "crow_run_r2",
+			"x" : 64,
+			"y"	: 101,
+			"width" : 16,
+			"height" : 11,
+			"mask_x" : 80
+		},
+		{
+			"name" : "crow_run_l0",
+			"x" : 64,
+			"y"	: 113,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 80
+		},
+		{
+			"name" : "crow_run_l1",
+			"x" : 64,
+			"y"	: 134,
+			"width" : 16,
+			"height" : 10,
+			"mask_x" : 80
+		},
+		{
+			"name" : "crow_run_l2",
+			"x" : 64,
+			"y"	: 149,
+			"width" : 16,
+			"height" : 11,
+			"mask_x" : 80
+		}
+	]
+}
