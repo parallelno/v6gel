@@ -1,5 +1,6 @@
 @memusage_v6_consts:
 	; This line is for proper formatting in VSCode
+.global *
 ;=======================================================
 ; Ports
 ;=======================================================

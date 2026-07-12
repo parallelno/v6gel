@@ -49,7 +49,6 @@ call engine\build.bat
 popd
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-
 echo.
 echo === Assemble the main file ================================================
 %v6asm% %CURRENT_DIR%main.asm -o %OUT_DIR%\main\main.o -f obj

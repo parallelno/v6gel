@@ -1,4 +1,6 @@
 @memusage_v6_utils:
+.global *
+
 .include "misc/v6_rnd.asm"
 .include "misc/v6_dzx0.asm"
 
@@ -21,8 +23,8 @@ restore_sp:
 ;	bc - source + len
 ; prep: 8cc
 ; loop: 32-64cc
-; copy 4 bytes: 48 + 32*4 + 32 * 1 = 208
-; copy 32 bytes: 48 + 32*32 + 32 * 1 = 1104
+; erase 4 bytes: 48 + 32*4 + 32 * 1 = 208
+; erase 32 bytes: 48 + 32*32 + 32 * 1 = 1104
 .opt
 mem_erase:
 			mvi e, 0
