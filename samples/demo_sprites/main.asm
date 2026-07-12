@@ -8,12 +8,9 @@
 ; Engine calls it after initialization.
 .global main
 
-; -- full 16 byte palette data (supplied to the engine color update routine)
-palette:
-    .db 0x00, 0x11, 0x22, 0x33
-    .db 0x44, 0x55, 0x66, 0x77
-    .db 0x88, 0x99, 0xAA, 0xBB
-    .db 0xCC, 0xDD, 0xEE, 0xFF
+; -- include palette meta data (supplied to the engine color update routine)
+; It contains relative labels to the sub-data (palette, fade animation)
+.include "build/demo_sprites/palettes/meta/pal_lv0_meta.asm"
 
 main:
             ; ------------------------------------------------------------------
@@ -22,7 +19,7 @@ main:
             ; - (DE) -> destination `v6_palette` in engine RAM
             ; - BC      -> number of bytes to copy (PALETTE_LEN)
             ; mem_copy will copy BC bytes from (HL) to (DE).
-            lxi h, palette
+            lxi h, _pal_lv0_data
             lxi d, v6_palette
             lxi b, PALETTE_LEN
             call mem_copy
@@ -31,7 +28,7 @@ main:
             ; Unpack the packed song data into the RAM disk and start the
             ; music player. The symbol `_little_mermaid_data` points to the packed
             ; data included with this sample.
-            lxi h, _little_mermaid_data
+            lxi h, _song01_data
             call v6_gc_unpack_init_play_song
 
             ; ------------------------------------------------------------------
