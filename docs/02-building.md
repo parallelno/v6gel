@@ -73,6 +73,11 @@ and produces three outputs:
 `--emit-asm` additionally keeps the human-readable `<name>_data.asm` for
 debugging.
 
+`--emit-obj` assembles the blob into a linkable `<name>.o` object file — use
+this when you want to link the asset data directly into a ROM instead of loading
+it from an FDD. The `.o` is written to `--bin-dir` by default; override with
+`--obj-dir`.
+
 ### Linking & RAM-disk packing — `v6loads`
 
 ```bat

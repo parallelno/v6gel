@@ -129,16 +129,33 @@ def obj_asm(name: str, bin_path: str) -> str:
 	return asm
 
 
-def assemble_obj(v6asm_path: str, name: str, bin_path: str, obj_path: str, temp_dir: str) -> None:
-	"""Assemble an object-file wrapper that embeds *bin_path* as ``_{name}_data``."""
+def assemble_obj(
+	v6asm_path: str,
+	name: str,
+	bin_path: str,
+	obj_path: str,
+	temp_dir: str,
+	keep_asm_path: str = None,
+) -> None:
+	"""Assemble an object-file wrapper that embeds *bin_path* as ``_{name}_data``.
+
+	If *keep_asm_path* is given the generated wrapper ASM is written there and
+	kept (used by the ``--emit-asm`` debug option); otherwise it is written to a
+	temp file and deleted after assembly.
+	"""
 	asm_text = obj_asm(name, bin_path)
 	os.makedirs(temp_dir, exist_ok=True)
 	os.makedirs(os.path.dirname(obj_path) or ".", exist_ok=True)
-	asm_path = os.path.join(temp_dir, name + "_obj" + consts.EXT_ASM)
+	if keep_asm_path:
+		os.makedirs(os.path.dirname(keep_asm_path) or ".", exist_ok=True)
+		asm_path = keep_asm_path
+	else:
+		asm_path = os.path.join(temp_dir, name + "_obj" + consts.EXT_ASM)
 	with open(asm_path, "w", encoding="ascii") as f:
 		f.write(asm_text)
 	run([v6asm_path, asm_path, "-o", obj_path, "-f", "obj"])
-	try:
-		os.remove(asm_path)
-	except OSError:
-		pass
+	if not keep_asm_path:
+		try:
+			os.remove(asm_path)
+		except OSError:
+			pass

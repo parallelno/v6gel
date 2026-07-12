@@ -9,7 +9,8 @@ Output blob layout (assembled from the generated data-ASM):
 The per-channel compression is part of the data *format*: at run time the
 player decompresses each register stream on the fly through a small 256-byte
 window buffer, so it stays inside the exporter (unlike the whole-file transport
-compression that the build driver applies before storing the blob on the FDD).
+compression applied by ``v6export --compress`` before embedding or storing the
+blob).
 """
 
 import io

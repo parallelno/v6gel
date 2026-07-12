@@ -1,18 +1,11 @@
 @echo off
-REM Build v6 engine library.
+setlocal
+rem Build v6 engine library.
 
-REM Tools paths.
+rem === UPDATE TOOLS PATHS =====================================================
 set v6asm=C:\Work\Programming\v6asm\target\release\v6asm
 
-REM Set the current directory to the location of this script.
-REM cd /d "%~dp0"
-SET current_dir=%~dp0
 
-
-echo Assemble the v6 library.
+rem === Assemble the v6 library ================================================
+set current_dir=%~dp0
 %v6asm% %current_dir%v6.asm -o build\v6\v6.o -f obj
-if %errorlevel% neq 0 exit /b %errorlevel%
-
-
-echo.
-echo Done.

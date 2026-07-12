@@ -3,7 +3,7 @@
 set v6asm=C:\Work\Programming\v6asm\target\release\v6asm
 set compiler=C:\Work\Programming\v6llvmc\llvm-build\bin\clang
 set emu=C:\Work\Programming\devector\bin\devector
-set v6=..\..\engine\out\v6.o
+set v6=C:\Work\Programming\v6gel\build\v6\v6.o
 set song=..\music\out\song01.o
 
 

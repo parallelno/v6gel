@@ -58,8 +58,6 @@ void dzx0_rd_wrapper(
 }
 
 
-
-
 void main() {
     // Set the palette
     // memcpy(v6_palette, palette, sizeof(palette));

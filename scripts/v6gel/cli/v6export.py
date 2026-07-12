@@ -81,6 +81,12 @@ def parse_args(argv=None):
 		"--type", dest="asset_type", default=None,
 		help="override the asset_type read from the meta JSON",
 	)
+	parser.add_argument(
+		"--compress", action="store_true",
+		help="transport-compress the .bin with zx0 after export; the compressed "
+			"file (default extension .zx0, overridable via --stored-ext) is what "
+			"gets embedded in the .o object file and referenced in *_meta.asm",
+	)
 	return parser.parse_args(argv)
 
 
@@ -103,6 +109,8 @@ def build_context(args):
 	name = os.path.splitext(os.path.basename(args.meta))[0]
 
 	stored_ext = args.stored_ext
+	if args.compress and stored_ext == consts.EXT_BIN:
+		stored_ext = consts.EXT_ZX0
 	if stored_ext and not stored_ext.startswith("."):
 		stored_ext = "." + stored_ext
 
@@ -136,10 +144,17 @@ def main(argv=None):
 			)
 
 		manifest = exporter(ctx)
+		if args.compress:
+			asmgen.run([*ctx.packer_path.split(), ctx.bin_path, ctx.stored_path])
 		if ctx.emit_obj:
 			obj_path = ctx.obj_path
+			keep_obj_asm = (
+				os.path.join(ctx.out_dir, ctx.name + "_obj" + consts.EXT_ASM)
+				if ctx.emit_asm else None
+			)
 			asmgen.assemble_obj(
-				ctx.v6asm_path, ctx.name, ctx.stored_path, obj_path, ctx.temp_dir
+				ctx.v6asm_path, ctx.name, ctx.stored_path, obj_path, ctx.temp_dir,
+				keep_asm_path=keep_obj_asm,
 			)
 			manifest.obj_path = obj_path
 		manifest.write(ctx.manifest_path)
