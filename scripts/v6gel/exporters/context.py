@@ -108,8 +108,14 @@ class AssetManifest:
 
 	def write(self, path: str) -> None:
 		os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+		data = asdict(self)
+		# Normalize path strings to forward slashes so manifests are
+		# portable and consistent across platforms.
+		for key, val in data.items():
+			if isinstance(val, str):
+				data[key] = val.replace("\\", "/")
 		with open(path, "w", encoding="utf-8") as f:
-			json.dump(asdict(self), f, indent="\t")
+			json.dump(data, f, indent="\t")
 
 	@staticmethod
 	def read(path: str) -> "AssetManifest":

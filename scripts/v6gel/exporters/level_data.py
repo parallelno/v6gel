@@ -91,7 +91,7 @@ def _ram_disk_data_to_asm(ctx, level_j_path):
 		)
 
 		room_data_asm += "			.word 0 ; safety pair of bytes for reading by POP B\n"
-		room_data_asm += "; " + room_path + "\n"
+		room_data_asm += "; " + room_path.replace("\\", "/") + "\n"
 		room_data_asm += room_data_label + ":\n"
 		room_data_asm += "; compressed room data len\n"
 		room_data_asm += f"			.word {data_len}\n"

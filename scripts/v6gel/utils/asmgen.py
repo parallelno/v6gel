@@ -86,6 +86,9 @@ def meta_asm(bin_path, body="", emit_filename=False):
 	linked directly into the ROM do not need a filename.  Set it to ``True``
 	when the blob will be loaded from an FDD.
 	"""
+	# Normalize to forward slashes so assembler directives are portable
+	# (backslashes trigger unknown escape sequence errors in the assembler).
+	bin_path = bin_path.replace("\\", "/")
 	source_name = _basename_no_ext(bin_path)
 	upper = source_name.upper()
 

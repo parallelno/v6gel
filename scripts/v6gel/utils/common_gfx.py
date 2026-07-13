@@ -15,9 +15,9 @@ def palette_file_to_asm(palette_path, asset_path = "", label_prefix = ""):
 
 	palette_coords = palette_j["colors_pos"]
 	colors = {}
-	asm = "; " + asset_path + "\n"
+	asm = "; " + asset_path.replace("\\", "/") + "\n"
 	label = label_prefix + "_palette"
-	palette = image.getpalette() 
+	palette = image.getpalette()
 
 	for i, pos in enumerate(palette_coords):
 		x = pos["x"]
@@ -31,7 +31,7 @@ def palette_file_to_asm(palette_path, asset_path = "", label_prefix = ""):
 		if i % 4 == 0 : asm += "			.byte "
 		asm += "%" + format(color, '08b') + ", "
 		if i % 4 == 3 : asm += "\n"
-	
+
 	return asm, colors, label, IMAGE_COLORS_MAX
 
 # combines RGB values into a Vector06c color format
@@ -46,17 +46,17 @@ def pack_color(r,g,b):
 def remap_colors(image, colors):
 	palette = image.getpalette()
 	color_matching_table = {}
-	
+
 	for color_idx in range(len(palette) //3):
 		r = palette[color_idx*3]
 		g = palette[color_idx*3 + 1]
 		b = palette[color_idx*3 + 2]
 		rgb = (r,g,b)
-		if rgb not in colors: 
+		if rgb not in colors:
 			continue
 		cidx = colors[rgb]
 		color_matching_table[color_idx] = cidx
-	
+
 	w = image.width
 	h = image.height
 
@@ -94,7 +94,7 @@ def indexes_to_bit_lists(tile_img):
 	for line in tile_img:
 		for color_idx in line:
 			bit0, bit1, bit2, bit3 = color_index_to_bit[color_idx]
-			bits0.append(bit0) 
+			bits0.append(bit0)
 			bits1.append(bit1)
 			bits2.append(bit2)
 			bits3.append(bit3)
@@ -107,7 +107,7 @@ def plane_indexes_to_bit_lists(tile_img):
 	bits3 = [] # E000-FFFF
 	for color_idx in tile_img:
 		bit0, bit1, bit2, bit3 = color_index_to_bit[color_idx]
-		bits0.append(bit0) 
+		bits0.append(bit0)
 		bits1.append(bit1)
 		bits2.append(bit2)
 		bits3.append(bit3)
