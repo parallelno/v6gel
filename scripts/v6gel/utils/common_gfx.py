@@ -2,10 +2,16 @@ import os
 import json
 from PIL import Image
 from pathlib import Path
+from v6gel.utils.log import ExportError
 
 IMAGE_COLORS_MAX = 16
 
 def palette_file_to_asm(palette_path, asset_path = "", label_prefix = ""):
+	if not os.path.exists(palette_path):
+		raise ExportError(
+			f"palette file not found: {palette_path}",
+			f"referenced by: {asset_path}",
+		)
 	with open(palette_path, "rb") as file:
 		palette_j = json.load(file)
 
@@ -63,6 +69,14 @@ def remap_colors(image, colors):
 	for y in range(h) :
 		for x in range(w) :
 			color_idx = image.getpixel((x, y))
+			if color_idx not in color_matching_table:
+				r = palette[color_idx * 3]
+				g = palette[color_idx * 3 + 1]
+				b = palette[color_idx * 3 + 2]
+				raise ExportError(
+					f"sprite contains a color not defined in the palette",
+					f"pixel ({x}, {y}): palette index {color_idx}, RGB ({r}, {g}, {b})",
+				)
 			new_color_idx = color_matching_table[color_idx]
 			image.putpixel((x,y), new_color_idx)
 	return image

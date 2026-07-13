@@ -145,7 +145,7 @@ Useful macros: `SYS_CALL` / `SYS_CALL_D` (BDOS calls),
 |---------|---------|
 | `set_palette` / `set_palette_int` | Apply a 16-color palette (main / from interrupt). |
 | `copy_palette_request_update` | Request a palette update on the next interrupt. |
-| `palette_fade_init` / `palette_fade_update` | Drive a palette fade; `palette_fade_out` / `palette_fade_in` for full fades. |
+| `palette_fade_init` / `palette_fade_update` | Drive a palette fade; `palette_fade` / `palette_fade_reverse` for full fades. |
 
 Globals: `v6_palette` (16 bytes), `v6_palette_update_request`, `v6_scr_offset_y`.
 
