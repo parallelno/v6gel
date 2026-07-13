@@ -453,7 +453,7 @@ set_palette_int:			; call it from an interruption routine
 
 
 .opt
-; Copy the pallete, then init the request for apply it
+; Copy the palette, then init the request for apply it
 ; in:
 ; hl - RAM Disk palette addr
 ; a - RAM Disk activation command
@@ -477,22 +477,22 @@ PALETTE_UPDATE_EVERY_NTH_COLOR = 2 ; update every Nth color
 ; in:
 ; de - palette fade addr; ex. PERMANENT_PAL_MENU_ADDR + _pal_menu_palette_fade_to_black_relative
 ; a - RAM Disk activation command
-pallete_fade_out:
+palette_fade_out:
 			mvi c, 0
-			call pallete_fade_init
+			call palette_fade_init
 			jmp @loop
-@pallete_fade_in:
+@palette_fade_in:
 			mvi c, 1
-			call pallete_fade_init
+			call palette_fade_init
 @loop:
-			call pallete_fade_update
+			call palette_fade_update
 			hlt
 			hlt
 			dcx h
 			; CY=1 if the fade is complete
 			jnc @loop
 			ret
-pallete_fade_in: = @pallete_fade_in
+palette_fade_in: = @palette_fade_in
 .endopt
 
 
@@ -502,8 +502,8 @@ pallete_fade_in: = @pallete_fade_in
 ; de - palette fade addr; ex. PERMANENT_PAL_MENU_ADDR + _pal_menu_palette_fade_to_black_relative
 ; a - RAM Disk activation command
 ; c - 0 - forward fade, 1 - reverse
-pallete_fade_init:
-			sta pallete_fade_update_rd_cmd + 1
+palette_fade_init:
+			sta palette_fade_update_rd_cmd + 1
 
 			; store fade direction
 			lxi h, @direction + 1
@@ -515,7 +515,7 @@ pallete_fade_init:
 			; c - fade_iterations - 2
 			; de - data addr in the RAM Disk
 
-			lxi h, pallete_fade_update_iterations + 1
+			lxi h, palette_fade_update_iterations + 1
 			mov m, c
 
 			inx d ; advance over fade_iterations
@@ -549,38 +549,38 @@ pallete_fade_init:
 			xchg
 
 @store_palette_pointer:
-			shld pallete_update_next_pal_advance + 1
+			shld palette_update_next_pal_advance + 1
 			xchg
-			shld pallete_update_current_pal + 1
+			shld palette_update_current_pal + 1
 			ret
 .endopt
 
 
 .opt
-; Fades out the current pallete
+; Fades out the current palette
 ; Interrupts must be enabled
 ; out:
 ; CY=1 if the fade out is complete
-pallete_fade_update:
-pallete_update_current_pal:
+palette_fade_update:
+palette_update_current_pal:
 			lxi d, TEMP_ADDR
-pallete_update_next_pal_advance:
+palette_update_next_pal_advance:
 			lxi h, PALETTE_LEN + SAFE_WORD_LEN
 			; hl - addr offset to the next palette (PALETTE_LEN + SAFE_WORD_LEN)
 			dad d
-			shld pallete_update_current_pal + 1
+			shld palette_update_current_pal + 1
 			; de - pointer to the current palette
 			; hl - pointer to the next palette
 			xchg
 			; hl - pointer to the current palette
-pallete_fade_update_rd_cmd:
+palette_fade_update_rd_cmd:
 			mvi a, TEMP_BYTE
 			call copy_palette_request_update
 
-pallete_fade_update_iterations:
+palette_fade_update_iterations:
 			mvi a, TEMP_BYTE
 			sui 1
-			sta pallete_fade_update_iterations + 1
+			sta palette_fade_update_iterations + 1
 			ret
 .endopt
 
