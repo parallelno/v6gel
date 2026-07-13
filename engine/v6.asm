@@ -4,9 +4,12 @@
 ; Include this file and all files it includes at most once
 .setting force_once, true
 
-.include "common\v6_consts.asm"
-.include "common\v6_macros.asm"
-.include "misc\v6_interruption.asm"
+.include "common/v6_consts.asm"
+.include "common/v6_macros.asm"
+.include "misc/v6_interruption.asm"
+.include "gfx/v6_sprite.asm"
+.include "gfx/v6_sprite_draw.asm"
+.include "gfx/v6_sprite_erase.asm"
 
 
 ;

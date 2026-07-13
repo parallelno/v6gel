@@ -30,7 +30,7 @@ KEY_CODE_ROW_7	= <~(1<<7)
 KEY_CODE_NO		= $ff
 ; key row 0
 KEY_CODE_TAB	= <~(1<<0) ; (клавиша ТАБ на клавиатуре Вектор 06ц), CONTROL_CODE_RETURN - return or to show the in-game return_menu)
-KEY_CODE_ALT	= <~(1<<1) ; (клавиша ПС на клавиатуре Вектор 06ц), CONTROL_CODE_FIRE2 - in-game weapon select 
+KEY_CODE_ALT	= <~(1<<1) ; (клавиша ПС на клавиатуре Вектор 06ц), CONTROL_CODE_FIRE2 - in-game weapon select
 KEY_CODE_ENTER	= <~(1<<2) ; (клавиша ВК на клавиатуре Вектор 06ц)
 KEY_CODE_DEL	= <~(1<<3) ; (клавиша ЗАБ на клавиатуре Вектор 06ц)
 KEY_CODE_LEFT	= <~(1<<4)

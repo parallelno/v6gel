@@ -1,4 +1,7 @@
 @memusage_v6_sprite_erase:
+
+.global *
+
 ; clear a N*16 pxs square on the screen,
 ; it clears 3 screen buffers from de addr and further
 ; ex. CALL_RAM_DISK_FUNC(sprite_erase, RAM_DISK_M_8F)

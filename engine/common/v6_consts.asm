@@ -1,6 +1,6 @@
 @memusage_v6_consts:
 	; This line is for proper formatting in VSCode
-.global *
+
 ;=======================================================
 ; Ports
 ;=======================================================
@@ -47,7 +47,8 @@ SCR_ADDR_MASK			= %1110_0000
 ;=======================================================
 ; Sprite
 ;=======================================================
-SPRITE_X_SCR_ADDR		= >SCR_BUFF1_ADDR
+SPRITE_SCR_ADDR			= SCR_BUFF1_ADDR
+SPRITE_X_SCR_ADDR		= >SPRITE_SCR_ADDR
 SPRITE_SCR_BUFFS		= 3
 SPRITE_W16				= 2
 SPRITE_W24				= 3

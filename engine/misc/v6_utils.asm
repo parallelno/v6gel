@@ -477,11 +477,11 @@ PALETTE_UPDATE_EVERY_NTH_COLOR = 2 ; update every Nth color
 ; in:
 ; de - palette fade addr; ex. PERMANENT_PAL_MENU_ADDR + _pal_menu_palette_fade_to_black_relative
 ; a - RAM Disk activation command
-palette_fade_out:
+palette_fade:
 			mvi c, 0
 			call palette_fade_init
 			jmp @loop
-@palette_fade_in:
+@palette_fade_reverse:
 			mvi c, 1
 			call palette_fade_init
 @loop:
@@ -492,7 +492,7 @@ palette_fade_out:
 			; CY=1 if the fade is complete
 			jnc @loop
 			ret
-palette_fade_in: = @palette_fade_in
+palette_fade_reverse: = @palette_fade_reverse
 .endopt
 
 

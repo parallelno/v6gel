@@ -1,4 +1,7 @@
 @memusage_v6_sprite:
+
+.global *
+
 ; get a sprite data addr
 ; in:
 ; hl - anim_ptr

@@ -1,4 +1,7 @@
 @memusage_v6_sprite_draw:
+
+.global *
+
 ; sharetable chunk of code to restore SP and
 ; return a couple of parameters within HL, C
 draw_sprite_ret:

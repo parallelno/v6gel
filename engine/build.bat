@@ -13,5 +13,5 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 
 rem === Print symbols if --symbols flag is set =================================
 if "%1"=="--symbols" (
-    %v6llvmc%\llvm-readelf -s build\v6\v6.o > build\v6\v6_symbols.txt
+    %v6llvmc%\llvm-readelf -s build\v6\v6.o > build\v6\v6.symtab
 )
