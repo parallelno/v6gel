@@ -1,4 +1,5 @@
 .global v6_action_code
+.global v6_action_code_old
 
 @memusage_v6_controls:
 
@@ -8,7 +9,7 @@
 .optional
 v6_action_code:
 			.word CONTROL_CODE_NO<<8 || CONTROL_CODE_NO
-action_code_old: = v6_action_code + 1
+v6_action_code_old: = v6_action_code + 1
 .endopt
 
 .optional
