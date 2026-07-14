@@ -1,6 +1,7 @@
 ; ------------------------------------------------------------------------------
 ; This demo shows how to use engine-provided services:
 ;    * read controls
+;    * avoid repeated key pressing
 ;    * debug output
 ;    * use of macros for safe zero comparison and zeroing A register
 ; ------------------------------------------------------------------------------
