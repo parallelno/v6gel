@@ -1,122 +1,154 @@
-; Demo: Initialize palette and play demo music
-; This module prepares the system palette, unpacks and starts a
-; packed song, and continuously requests palette updates so the
-; engine can animate colors on each interrupt.
+; ------------------------------------------------------------------------------
+; This demo shows how to use engine-provided services:
+;    * palette update
+;    * palette fade
+;    * play compressed music
+;    * sprite erase
+;    * sprite draw
+;    * read controls
+;    * export assets into meta-data and data files, and reference it in assembly
+; ------------------------------------------------------------------------------
 
-
-; Expose the `main` label to make it reachable by linker.
-; Engine calls it after initialization.
+; Expose `main` symbol so the linker and engine can call into this demo.
 .global main
 
-.include "../../engine/controls/v6_controls_consts.asm"
+; Import engine constants and control codes
 .include "../../engine/common/v6_consts.asm"
+.include "../../engine/controls/v6_controls_consts.asm"
 
-; Include the palette meta data (supplied to the engine color update routine)
-; It contains relative labels to the sub-data (palette, fade animation)
+; Include generated metadata for palette and sprite assets.
+; Each asset is exported into two files:
+; 1. *_meta.asm: contains relative labels to the data file and usefull constants.
+;    It is usually included in the program.
+; 2. *_data.asm: contains the actual bytes to be loaded into the RAM disk. It
+;    can be included, linked or loaded from FDD at runtime.
 .include "build/demo_sprites/palettes/meta/pal_lv1_meta.asm"
 .include "build/demo_sprites/sprites/meta/knight_meta.asm"
 
+; ---------------------------------------------------------------------------
+; Entry point
+; Steps performed here:
+;  1. Request the engine to apply the palette stored in `v6_palette`.
+;  2. Start a fade-in animation from a constant color to our exported palette.
+;  3. Unpack & play the compressed song.
+;  4. Enter the main loop which syncs to frames, handles controls and
+;     renders the animated sprite.
+; ---------------------------------------------------------------------------
 main:
-            ; The engine palette is all black by default. Apply it to the HW.
-            lxi d, v6_palette_update_request ; DE = palette update request addr
-            mvi a, PALETTE_UPD_REQ_YES       ; A = request value
+            ; By default the engine uses a black palette.
+            ; Request the engine to refresh hardware palette from `v6_palette`.
+            ; The engine watches `v6_palette_update_request` and applies
+            ; palette data when the request value is set to `PALETTE_UPD_REQ_YES`.
+            lxi d, v6_palette_update_request   ; DE = palette update request addr
+            mvi a, PALETTE_UPD_REQ_YES         ; A = request value
+            hlt                                 ; yield; engine will process request
 
-            ; Inquire the engine to apply the palette change. The engine will read the
-            ; palette data from the v6_palette table and apply it to the HW.
-            hlt
-
-            ; ------------------------------------------------------------------
-            ; Fade the palette from black to the sample palette.
-            ; The fade animation data is included in the palette meta data.
+            ; Fade-in the palette from black to our exported palette.
+            ; The meta file defines the fade animation offset
+            ; label `_pal_lv1_palette_fade_to_black_relative`.
+            ; The object file contains the actual data and the label that points
+            ; to it in a format `_<asset_json_file_name>_data`.
             lxi d, _pal_lv1_data + _pal_lv1_palette_fade_to_black_relative
             call palette_fade_reverse
 
-
-            ; ------------------------------------------------------------------
-            ; Unpack the packed song data into the RAM disk and start the
-            ; music player. The symbol `_little_mermaid_data` points to the packed
-            ; data included with this sample.
+            ; Unpack the packed song into the RAM disk and start playback.
+            ; `_song01_data` is produced by the exporter and points to the packed bytes.
             lxi h, _song01_data
             call v6_gc_unpack_init_play_song
 
-
-SPRITE_INIT_POS_X = 10 ; in bytes, multiply by 8 for pixel position
+; ---------------------------------------------------------------------------
+; Configuration: initial sprite position
+; Note: `SPRITE_INIT_POS_X` is specified in bytes (screen X in 8-pixel columns).
+; To convert to pixels multiply by 8 where needed.
+; `SPRITE_X_SCR_ADDR` is an engine-provided constant (screen base X offset).
+; ---------------------------------------------------------------------------
+SPRITE_INIT_POS_X = 10 ; in bytes (8 pixels per byte)
 SPRITE_INIT_POS_Y = 128
 
+; ---------------------------------------------------------------------------
+; Main game loop: sync to frame start, read controls and update sprite
+; ---------------------------------------------------------------------------
 main_loop:
-            ; print A register to the console for debugging
-            ; out 0xED
-            ; sync with the frame start
+            ; Synchronize with the frame start.
             hlt
 
+            ; Prepare the screen address pointer for the knight sprite.
             lxi h, knight_scr_addr
 
-            ; handle the controls
+            ; Read current keyboard action code provided by engine.
+            ; Codes are defined in `v6_controls_consts.asm` and are bitwise ORed together.
             lda v6_action_code
-            mov c, a
+            mov c, a              ; save action code in C for multi-key checks
 
-            ; check key UP
+            ; Check UP: if pressed, increment Y (screen row) = move up visually
             ani CONTROL_CODE_UP
             jz check_key_down
-            inr m
-            out 0xED
+            inr m                 ; increment low byte (Y)
+            out 0xED              ; optional debug output (leave for learners)
             jmp check_key_left
 
 check_key_down:
             mov a, c
             ani CONTROL_CODE_DOWN
             jz check_key_left
-            dcr m
+            dcr m                 ; decrement low byte (Y)
+            out 0xED              ; optional debug output (leave for learners)
 
 check_key_left:
-            inx h ; move to the x position (in bytes)
+            inx h                 ; advance HL to the X position byte (screen X in bytes)
             mov a, c
             ani CONTROL_CODE_LEFT
             jz check_key_right
-            dcr m
+            dcr m                 ; decrement X (move left)
+            out 0xED              ; optional debug output (leave for learners)
             jmp render
 
 check_key_right:
             mov a, c
             ani CONTROL_CODE_RIGHT
             jz render
-            inr m
+            inr m                 ; increment X (move right)
+            out 0xED              ; optional debug output (leave for learners)
 
+; ---------------------------------------------------------------------------
+; Rendering: erase previous sprite then draw the new one
+; - `knight_scr_addr_old` stores previous screen coordinates
+; - sprite metadata contains frame width/height and pixel data
+; ---------------------------------------------------------------------------
 render:
-            ; erase the old sprite
+            ; Erase the sprite at the old position (read address, then call erase)
             lhld knight_scr_addr_old
             xchg
-            ; we will be drawing one frame of the knight animation.
-            ; the frame data contains a width and height in the second pair of bytes.
-            ; the width is minus 1 of the actual width in bytes.
-            ; we reconstruct the actual width by adding 1 to it.
-            ; for more details about the sprite data format, see the
-            ; engine\gfx\v6_sprite_draw.asm and meta data in build/demo_sprites/sprites/meta/knight_meta.asm
+
+            ; The sprite frame header: first two bytes are frame x/y offset,
+            ; next two bytes are width/height (width is stored as width-1 in
+            ; exporter for performance reasons).
+            ; Load a frame width/height.
             lhld _knight_data + _knight_idle_0_0_relative + 2
-            inr h
-            ; de - scr addr
-            ; hl - width, height
+            ; DE = screen addr to clear, HL = width,height pair expected by routine
             call sprite_erase
 
-
 draw_sprites:
-            ; Draw a sprite on the screen.
-            ; bc - sprite data
-            ; de - screen addr
-            ; we will be drawing one frame of the knight animation.
+            ; Draw a frame 0, pixel preshift 0 of the idle animation at current
+            ; screen position.
             lxi b, _knight_data + _knight_idle_0_0_relative
             lhld knight_scr_addr
             xchg
+            ; BC = Sprite data, DE = Screen addr
             call sprite_draw_vm
 
-            ; copy the current screen position to the old position for next frame
+            ; Save current screen position for the next frame erase
             lhld knight_scr_addr
             shld knight_scr_addr_old
-
 
             jmp main_loop
             ret
 
+; ---------------------------------------------------------------------------
+; Screen address variables (stored as low/high byte pairs matching engine API)
+; `SPRITE_X_SCR_ADDR` is an engine constant pointing to the X base offset.
+; We add `SPRITE_INIT_POS_X` to place the sprite horizontally.
+; ---------------------------------------------------------------------------
 knight_scr_addr:
             .db SPRITE_INIT_POS_Y
             .db SPRITE_X_SCR_ADDR + SPRITE_INIT_POS_X
