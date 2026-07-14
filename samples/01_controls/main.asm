@@ -7,44 +7,51 @@
 ; Expose `main` symbol so the linker and engine can call into this demo.
 .global main
 
-; Import engine constants and control codes
+; Import engine constants, control codes, and helper macros.
 .include "../../engine/common/v6_consts.asm"
 .include "../../engine/common/v6_macros.asm"
 .include "../../engine/controls/v6_controls_consts.asm"
 
 
-; ------------------------------------------------------------------------------
+; ---------------------------------------------------------------------------
 ; Entry point
-; Steps performed here:
-; 1. Enter the main loop which syncs to frames, handles controls and
-;    outputs the pressed key code to the debug console.
-; ------------------------------------------------------------------------------
+; Notes for learners:
+;  - `v6_action_code` is a bitfield where each bit represents a control (see
+;    `v6_controls_consts.asm`). Multiple keys can be ORed together.
+;  - Use `ani` to mask and check for specific buttons, e.g. `ani CONTROL_CODE_UP`.
+;  - The `out 0xED` instruction writes A to the emulator debug port
+;    the Devector emulator can show this value in a console window.
+; ---------------------------------------------------------------------------
 main:
 @loop:
             ; Delay 1/50th of a second (1 frame).
             hlt
 
-            ; Read current keyboard action code provided by engine.
-            ; Codes are defined in `v6_controls_consts.asm` and are bitwise ORed together.
+            ; Read action code provided by the engine (bitmask of pressed keys).
             lda v6_action_code
+
+            ; Quick check: if action code equals CONTROL_CODE_NO (zero), continue.
             ; `CPI_ZERO` macro performs a safety check to ensure the constant
             ; is zero. It makes the usage of a `ora a` operation (optimized
             ; comparison with zero) safe and clear.
             CPI_ZERO(CONTROL_CODE_NO)
-            ; If no key is pressed, skip debug output and continue to the next frame.
             jz @loop
 
+            ; Mask direction keys (example): if none of the four directions are set,
+            ; jump to exit. This demonstrates using `ani` with a combined mask.
             ani CONTROL_CODE_UP | CONTROL_CODE_DOWN | CONTROL_CODE_LEFT | CONTROL_CODE_RIGHT
             jz @exit
 
 @debug_output:
-            ; Debug output of the pressed key code.
-            ; Check the emulator's debug console to see the output.
+            ; Send the raw action code to the emulator debug port for inspection.
+            ; Learners can send any bytes here for debugging purposes.
             out 0xED
 
             jmp @loop
+
 @exit:
-            ; Stops the demo for ROMs, and returns to OS for COMs.
+            ; Print zero to the stdout to indicate graceful exit.
             A_TO_ZERO(NULL)
             out 0xED
+            ; For ROMs it stops the program, for COMs it returns to the OS.
             ret

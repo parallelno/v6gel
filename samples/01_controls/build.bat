@@ -1,8 +1,9 @@
 @echo off
 
 echo.
-echo === demo_sprites: Build script ===========================================
-echo Purpose: TODO: fill out
+echo === samples\01_controls: Build script ====================================
+echo Purpose: build and run the controls sample that demonstrates reading input
+echo and sending debug output.
 echo Prerequisites: add `v6asm`, `clang`, and emulator to PATH
 echo Note: update the TOOLS PATHS below if your tools are installed elsewhere.
 
@@ -10,11 +11,9 @@ echo Note: update the TOOLS PATHS below if your tools are installed elsewhere.
 echo.
 echo === TOOLS PATHS (update if required) ======================================
 set v6asm=C:\Work\Programming\v6asm\target\release\v6asm
-set zx0=tools\zx0\salvador.exe -classic
 set compiler=C:\Work\Programming\v6llvmc\llvm-build\bin\clang
 set emu=C:\Work\Programming\devector\bin\devector
 echo v6asm=%v6asm%
-echo zx0=%zx0%
 echo compiler=%compiler%
 echo emu=%emu%
 
@@ -30,9 +29,7 @@ echo === Build the assets ======================================================
 echo.
 echo === Build the v6 library ==================================================
 set v6_o=build\v6\v6.o
-rem Build engine library (stores symbols (labels and constants) to
-rem build\v6\v6.symtab when --symbols supplied, used for demonstration purposes,
-rem helpful for debugging)
+rem Build engine library (use --symbols to emit symbol table useful for debugging)
 pushd .
 call engine\build.bat --symbols
 popd
@@ -46,7 +43,7 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 
 
 echo.
-echo === Link the main program with the v6 library and the assets ==============
+echo === Link the main program with the v6 library =============================
 set target=-target i8080-unknown-v6c
 set STACK_MAIN_PROGRAM_ADDR=0x100
 set STACK_DEF=-Wl,--defsym=__stack_top=%STACK_MAIN_PROGRAM_ADDR%
