@@ -1,9 +1,8 @@
 @echo off
 
 echo.
-echo === samples\01_controls: Build script ====================================
-echo Purpose: build and run the controls sample that demonstrates reading input
-echo and sending debug output.
+echo === samples\02_palette: Build script ====================================
+echo Purpose: Demonstrate palette usage and fade effects
 echo Prerequisites: add `v6asm`, `clang`, and emulator to PATH
 echo Note: update the TOOLS PATHS below if your tools are installed elsewhere.
 
@@ -21,6 +20,23 @@ rem === Set the current directory to the location of this script. ==============
 set CURRENT_DIR=%~dp0
 for %%I in ("%CURRENT_DIR:~0,-1%") do set "PROJECT_NAME=%%~nxI"
 set OUT_DIR=build\%PROJECT_NAME%
+
+
+echo.
+echo === Build the assets ======================================================
+
+echo.
+rem Export palette: pal_lv0 (contains 16-byte palette + fade animation metadata)
+set pal_lv0_json=%CURRENT_DIR%assets\palettes\pal_lv0.json
+set pal_lv0_o=%OUT_DIR%\palettes\bin\pal_lv0.o
+echo asset: %pal_lv0_json%
+python -m v6gel.cli.v6export ^
+    %pal_lv0_json% ^
+    -o %OUT_DIR%\palettes\meta ^
+    --bin-dir %OUT_DIR%\palettes\bin ^
+    --emit-asm ^
+    --emit-obj
+if %errorlevel% neq 0 exit /b %errorlevel%
 
 
 echo.
@@ -48,6 +64,7 @@ set STACK_DEF=-Wl,--defsym=__stack_top=%STACK_MAIN_PROGRAM_ADDR%
 %compiler% %target% %STACK_DEF% -nostdlib -O2 ^
     "%OUT_DIR%\main\main.o" ^
     %v6_o% ^
+    %pal_lv0_o% ^
     -o "%OUT_DIR%\%PROJECT_NAME%.rom"
 if %errorlevel% neq 0 exit /b %errorlevel%
 

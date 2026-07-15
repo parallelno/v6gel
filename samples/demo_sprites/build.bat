@@ -27,7 +27,6 @@ set OUT_DIR=build\%PROJECT_NAME%
 echo.
 echo === Build the assets ======================================================
 
-
 echo.
 rem Export music: song01 (v6gel exporter handles packing and optional compression)
 set song01_json=%CURRENT_DIR%assets\music\song01.json
