@@ -35,7 +35,7 @@ python -m v6gel.cli.v6export ^
     -o %OUT_DIR%\tiled_imgs\meta ^
     --bin-dir %OUT_DIR%\tiled_imgs\bin ^
     --emit-asm ^
-    --emit-obj ^
+    --emit-obj
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 echo.
@@ -48,9 +48,21 @@ python -m v6gel.cli.v6export ^
     -o %OUT_DIR%\tiled_imgs\meta ^
     --bin-dir %OUT_DIR%\tiled_imgs\bin ^
     --emit-asm ^
-    --emit-obj ^
+    --emit-obj
 if %errorlevel% neq 0 exit /b %errorlevel%
 
+echo.
+rem Export palette: pal_lv1 (contains 16-byte palette + fade animation metadata)
+set pal_lv1_json=%CURRENT_DIR%assets\palettes\pal_lv1.json
+set pal_lv1_o=%OUT_DIR%\palettes\bin\pal_lv1.o
+echo asset: %pal_lv1_json%
+python -m v6gel.cli.v6export ^
+    %pal_lv1_json% ^
+    -o %OUT_DIR%\palettes\meta ^
+    --bin-dir %OUT_DIR%\palettes\bin ^
+    --emit-asm ^
+    --emit-obj
+if %errorlevel% neq 0 exit /b %errorlevel%
 
 echo.
 echo === Build the v6 library ==================================================
@@ -79,6 +91,7 @@ set STACK_DEF=-Wl,--defsym=__stack_top=%STACK_MAIN_PROGRAM_ADDR%
     %v6_o% ^
     %tim_data_o% ^
     %tim_gfx_o% ^
+    %pal_lv1_o% ^
     -o "%OUT_DIR%\%PROJECT_NAME%.rom"
 if %errorlevel% neq 0 exit /b %errorlevel%
 
