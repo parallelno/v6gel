@@ -35,7 +35,8 @@
 ;   "fades" : array of fade animation definitions, each with:
 ;		"name" : name of the fade animation
 ;		"color" : color to fade to/from, with r,g,b values (r and g: 3 bits, b: 2 bits)
-;       "iterations" : number of iterations for the fade animation, each iteration is 1/25th of a second
+;       "iterations" : number of iterations for the fade animation, each
+;           iteration is 1/25th of a second.
 ;       "comment" : optional comment for the fade animation
 ; Check the `pal_lv0.json` file in the `assets/palettes` folder for examples.
 
