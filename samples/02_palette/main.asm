@@ -1,8 +1,8 @@
 ; ------------------------------------------------------------------------------
 ; This demo shows how to use engine-provided services:
-;    * Palette update
-;    * Palette fade
-;    * Use of macros for safe zero comparison and zeroing A register
+;    * palette update
+;    * palette fade
+;    * use of macros for safe zero comparison and zeroing A register
 ; Key concepts demonstrated:
 ;  - using the `v6_palette_update_request` handshake to ask the engine to apply
 ;    the current palette stored in `v6_palette`
