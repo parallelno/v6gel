@@ -20,15 +20,15 @@ from PyQt6.QtWidgets import (
 )
 
 from .glyph_model import FontData, GlyphEntry
-from .templates import _DEFAULT_PALETTE
 
 
 class SystemFontDialog(QDialog):
-    """Let the user pick a system font and generate a font.png + FontData."""
+    """Let the user pick a system font and generate a <name>.png + FontData."""
 
-    def __init__(self, out_dir: str, parent=None):
+    def __init__(self, out_dir: str, png_stem: str, parent=None):
         super().__init__(parent)
         self.out_dir = out_dir
+        self._png_stem = png_stem   # base name without extension, e.g. "my_font"
         self._result_data: Optional[FontData] = None
         self._result_image: Optional[PILImage.Image] = None
 
@@ -154,10 +154,16 @@ class SystemFontDialog(QDialog):
         padding = self._padding_spin.value()
         per_row = self._per_row_spin.value()
 
-        # Measure: uniform cell size based on max advance + ascent/descent
+        # Uniform cell size: widest advance + padding, full font height + padding
         max_adv = max(fm.horizontalAdvance(c) for c, _ in chars)
         cell_w = max_adv + 2 * padding
         cell_h = fm.height() + 2 * padding
+        draw_h = cell_h - 2 * padding   # inner draw-rect height = fm.height()
+
+        # Baseline position within each cell (Qt y-down).
+        # AlignVCenter centres the text vertically inside draw_h.
+        vert_pad = (draw_h - fm.height()) // 2
+        baseline_in_cell = vert_pad + fm.ascent()  # offset from cell_y to baseline
 
         n = len(chars)
         cols = min(per_row, n)
@@ -172,7 +178,7 @@ class SystemFontDialog(QDialog):
         painter.setFont(qfont)
         painter.setPen(QColor(255, 255, 255))
 
-        entries: list[GlyphEntry] = []
+        cell_info: list[tuple[int, int, int, int]] = []  # cell_x, cell_y, adv, search_h
         for idx, (char, name) in enumerate(chars):
             col_i = idx % cols
             row_i = idx // cols
@@ -181,32 +187,54 @@ class SystemFontDialog(QDialog):
             adv = fm.horizontalAdvance(char)
 
             painter.drawText(
-                QRect(cell_x, cell_y, cell_w, cell_h - 2 * padding),
+                QRect(cell_x, cell_y, cell_w, draw_h),
                 Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
                 char,
             )
-            entries.append(GlyphEntry(
-                name=name,
-                x=cell_x,
-                y=cell_y,
-                width=max(1, adv),
-                height=max(1, cell_h - 2 * padding),
-            ))
+            cell_info.append((cell_x, cell_y, adv))
         painter.end()
 
-        # Convert QImage → PIL indexed P mode
+        # Convert QImage → PIL indexed P mode (0=black bg, 1=white fg)
         buf = QBuffer()
         buf.open(QIODevice.OpenModeFlag.WriteOnly)
         qimg.save(buf, "PNG")
         buf.close()
         pil_rgb = PILImage.open(io.BytesIO(bytes(buf.data()))).convert("L")
-
-        # Threshold → indexed P (0=black bg, 1=white fg)
         indexed = PILImage.new("P", pil_rgb.size)
         pal = [0] * 768
-        pal[3:6] = [255, 255, 255]   # index 1 = white
+        pal[3:6] = [255, 255, 255]
         indexed.putpalette(pal)
         indexed.putdata([1 if p > 128 else 0 for p in pil_rgb.getdata()])
+
+        # Auto-detect tight pixel bounds for each glyph and derive offset_y.
+        from .auto_detect import detect_bounds
+        entries: list[GlyphEntry] = []
+        for (cell_x, cell_y, adv), (char, name) in zip(cell_info, chars):
+            result = detect_bounds(indexed, 0,
+                                   (cell_x, cell_y, cell_w, draw_h))
+            if result:
+                gx, gy, gw, gh = result
+                # offset_y = baseline_qt − glyph_bottom_qt
+                # baseline_qt = cell_y + baseline_in_cell
+                # glyph_bottom_qt = gy + gh
+                offset_y = (cell_y + baseline_in_cell) - (gy + gh)
+                entries.append(GlyphEntry(
+                    name=name,
+                    x=gx,
+                    y=gy,
+                    width=max(1, adv),   # cursor advance stays as font-metric value
+                    height=max(1, gh),
+                    offset_y=int(round(offset_y)),
+                ))
+            else:
+                # Invisible glyph (e.g. space) — minimal placeholder
+                entries.append(GlyphEntry(
+                    name=name,
+                    x=cell_x,
+                    y=cell_y,
+                    width=max(1, adv),
+                    height=1,
+                ))
         return indexed, entries
 
     def _update_preview(self, *_):
@@ -233,20 +261,21 @@ class SystemFontDialog(QDialog):
             chars = self._get_charset()
             gfx_ptrs = [name for _, name in chars]
 
-            # Save PNG
+            # Save PNG as art/<stem>.png
             art_dir = os.path.join(self.out_dir, "art")
             os.makedirs(art_dir, exist_ok=True)
-            png_path = os.path.join(art_dir, "font.png")
+            png_filename = self._png_stem + ".png"
+            png_path = os.path.join(art_dir, png_filename)
             img.save(png_path)
+            path_png_rel = "art/" + png_filename
 
             family = self._font_combo.currentFont().family()
             size = self._size_spin.value()
             self._result_data = FontData(
-                path_png="art/font.png",
+                path_png=path_png_rel,
                 comment=f"Generated from system font: {family} {size}pt",
                 spacing=1,
                 color_sample_pos=[0, 0],
-                palette=list(_DEFAULT_PALETTE),
                 gfx_ptrs=gfx_ptrs,
                 gfx=entries,
             )

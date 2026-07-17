@@ -66,6 +66,9 @@ Unicode-aware and **mangled** to avoid case-insensitive collisions in v6asm
 (e.g. uppercase `A` → `cap_a`). The byte layout is unaffected (only relative
 offsets matter). Used by `text_ex_init_font` / `text_ex_draw`.
 
+See **[Font Editor](05-font-editor.md)** for the GUI tool that creates and edits
+font.json files, with live preview, auto-detect, and system font import.
+
 ### Palette (`palette`)
 Vector-06c 16-color palettes, plus optional fade tables. Applied with
 `set_palette` / the palette-fade utilities.

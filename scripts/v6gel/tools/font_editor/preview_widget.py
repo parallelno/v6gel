@@ -173,10 +173,22 @@ class FontPreviewWidget(QWidget):
 
         valid = [g for g in resolved if g is not None]
 
-        # Vertical extents relative to cursor_y
-        above = max((-(g.offset_y) for g in valid if g.offset_y < 0), default=0)
-        below = max((g.offset_y + g.height for g in valid), default=10)
-        baseline_y = int(above) + 2    # cursor_y in output image coords
+        # Vertical layout (V6 uses y-up; Qt uses y-down — signs are inverted).
+        # In V6: cursor_y is the BOTTOM of the glyph; it extends UPWARD by height.
+        #   glyph bottom = cursor_y + offset_y  (offset_y<0 → below baseline)
+        #   glyph top    = cursor_y + offset_y + height - 1  (upward)
+        #
+        # Mapping to Qt (y-down), with baseline_y = the Qt row for the V6 cursor:
+        #   Qt draw_y (top-left) = baseline_y - offset_y - height + 1
+        #   Qt glyph bottom row  = baseline_y - offset_y
+        #
+        # Pixels needed ABOVE baseline in Qt (smaller y):
+        #   = max(offset_y + height - 1) across all glyphs
+        above = max((g.offset_y + g.height - 1 for g in valid), default=8)
+        # Pixels needed BELOW baseline in Qt (larger y):
+        #   = max(-offset_y) for glyphs where offset_y < 0
+        below = max((-g.offset_y for g in valid if g.offset_y < 0), default=0)
+        baseline_y = int(above) + 2    # Qt row = V6 cursor baseline
         total_h = baseline_y + int(below) + 4
 
         # Horizontal
@@ -193,7 +205,9 @@ class FontPreviewWidget(QWidget):
 
             if g is not None:
                 draw_x = cursor_x + g.offset_x
-                draw_y = baseline_y + g.offset_y
+                # V6 bottom of glyph = baseline_y - offset_y (Qt y-down)
+                # V6 top  of glyph  = baseline_y - offset_y - height + 1
+                draw_y = baseline_y - g.offset_y - g.height + 1
 
                 # Blit glyph pixels
                 for dy in range(g.height):

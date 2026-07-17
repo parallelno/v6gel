@@ -14,6 +14,7 @@ New here? Start with the [Project Overview](01-overview.md), then read
 | 2 | [Building & Tooling](02-building.md) | How to build the library and assets; the tools the pipeline requires; CLI commands and flags. |
 | 3 | [Asset Pipeline & Data Layout](03-asset-pipeline.md) | Source vs exported formats, the build config, and every asset type. |
 | 4 | [v6gel Library Reference](04-engine-library.md) | The engine's public API: graphics, sound, controls, OS/files, and utilities. |
+| 5 | [Font Editor](05-font-editor.md) | GUI tool for creating and editing font assets (`v6font-editor`). |
 
 ## Quick links
 

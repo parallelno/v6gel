@@ -69,7 +69,6 @@ def write_font_json(path: str, data: FontData) -> None:
         gfx_list.append(entry)
 
     out = {
-        "palette": data.palette,
         "asset_type": "font",
         "path_png": data.path_png,
         "comment": data.comment,

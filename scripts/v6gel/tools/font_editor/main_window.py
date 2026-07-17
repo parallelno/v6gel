@@ -42,6 +42,7 @@ class FontEditorMainWindow(QMainWindow):
         self._build_toolbar()
         self._connect_signals()
         self._set_title()
+        self._preview_input.setText("Hello World!")  # default preview text
 
     # =========================================================================
     # UI construction
@@ -49,7 +50,7 @@ class FontEditorMainWindow(QMainWindow):
 
     def _build_ui(self):
         self.setWindowTitle("v6 Font Editor")
-        self.resize(1280, 800)
+        self.resize(1440, 900)
 
         splitter = QSplitter(Qt.Orientation.Horizontal)
         self.setCentralWidget(splitter)
@@ -57,13 +58,14 @@ class FontEditorMainWindow(QMainWindow):
         # Left: canvas
         self._canvas = FontCanvasWidget()
         splitter.addWidget(self._canvas)
-        splitter.setStretchFactor(0, 3)
+        splitter.setStretchFactor(0, 1)
 
         # Right: tabs
         self._tabs = QTabWidget()
-        self._tabs.setMinimumWidth(340)
         splitter.addWidget(self._tabs)
         splitter.setStretchFactor(1, 1)
+        # Default 50/50 split; user can drag freely from edge to edge
+        splitter.setSizes([720, 720])
 
         self._build_preview_tab()
         self._build_glyphs_tab()
@@ -181,12 +183,40 @@ class FontEditorMainWindow(QMainWindow):
         self._tabs.addTab(w, "Charset")
 
     def _build_settings_tab(self):
-        self._sett_spacing = QSpinBox(); self._sett_spacing.setRange(0, 20)
-        self._sett_csp_x   = QSpinBox(); self._sett_csp_x.setRange(0, 9999)
-        self._sett_csp_y   = QSpinBox(); self._sett_csp_y.setRange(0, 9999)
+        self._sett_spacing = QSpinBox()
+        self._sett_spacing.setRange(0, 20)
+        self._sett_spacing.setToolTip(
+            "Pixels added to every glyph's advance width between characters.\n"
+            "Final cursor step = glyph width + spacing."
+        )
+
+        self._sett_csp_x = QSpinBox()
+        self._sett_csp_x.setRange(0, 9999)
+        self._sett_csp_x.setToolTip(
+            "X coordinate of the pixel used to sample the background colour.\n"
+            "Any pixel in the PNG that equals this colour is treated as transparent."
+        )
+
+        self._sett_csp_y = QSpinBox()
+        self._sett_csp_y.setRange(0, 9999)
+        self._sett_csp_y.setToolTip(
+            "Y coordinate of the pixel used to sample the background colour.\n"
+            "Any pixel in the PNG that equals this colour is treated as transparent."
+        )
+
         self._sett_comment = QLineEdit()
+        self._sett_comment.setToolTip(
+            "Free-text comment stored in font.json. Not used by the engine."
+        )
+
         self._sett_path_png = QLineEdit()
-        self._btn_browse_png = QPushButton("Browse…")
+        self._sett_path_png.setToolTip(
+            "Path to the glyph atlas PNG, relative to the font.json file.\n"
+            "Example: art/font.png"
+        )
+
+        self._btn_browse_png = QPushButton("Browse\u2026")
+        self._btn_browse_png.setToolTip("Open a file picker to select the PNG atlas.")
 
         path_row = QHBoxLayout()
         path_row.addWidget(self._sett_path_png)
@@ -251,12 +281,6 @@ class FontEditorMainWindow(QMainWindow):
     def _build_toolbar(self):
         tb = self.addToolBar("Main")
         tb.setMovable(False)
-        tb.addAction(self._act_new)
-        tb.addAction(self._act_open)
-        tb.addAction(self._act_save)
-        tb.addSeparator()
-        tb.addAction(self._act_import_font)
-        tb.addSeparator()
         tb.addAction(self._act_zoom_in)
         tb.addAction(self._act_zoom_out)
         tb.addAction(self._act_zoom_fit)
@@ -395,24 +419,26 @@ class FontEditorMainWindow(QMainWindow):
     def action_import_font(self):
         if not self._confirm_discard():
             return
-        # Ask where to save the resulting files
-        out_dir = QFileDialog.getExistingDirectory(
-            self, "Output folder (will contain font.json + art/font.png)"
+        # Ask the user to name the output JSON file
+        json_path, _ = QFileDialog.getSaveFileName(
+            self, "Save font as…", "font.json", "Font JSON (*.json)"
         )
-        if not out_dir:
+        if not json_path:
             return
-        dlg = SystemFontDialog(out_dir, self)
+        out_dir = os.path.dirname(os.path.abspath(json_path))
+        png_stem = os.path.splitext(os.path.basename(json_path))[0]
+        dlg = SystemFontDialog(out_dir, png_stem, self)
         if dlg.exec() != QDialog.DialogCode.Accepted:
             return
         fd = dlg.result_data
         img = dlg.result_image
         if fd and img:
-            json_path = os.path.join(out_dir, "font.json")
             self._json_path = json_path
             self._base_dir = out_dir
             self._pil_image = img
             self._load_font_data(fd)
-            self._mark_dirty()
+            # Save JSON immediately alongside the already-written PNG
+            self._do_save(json_path)
 
     def action_load_png(self):
         path, _ = QFileDialog.getOpenFileName(

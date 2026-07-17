@@ -32,22 +32,10 @@ from PyQt6.QtWidgets import (
 from .glyph_model import FontData, GlyphEntry, GlyphTableModel
 
 # ---------------------------------------------------------------------------
-# Color palette for glyph rects
+# Glyph rect colours — always orange; brighter when selected
 # ---------------------------------------------------------------------------
-_COLORS = [
-    QColor(255, 80,  80),
-    QColor(80,  220, 80),
-    QColor(80,  150, 255),
-    QColor(255, 220, 60),
-    QColor(255, 80,  220),
-    QColor(60,  230, 230),
-    QColor(255, 150, 30),
-    QColor(180, 80,  255),
-    QColor(0,   210, 170),
-    QColor(255, 120, 100),
-    QColor(150, 255, 80),
-    QColor(80,  180, 255),
-]
+_ORANGE     = QColor(255, 140,  0)   # normal border
+_ORANGE_SEL = QColor(255, 200, 50)   # selected border / handles
 
 
 # ---------------------------------------------------------------------------
@@ -58,16 +46,17 @@ class GlyphRectItem(QGraphicsObject):
     """One glyph rect drawn on the canvas.
 
     Visual layers:
-      1. Semi-transparent fill + solid outline (data rect in PNG coords).
-      2. Resize handles (8 squares at corners/edges) when selected.
-      3. Name label (top-left of rect).
+      1. 1-px cosmetic orange outline (no fill — glyph pixels stay visible).
+      2. Resize handles (8 squares) when selected.
+      3. Small filled square at bottom-left — the glyph "stands" on this point.
     """
 
     # row, x, y, w, h  — emitted on mouse-release after a resize/move
     geometry_committed = pyqtSignal(int, int, int, int, int)
 
-    HANDLE_NONE = -1
-    HANDLE_SIZE = 8.0
+    HANDLE_NONE  = -1
+    HANDLE_SIZE  = 5.0  # scene-px threshold used only for hit-detection
+    _HANDLE_DP   = 5    # device-pixel size of drawn handle squares
 
     # Handle indices 0-7 = TL,T,TR,R,BR,B,BL,L; 8 = interior (move)
     _CURSORS = [
@@ -82,12 +71,12 @@ class GlyphRectItem(QGraphicsObject):
         Qt.CursorShape.SizeAllCursor,
     ]
 
-    def __init__(self, row: int, glyph: GlyphEntry, color: QColor, parent=None):
+    def __init__(self, row: int, glyph: GlyphEntry, parent=None):
         super().__init__(parent)
         self.row = row
-        self._color = color
         self._rect = QRectF(glyph.x, glyph.y, glyph.width, glyph.height)
-        self._label = glyph.name
+        self._offset_x: int = glyph.offset_x
+        self._offset_y: int = glyph.offset_y
         self._active_handle = self.HANDLE_NONE
         self._drag_start: Optional[QPointF] = None
         self._drag_start_rect: Optional[QRectF] = None
@@ -105,7 +94,8 @@ class GlyphRectItem(QGraphicsObject):
     def set_rect_from_glyph(self, glyph: GlyphEntry):
         self.prepareGeometryChange()
         self._rect = QRectF(glyph.x, glyph.y, glyph.width, glyph.height)
-        self._label = glyph.name
+        self._offset_x = glyph.offset_x
+        self._offset_y = glyph.offset_y
         self.update()
 
     def _handle_centers(self) -> list[QPointF]:
@@ -137,46 +127,54 @@ class GlyphRectItem(QGraphicsObject):
     # -- QGraphicsItem API ---------------------------------------------------
 
     def boundingRect(self) -> QRectF:
-        m = self.HANDLE_SIZE + 2
-        return self._rect.adjusted(-m, -m, m, m)
+        # Margin covers the origin dot + enough for handles at any reasonable zoom
+        return self._rect.adjusted(-10, -10, 10, 10)
 
     def paint(self, painter: QPainter, _option, _widget=None):
         r = self._rect
+        is_sel = self.isSelected()
+        color  = _ORANGE_SEL if is_sel else _ORANGE
 
-        # Fill
-        fill = QColor(self._color)
-        fill.setAlpha(45)
-        painter.fillRect(r, fill)
-
-        # Outline
-        lw = 2.5 if self.isSelected() else 1.2
-        painter.setPen(QPen(self._color, lw))
+        # No fill — keep glyph pixels fully visible
         painter.setBrush(Qt.BrushStyle.NoBrush)
+
+        # 1-px cosmetic border (stays 1 device-pixel at any zoom)
+        pen = QPen(color, 1.0)
+        pen.setCosmetic(True)
+        painter.setPen(pen)
         painter.drawRect(r)
 
-        # Label
-        if r.width() >= 4 and r.height() >= 5:
-            lc = QColor(self._color)
-            lc.setAlpha(230)
-            painter.setPen(QPen(lc))
-            f = painter.font()
-            f.setPixelSize(max(5, min(8, int(r.height() * 0.55))))
-            painter.setFont(f)
-            label_rect = QRectF(r.left() + 1, r.top(), max(r.width() - 2, 2), 10)
-            painter.drawText(
-                label_rect,
-                Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop,
-                self._label,
-            )
+        # Green origin cross — cursor position BEFORE the glyph's local offsets.
+        # cross_x = rect.left() - offset_x  (cursor x before horizontal shift)
+        # cross_y = rect.bottom() - 1 + offset_y  (baseline level; offset_y<0 = descender)
+        t   = painter.worldTransform()
+        sx  = abs(t.m11()) or 1.0
+        sy  = abs(t.m22()) or 1.0
+        arm_x = 5.0 / sx   # 5 device-px arms, in scene coords
+        arm_y = 5.0 / sy
+        cx = r.left() - self._offset_x
+        cy = r.bottom() + self._offset_y
+        cross_pen = QPen(QColor(0, 210, 80), 1)
+        cross_pen.setCosmetic(True)
+        painter.setPen(cross_pen)
+        painter.drawLine(QPointF(cx - arm_x, cy), QPointF(cx + arm_x, cy))
+        painter.drawLine(QPointF(cx, cy - arm_y), QPointF(cx, cy + arm_y))
 
-        # Resize handles when selected
-        if self.isSelected():
-            hs = self.HANDLE_SIZE / 2
-            painter.setPen(QPen(QColor(0, 0, 0), 1))
-            painter.setBrush(QBrush(self._color))
+        # Resize handles (only when selected).
+        # Convert _HANDLE_DP device-pixels to scene-pixels using the painter
+        # transform so the squares stay small regardless of zoom level.
+        if is_sel:
+            t  = painter.worldTransform()
+            sx = abs(t.m11()) or 1.0
+            sy = abs(t.m22()) or 1.0
+            hw = self._HANDLE_DP / sx / 2   # half-width in scene coords
+            hh = self._HANDLE_DP / sy / 2   # half-height in scene coords
+            h_pen = QPen(QColor(20, 20, 20), 1)
+            h_pen.setCosmetic(True)
+            painter.setPen(h_pen)
+            painter.setBrush(QBrush(_ORANGE_SEL))
             for hp in self._handle_centers():
-                painter.drawRect(QRectF(hp.x() - hs, hp.y() - hs,
-                                        self.HANDLE_SIZE, self.HANDLE_SIZE))
+                painter.drawRect(QRectF(hp.x() - hw, hp.y() - hh, hw * 2, hh * 2))
 
     def hoverMoveEvent(self, event):
         h = self._hit_handle(event.pos())
@@ -303,8 +301,7 @@ class FontCanvasWidget(QGraphicsView):
         if not self._model:
             return
         for i, g in enumerate(self._model._data.gfx):
-            color = _COLORS[i % len(_COLORS)]
-            item = GlyphRectItem(i, g, color)
+            item = GlyphRectItem(i, g)
             item.geometry_committed.connect(self._on_geometry_committed)
             self._scene.addItem(item)
             self._glyph_items.append(item)
@@ -343,12 +340,27 @@ class FontCanvasWidget(QGraphicsView):
         if self._pix_item:
             self.fitInView(self._pix_item, Qt.AspectRatioMode.KeepAspectRatio)
 
-    def zoom_in(self):  self.scale(1.5, 1.5)
-    def zoom_out(self): self.scale(1 / 1.5, 1 / 1.5)
+    def zoom_in(self):
+        self.scale(1.5, 1.5)
+
+    def zoom_out(self):
+        self.scale(1 / 1.5, 1 / 1.5)
+
     def zoom_1x(self):
         self.resetTransform()
         if self._pix_item:
             self.centerOn(self._pix_item)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        # Keep the atlas the same size relative to the viewport: scale the view
+        # transform by the ratio of the new viewport size to the old one.
+        old = event.oldSize()
+        new = event.size()
+        if old.width() > 0 and old.height() > 0 and new.width() > 0 and new.height() > 0:
+            factor = min(new.width() / old.width(), new.height() / old.height())
+            if factor > 0 and abs(factor - 1.0) > 1e-6:
+                self.scale(factor, factor)
 
     # -- mouse / keyboard ----------------------------------------------------
 

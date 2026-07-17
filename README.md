@@ -30,6 +30,7 @@ get you started quickly.
 | [Building & Tooling](docs/02-building.md) | Build commands and the tools the pipeline needs. |
 | [Asset Pipeline & Data Layout](docs/03-asset-pipeline.md) | Source and exported formats, per asset type. |
 | [v6gel Library Reference](docs/04-engine-library.md) | The engine's public API. |
+| [Font Editor](docs/05-font-editor.md) | GUI tool for creating and editing font assets. |
 
 ## Quick start
 
