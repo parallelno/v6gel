@@ -8,6 +8,7 @@ license = { file = "LICENSE" }
 dependencies = [
     "Pillow>=10.0",
     "lhafile>=0.3.0",
+    "PyQt6>=6.4",
 ]
 
 [project.optional-dependencies]
@@ -20,6 +21,7 @@ v6export = "v6gel.cli.v6export:main"
 v6loads = "v6gel.cli.v6loads:main"
 v6build-assets = "v6gel.cli.build_assets:main"
 v6clear = "v6gel.cli.clear:main"
+v6font-editor = "v6gel.tools.font_editor.app:main"
 
 [build-system]
 requires = ["setuptools>=61"]
