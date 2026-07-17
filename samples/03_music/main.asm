@@ -3,7 +3,7 @@
 ;    * play music track
 ;
 ; Notes:
-;  - the music format contains 14 commpressed streams, ech for AY register
+;  - the music format contains 14 commpressed streams, each for AY register
 ;    supplied runtime
 ;  - for ROM executibles export the music track compressed (--compress) to save
 ;    RAM
@@ -21,7 +21,7 @@
 ;   The exporter requires input in YM format (AY-3-8910 register dump).
 ;   To generate YM files, use the included `tools\ay_emul` utility to
 ;   convert tracker music, or use the `audio2ay3` project
-;   (`github.com/parallelno/audio2ay3`) to convert MP3 files.
+;   (`github.com/parallelno/audio2ay3`) to convert MP3 files (in this sample).
 ; ---------------------------------------------------------------------------
 
 ; ---------------------------------------------------------------------------
@@ -36,7 +36,7 @@
 ;   the player never needs the full uncompressed data in RAM at once.
 ;
 ;   The final asset consists of two files:
-;     <name>_meta.asm  — linked into the program; provides file size / filename
+;     <name>_meta.asm  — provides file size / filename (for COM apps only)
 ;     <name>.bin       — the data blob; linked into ROM or loaded from FDD
 ; ---------------------------------------------------------------------------
 
@@ -50,8 +50,8 @@
 ;                            asset was exported with --emit-filename; required
 ;                            for COM executables that load the blob from FDD)
 ;
-;   ROM executables link the blob directly and only need FILE_LEN/LAST_RECORD_LEN.
-;   COM executables also use FILENAME_PTR to locate the file on the disk.
+;   ROM executables do not need it.
+;   COM executables use FILENAME_PTR to locate the file on the disk.
 ; ---------------------------------------------------------------------------
 
 ; ---------------------------------------------------------------------------
@@ -75,6 +75,23 @@
 ;   and writing the resulting register value to the AY chip.
 ; ---------------------------------------------------------------------------
 
+; ---------------------------------------------------------------------------
+; Player API
+;  v6_gc_start - starts a new song / repeat finished song.
+;   call from interruption CALL_RAM_DISK_FUNC_NO_RESTORE(v6_gc_start, RAM_DISK_MUSIC)
+;   call from main program CALL_RAM_DISK_FUNC(v6_gc_start, RAM_DISK_MUSIC)
+;  v6_gc_pause - pause the player
+;  v6_gc_unpause - unpause the player
+;  v6_gc_flip_pause - flip pause/unpause
+; ---------------------------------------------------------------------------
+
+; Import engine constants, control codes, and helper macros.
+.include "../../engine/common/v6_consts.asm"
+.include "../../engine/common/v6_macros.asm"
+.include "../../engine/controls/v6_controls_consts.asm"
+
+; common utility functions for demos, such as `wait_until_any_key_pressed`
+.include "../common/utils.asm"
 
 .global main
 
@@ -83,6 +100,15 @@ main:
             lxi h, _song01_data
             call v6_gc_unpack_init_play_song
 
-            ; An infinite loop to keep the program running for demonstrating
-            ; purposes.
-@loop:      jmp @loop
+@loop:
+            call wait_until_any_key_pressed
+            ani CONTROL_CODE_KEY_SPACE
+            jnz @flip_pause
+@start:
+            call v6_gc_pause
+            CALL_RAM_DISK_FUNC(v6_gc_start, RAM_DISK_MUSIC)
+            jmp @loop
+
+@flip_pause:
+			call v6_gc_flip_pause
+            jmp @loop

@@ -68,7 +68,9 @@ v6_gc_init_song:
 .opt
 ; uses to start a new song or to repeat a finished song
 ; requires a call v6_gc_init_song upfront!
-; ex. CALL_RAM_DISK_FUNC_NO_RESTORE(v6_gc_start, RAM_DISK_MUSIC)
+; ex:
+; from interruption CALL_RAM_DISK_FUNC_NO_RESTORE(v6_gc_start, RAM_DISK_MUSIC)
+; from main program CALL_RAM_DISK_FUNC(v6_gc_start, RAM_DISK_MUSIC)
 v6_gc_start:
 			call v6_gc_tasks_init
 			call v6_gc_scheduler_init
@@ -117,8 +119,8 @@ v6_gc_update:
 ;==========================================
 ; create a v6_gc_unpack tasks
 v6_gc_tasks_init:
-			; TODO: avoid disabling/enabling interruptions.
-			; it's not obvious behavior
+			; TODO: avoid disabling/enabling interruptions in this func.
+			; it's not expected behavior.
 			di
 			lxi h, 0
 			dad sp

@@ -19,6 +19,9 @@
 .include "../../engine/common/v6_macros.asm"
 .include "../../engine/controls/v6_controls_consts.asm"
 
+; common utility functions for demos, such as `wait_until_any_key_pressed`
+.include "../common/utils.asm"
+
 ; Note: Each asset in the assets folder is exported into two files:
 ; 1. *_meta.asm: contains relative labels to the data file and usefull constants.
 ;    It is usually included in the program.
@@ -80,16 +83,3 @@ main:
 
             call wait_until_any_key_pressed
             jmp @fade_in
-
-
-; ---------------------------------------------------------------------------
-; Utility: wait for any key press (frame-synced)
-; This routine demonstrates a safe zero-check idiom using `CPI_ZERO` macro,
-; details in `samples/01_controls` and `v6_macros.asm`.
-; ---------------------------------------------------------------------------
-wait_until_any_key_pressed:
-            hlt                      ; delay 1/50th of a second (1 frame).
-            lda v6_action_code       ; read current action code
-            CPI_ZERO(CONTROL_CODE_NO)
-            jz wait_until_any_key_pressed
-            ret
