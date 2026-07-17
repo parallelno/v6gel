@@ -81,7 +81,16 @@ class FontEditorMainWindow(QMainWindow):
     def _build_preview_tab(self):
         self._preview_input = QLineEdit()
         self._preview_input.setPlaceholderText("Type text to preview…")
+        self._preview_input.setToolTip(
+            "Type any string here to see how it looks with the current font.\n"
+            "Characters not present in the glyph list are shown as placeholder boxes."
+        )
         self._preview_widget = FontPreviewWidget()
+        self._preview_widget.setToolTip(
+            "Live preview of the text above rendered using the current glyph data and PNG.\n"
+            "Use the zoom slider to scale up, and toggle \"Show cursor marks\" to see\n"
+            "the baseline (green ticks) and actual glyph-origin positions."
+        )
 
         w = QWidget()
         lay = QVBoxLayout(w)
@@ -91,55 +100,83 @@ class FontEditorMainWindow(QMainWindow):
         self._tabs.addTab(w, "Preview")
 
     def _build_glyphs_tab(self):
+        # Tooltips shared by input widgets AND their form-row labels
+        tt_table = (
+            "List of all glyphs defined in this font.\n"
+            "Click a row to select the glyph and highlight it on the canvas.\n"
+            "Columns: Name | X | Y | Width (adv) | Height | Offset X | Offset Y"
+        )
+        tt_name = (
+            "Glyph identifier. Must match the name used in the Charset tab.\n"
+            "Examples: A  a  0  space  exclamation  comma"
+        )
+        tt_x = "X coordinate of the top-left pixel of the glyph crop in the PNG."
+        tt_y = "Y coordinate of the top-left pixel of the glyph crop in the PNG."
+        tt_w = (
+            "Cursor X advance after drawing this glyph (in pixels).\n"
+            "This is NOT the visual pixel crop width — the data cell is always 8 px wide.\n"
+            "The cursor moves by: width + global spacing."
+        )
+        tt_h = "Pixel crop height of the glyph in the PNG."
+        tt_ox = (
+            "Horizontal rendering offset from the cursor position (pixels).\n"
+            "Negative → glyph shifts left of cursor.\n"
+            "Does NOT affect the next char’s cursor position."
+        )
+        tt_oy = (
+            "Vertical rendering offset from the cursor baseline (pixels).\n"
+            "Negative → glyph’s bottom extends below baseline (descender: g, j, p…).\n"
+            "Positive → glyph floats above the baseline (dash, quote…).\n"
+            "Does NOT affect the next char’s cursor position.\n"
+            "The green cross on the canvas shows the resulting baseline anchor."
+        )
+
+        def _lbl(text, tt):
+            lbl = QLabel(text); lbl.setToolTip(tt); return lbl
+
         # Table
         self._glyph_table = QTableView()
+        self._glyph_table.setToolTip(tt_table)
         self._glyph_table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
         self._glyph_table.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
         self._glyph_table.horizontalHeader().setStretchLastSection(True)
         self._glyph_table.verticalHeader().setDefaultSectionSize(18)
 
         # Property form
-        self._prop_name     = QLineEdit()
-        self._prop_x        = QSpinBox(); self._prop_x.setRange(0, 9999)
-        self._prop_y        = QSpinBox(); self._prop_y.setRange(0, 9999)
-        self._prop_w        = QSpinBox(); self._prop_w.setRange(1, 255)
-        self._prop_w.setToolTip(
-            "Cursor X advance after this glyph.\n"
-            "NOT the pixel crop width — data cell is always 8 px (GLYPH_WIDTH)."
-        )
-        self._prop_h        = QSpinBox(); self._prop_h.setRange(1, 255)
+        self._prop_name = QLineEdit(); self._prop_name.setToolTip(tt_name)
+        self._prop_x = QSpinBox(); self._prop_x.setRange(0, 9999); self._prop_x.setToolTip(tt_x)
+        self._prop_y = QSpinBox(); self._prop_y.setRange(0, 9999); self._prop_y.setToolTip(tt_y)
+        self._prop_w = QSpinBox(); self._prop_w.setRange(1, 255);  self._prop_w.setToolTip(tt_w)
+        self._prop_h = QSpinBox(); self._prop_h.setRange(1, 255);  self._prop_h.setToolTip(tt_h)
         self._prop_offset_x = QSpinBox(); self._prop_offset_x.setRange(-128, 127)
-        self._prop_offset_x.setToolTip(
-            "Horizontal rendering offset from cursor.\n"
-            "Does NOT affect the next char's cursor position."
-        )
+        self._prop_offset_x.setToolTip(tt_ox)
         self._prop_offset_y = QSpinBox(); self._prop_offset_y.setRange(-128, 127)
-        self._prop_offset_y.setToolTip(
-            "Vertical rendering offset from cursor.\n"
-            "Negative → glyph renders ABOVE cursor line.\n"
-            "Positive → glyph renders BELOW cursor line.\n"
-            "Does NOT affect the next char's cursor position."
-        )
+        self._prop_offset_y.setToolTip(tt_oy)
 
         form = QFormLayout()
-        form.addRow("Name:",          self._prop_name)
-        form.addRow("X:",             self._prop_x)
-        form.addRow("Y:",             self._prop_y)
-        form.addRow("Width (adv):",   self._prop_w)
-        form.addRow("Height:",        self._prop_h)
-        form.addRow("Offset X:",      self._prop_offset_x)
-        form.addRow("Offset Y:",      self._prop_offset_y)
+        form.addRow(_lbl("Name:",         tt_name),  self._prop_name)
+        form.addRow(_lbl("X:",            tt_x),     self._prop_x)
+        form.addRow(_lbl("Y:",            tt_y),     self._prop_y)
+        form.addRow(_lbl("Width (adv):",  tt_w),     self._prop_w)
+        form.addRow(_lbl("Height:",       tt_h),     self._prop_h)
+        form.addRow(_lbl("Offset X:",     tt_ox),    self._prop_offset_x)
+        form.addRow(_lbl("Offset Y:",     tt_oy),    self._prop_offset_y)
 
         form_widget = QWidget()
         form_widget.setLayout(form)
 
         # Buttons
         self._btn_add    = QPushButton("Add Glyph")
+        self._btn_add.setToolTip("Add a new empty glyph entry. Prompts for a name.")
         self._btn_del    = QPushButton("Delete")
+        self._btn_del.setToolTip("Delete the selected glyph entry.")
         self._btn_detect = QPushButton("Auto-detect")
-        self._btn_detect.setToolTip("Detect tight pixel bounds for selected glyph")
+        self._btn_detect.setToolTip(
+            "Scan the PNG for non-background pixels in the selected glyph\u2019s area\n"
+            "and tighten X, Y, Height to the actual pixel bounds."
+        )
         self._btn_detect_all = QPushButton("Detect All")
-        self._btn_detect_all.setToolTip("Run auto-detect on every glyph")
+        self._btn_detect_all.setToolTip("Run Auto-detect on every glyph in the list.")
 
         btn_row = QHBoxLayout()
         for b in (self._btn_add, self._btn_del, self._btn_detect, self._btn_detect_all):
@@ -162,12 +199,23 @@ class FontEditorMainWindow(QMainWindow):
 
         self._charset_list = QListWidget()
         self._charset_list.setDragDropMode(QAbstractItemView.DragDropMode.InternalMove)
+        self._charset_list.setToolTip(
+            "The gfx_ptrs mapping: each row is a charset code position (0-based)\n"
+            "mapped to a glyph name. The game engine looks up char code N here to\n"
+            "find which glyph to draw. Use \"space\" for unmapped positions.\n"
+            "Drag rows to reorder. Double-click a row to rename it."
+        )
 
         self._btn_cs_add  = QPushButton("Add")
+        self._btn_cs_add.setToolTip("Append a new entry at the end of the charset mapping.")
         self._btn_cs_del  = QPushButton("Remove")
-        self._btn_cs_up   = QPushButton("↑")
-        self._btn_cs_down = QPushButton("↓")
+        self._btn_cs_del.setToolTip("Remove the selected charset entry.")
+        self._btn_cs_up   = QPushButton("\u2191")
+        self._btn_cs_up.setToolTip("Move the selected entry one position up (decrements its char code).")
+        self._btn_cs_down = QPushButton("\u2193")
+        self._btn_cs_down.setToolTip("Move the selected entry one position down (increments its char code).")
         self._btn_cs_edit = QPushButton("Edit")
+        self._btn_cs_edit.setToolTip("Rename the glyph name at the selected charset position.")
 
         cs_btn = QHBoxLayout()
         for b in (self._btn_cs_add, self._btn_cs_del,
@@ -222,12 +270,22 @@ class FontEditorMainWindow(QMainWindow):
         path_row.addWidget(self._sett_path_png)
         path_row.addWidget(self._btn_browse_png)
 
+        # Tooltip strings for the Settings labels
+        tt_spacing = self._sett_spacing.toolTip()
+        tt_csp_x   = self._sett_csp_x.toolTip()
+        tt_csp_y   = self._sett_csp_y.toolTip()
+        tt_comment = self._sett_comment.toolTip()
+        tt_pathpng = self._sett_path_png.toolTip()
+
+        def _lbl(text, tt):
+            lbl = QLabel(text); lbl.setToolTip(tt); return lbl
+
         form = QFormLayout()
-        form.addRow("Spacing:", self._sett_spacing)
-        form.addRow("BG sample X:", self._sett_csp_x)
-        form.addRow("BG sample Y:", self._sett_csp_y)
-        form.addRow("Comment:", self._sett_comment)
-        form.addRow("Path PNG:", path_row)
+        form.addRow(_lbl("Spacing:",      tt_spacing), self._sett_spacing)
+        form.addRow(_lbl("BG sample X:",  tt_csp_x),   self._sett_csp_x)
+        form.addRow(_lbl("BG sample Y:",  tt_csp_y),   self._sett_csp_y)
+        form.addRow(_lbl("Comment:",      tt_comment), self._sett_comment)
+        form.addRow(_lbl("Path PNG:",     tt_pathpng), path_row)
 
         w = QWidget()
         lay = QVBoxLayout(w)

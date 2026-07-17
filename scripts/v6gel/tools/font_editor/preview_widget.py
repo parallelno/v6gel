@@ -92,15 +92,29 @@ class FontPreviewWidget(QWidget):
         self._text: str = ""
 
         self._canvas = _PreviewCanvas()
+
+        tt_zoom = "Preview zoom level (1× – 8×). Uses nearest-neighbour scaling."
+        tt_cursors = (
+            "Show baseline marks:\n"
+            "  • green ticks at the cursor position (before offsets)\n"
+            "  • yellow ticks at the actual glyph origin (after offset_x/offset_y)\n"
+            "  • dashed horizontal line = the cursor baseline"
+        )
+
         self._zoom_slider = QSlider(Qt.Orientation.Horizontal)
         self._zoom_slider.setRange(1, 8)
         self._zoom_slider.setValue(3)
         self._zoom_slider.setMaximumWidth(150)
+        self._zoom_slider.setToolTip(tt_zoom)
         self._show_cursors_cb = QCheckBox("Show cursor marks")
         self._show_cursors_cb.setChecked(False)
+        self._show_cursors_cb.setToolTip(tt_cursors)
+
+        zoom_label = QLabel("Zoom:")
+        zoom_label.setToolTip(tt_zoom)
 
         ctrl = QHBoxLayout()
-        ctrl.addWidget(QLabel("Zoom:"))
+        ctrl.addWidget(zoom_label)
         ctrl.addWidget(self._zoom_slider)
         ctrl.addWidget(self._show_cursors_cb)
         ctrl.addStretch()
