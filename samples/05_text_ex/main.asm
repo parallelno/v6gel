@@ -85,21 +85,34 @@
 ; ---------------------------------------------------------------------------
 
 ; ---------------------------------------------------------------------------
-; Tiled Image API
-;  `tiled_img_init_idxs`  - initialize the drawing routine with the index data
-;     (index data asset in HL, RAM disk access command in A).
-;  `tiled_img_init_gfx`   - initialize the drawing routine with the graphics data
-;     (graphics data asset in HL, RAM disk access command in A).
-;  `tiled_img_draw`       - copy and draw one tiled layer (local pointer to a
-;      tiled layer in DE).
+; Text Ex API
+;  `text_ex_reset_spacing` - reset line and paragraph spacing to default values.
+;  `text_ex_set_spacing`   - set line and paragraph spacing
+;                            (C = line spacing, B = paragraph spacing).
+;  `text_ex_set_scr_addr`  - set the high byte of screen buffer address (A =
+;                            >SCR_BUFF3_ADD, >SCR_BUFF2_ADDR, >SCR_BUFF1_ADDR,
+;                            default >SCR_BUFF1_ADDR).
+;  `text_ex_init_font`     - initialize the font graphics data (A = RAM disk
+;                            access command, HL = font_gfx_ptrs, BC = font global
+;                            gfx addr, points to where gfx was loaded or linked).
+;  `text_ex_init_text`     - initialize the text data (A = RAM disk access
+;                            command, HL = text data addr, points to the addr
+;                            where it was loaded or linked).
+;  `text_ex_draw`          - draw the text (DE = local text addr within the text
+;                            data blob).
+;  `text_ex_draw_pos_offset_set` - drawing the text with a position offset (DE =
+;                            local text addr within the text data blob, HL =
+;                            scr_pos offset).
 ; ---------------------------------------------------------------------------
 
-; Import engine constants and helper macros.
+; Import engine constants, helper macros, and text drawing routines.
 .include "../../engine/common/v6_consts.asm"
 .include "../../engine/common/v6_macros.asm"
+.include "../../engine/gfx/v6_text_ex_consts.asm"
 
 ; Include generated metadata for tiled image data and palette.
-.include "build/04_tiled_img/tiled_imgs/asm/tim_data_meta.asm"
+.include "build/05_text_ex/fonts/asm/font_meta.asm"
+.include "build/05_text_ex/text/asm/txt_menu_meta.asm"
 .include "build/04_tiled_img/palettes/asm/pal_lv1_meta.asm"
 
 .global main
@@ -109,26 +122,19 @@ main:
             lxi d, _pal_lv1 + _pal_lv1_palette_fade_to_black_relative
             call palette_fade_reverse
 
-            ; Register the index and graphics blobs, then draw the background
-            ; layer.  RAM_DISK_OFF_CMD selects the ordinary RAM-disk bank.
             A_TO_ZERO(RAM_DISK_OFF_CMD)
-            lxi h, _tim_data
-            call tiled_img_init_idxs
-            A_TO_ZERO(RAM_DISK_OFF_CMD)
-            lxi h, _tim_gfx
-            call tiled_img_init_gfx
-            lxi d, _tim_main_menu_back
-            call tiled_img_draw
+            lxi h, font_gfx_ptrs
+            lxi b, _font
+            call text_ex_init_font
 
-            ; Register the same shared assets again and draw the foreground
-            ; layer on top of the background.
             A_TO_ZERO(RAM_DISK_OFF_CMD)
-            lxi h, _tim_data
-            call tiled_img_init_idxs
-            A_TO_ZERO(RAM_DISK_OFF_CMD)
-            lxi h, _tim_gfx
-            call tiled_img_init_gfx
-            lxi d, _tim_main_menu_front
-            call tiled_img_draw
+            lxi h, _txt_menu
+            call text_ex_init_text
+
+            mvi a, >SCR_BUFF2_ADDR
+            call text_ex_set_scr_addr
+
+            lxi d, _main_menu_license
+			call text_ex_draw
 
             ret

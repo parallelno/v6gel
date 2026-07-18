@@ -122,25 +122,14 @@
 				]
 			}
 		},
-		"credits screen" : {
-			"credits" : {
+		"demo" : {
+			"test_text" : {
 				"scr_pos" : [18, 224],
 				"text": [
-					"    This game was created because I truly",
-					"believe in the awesomeness of the Soviet",
-					"PC Vector 06c that shaped my life._PARAG_BREAK_",
-
-					"Code: Alex Fedotovskikh",
-					"Story and inspiration: Petr Fedotovskikh",
-					"Game mechanics: Ilia Fedotovskikh",
-					"Support and ideas: Fenia Fedotovskikh",
-					"Level design: the whole family!",
-					"Big thanks to my amazing family for",
-					"working hard to make it a reality!_PARAG_BREAK_",
-
-					"Special thanks to zx-pk.ru community",
-					"and especially to ivagor, nzeemin, svofski,",
-					"and jerry for their contribution and help!"
+					"   Welcome to 05 Text Example!_PARAG_BREAK_",
+					"     Great to have you here.",
+					"Explore, learn, and enjoy your crafts.",
+					"  Thank you for choosing the V6 Gel!"
 				]
 			}
 		}

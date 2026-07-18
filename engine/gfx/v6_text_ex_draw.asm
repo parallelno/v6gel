@@ -1,6 +1,14 @@
 @memusage_v6_text_ex_draw:
 
-.include "asm/v6/v6_text_ex_consts.asm"
+.global text_ex_reset_spacing
+.global text_ex_set_spacing
+.global text_ex_set_scr_addr
+.global text_ex_init_font
+.global text_ex_init_text
+.global text_ex_draw
+.global text_ex_draw_pos_offset_set
+
+.include "v6_text_ex_consts.asm"
 
 LINE_SPACING_DEFAULT = -12
 PARAG_SPACING_DEFAULT = -24
@@ -25,9 +33,10 @@ text_ex_set_spacing:
 			mov m, b
 			ret
 
-; set what scr buffers to draw to (SCR_BUFF3_ADDR, SCR_BUFF2_ADDR, SCR_BUFF1_ADDR)
+; set the high byte of the scr buffer addr to draw to.
 ; in:
-; a - SCR_BUFF3_ADDR or SCR_BUFF2_ADDR or SCR_BUFF1_ADDR
+; a - >SCR_BUFF3_ADDR or >SCR_BUFF2_ADDR or >SCR_BUFF1_ADDR
+; default: >SCR_BUFF1_ADDR
 text_ex_set_scr_addr:
 			sta text_ex_scr_buff_addr + 1
 			ret
@@ -68,7 +77,7 @@ text_ex_init_text:
 
 ; draw a text with kerning
 ; in:
-; de - local text addr
+; de - local text addr within the text data blob.
 
 ; if called text_ex_draw_pos_offset_set
 ; in:
