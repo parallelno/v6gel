@@ -1,0 +1,148 @@
+{
+	"asset_type" : "text_eng",
+	"text" : {
+		"main menu" : {
+			"settings" : {
+				"scr_pos" : [96, 131],
+				"text": [
+					"START GAME",
+					"OPTIONS",
+					"SCORES",
+					"CREDITS"
+				]
+			},
+			"license" : {
+				"scr_pos" : [26, 32],
+				"text": [
+					"2025. Developed by Fedotovskikh family"
+				]
+			}
+		},
+		"scores screen" : {
+			"score_title" : {
+				"scr_pos" : [88, 216],
+				"text": [
+					"SCORE BOARD"
+				]
+			},
+			"buff" : {
+				"scr_pos" : [56, 184],
+				"text": [
+					"TEMPNAME .................. 65535"
+				]
+			}
+		},
+		"options screen" : {
+			"setting_on" : {
+				"scr_pos" : [164, 202],
+				"text": [
+					"ON"
+				]
+			},
+			"setting_off" : {
+				"scr_pos" : [164, 202],
+				"text": [
+					"OFF"
+				]
+			},
+			"settings" : {
+				"scr_pos" : [105, 216],
+				"text": [
+					"Settings"
+				]
+			},
+			"settings_names" : {
+				"scr_pos" : [64, 202],
+				"text": [
+					"Music",
+					"SFX_PARAG_BREAK_",
+
+					"Control Preset ...",
+					" UP ..............................",
+					" DOWN ......................",
+					" LEFT ........................",
+					" RIGHT .....................",
+					" FIRE ..........................",
+					" SELECT ..................",
+					" RETURN ................"
+				]
+			},
+			"return" : {
+				"scr_pos" : [88, 25],
+				"text": [
+					"Return to the Main Menu"
+				]
+			},
+			"dots" : {
+				"scr_pos" : [0, 0],
+				"text": [
+					"........................................"
+				]
+			},
+			"change_settings" : {
+				"scr_pos" : [138, 25],
+				"text": [
+					"Change settings"
+				]
+			},
+			"control_preset_key" : {
+				"scr_pos" : [164, 164],
+				"text": [
+					"Keys"
+				]
+			},
+			"control_preset_joy" : {
+				"scr_pos" : [164, 164],
+				"text": [
+					"JoyP1"
+				]
+			},
+			"controls_keyboard" : {
+				"scr_pos" : [164, 150],
+				"text": [
+					"K UP",
+					"K DOWN",
+					"K LEFT",
+					"K RIGHT",
+					"K SPACE",
+					"K PS",
+					"K TAB"
+				]
+			},
+			"controls_joystic" : {
+				"scr_pos" : [164, 150],
+				"text": [
+					"J UP",
+					"J DOWN",
+					"J LEFT",
+					"J RIGHT",
+					"J FIRE1",
+					"J FIRE2",
+					"J TAB"
+				]
+			}
+		},
+		"credits screen" : {
+			"credits" : {
+				"scr_pos" : [18, 224],
+				"text": [
+					"    This game was created because I truly",
+					"believe in the awesomeness of the Soviet",
+					"PC Vector 06c that shaped my life._PARAG_BREAK_",
+
+					"Code: Alex Fedotovskikh",
+					"Story and inspiration: Petr Fedotovskikh",
+					"Game mechanics: Ilia Fedotovskikh",
+					"Support and ideas: Fenia Fedotovskikh",
+					"Level design: the whole family!",
+					"Big thanks to my amazing family for",
+					"working hard to make it a reality!_PARAG_BREAK_",
+
+					"Special thanks to zx-pk.ru community",
+					"and especially to ivagor, nzeemin, svofski,",
+					"and jerry for their contribution and help!"
+				]
+			}
+		}
+	}
+}
