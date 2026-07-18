@@ -26,7 +26,8 @@ echo.
 echo === Build the assets ======================================================
 
 echo.
-rem Export tiled image data: tim
+rem Export tiled image index data. This blob contains the map layout and
+rem per-image metadata consumed by tiled_img_draw.
 set tim_data_json=%CURRENT_DIR%assets\tiled_imgs\tim_data.json
 set tim_data_o=%OUT_DIR%\tiled_imgs\bin\tim_data.o
 echo asset: %tim_data_json%
@@ -39,7 +40,8 @@ python -m v6gel.cli.v6export ^
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 echo.
-rem Export tiled image gfx: tim
+rem Export tiled image graphics. This blob contains the 8x8 tile graphics
+rem shared by the tiled image maps.
 set tim_gfx_json=%CURRENT_DIR%assets\tiled_imgs\tim_gfx.json
 set tim_gfx_o=%OUT_DIR%\tiled_imgs\bin\tim_gfx.o
 echo asset: %tim_gfx_json%
@@ -52,7 +54,7 @@ python -m v6gel.cli.v6export ^
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 echo.
-rem Export palette: pal_lv1 (contains 16-byte palette + fade animation metadata)
+rem Export palette: pal_lv1 (16-byte palette plus fade animation metadata).
 set pal_lv1_json=%CURRENT_DIR%assets\palettes\pal_lv1.json
 set pal_lv1_o=%OUT_DIR%\palettes\bin\pal_lv1.o
 echo asset: %pal_lv1_json%
@@ -67,7 +69,7 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 echo.
 echo === Build the v6 library ==================================================
 set v6_o=build\v6\v6.o
-rem Build engine library (use --symbols to emit symbol table useful for debugging)
+rem Build the engine library and emit a symbol table for debugging.
 pushd .
 call engine\build.bat --symbols
 popd

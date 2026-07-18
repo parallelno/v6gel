@@ -48,7 +48,9 @@ tiled_img_init_gfx:
 ; - The tile idxs are stored in the RAM Disk, and copied to a temp before drawing.
 ; - The tile gfxs are stored in the RAM Disk, and rendered directly from there.
 ; - The max tiled image data excluding the gfx tiles is TEMP_BUFF_LEN.
-; - The maximum number of gfx tiles is 254, because 0 and $FF idxs are reserved.
+; - The maximum number of gfx tiles is 254, because 0 and $FF idxs are reserved
+;   for REPEATER_CODE. The next two bytes after it represent the idx and
+;   repeating counter.
 ; - Multiple tiled images can use the same gfx tiles.
 
 ;-------------------------------------------------------------------------------
