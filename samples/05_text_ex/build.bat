@@ -32,7 +32,8 @@ set font_o=%OUT_DIR%/fonts/bin/font.o
 echo asset: %font_json%
 python -m v6gel.cli.v6export ^
     %font_json% ^
-    -o %OUT_DIR%/fonts/meta ^
+    -o %OUT_DIR%/fonts/asm ^
+    --manifest-dir %OUT_DIR%/fonts/manifests ^
     --bin-dir %OUT_DIR%/fonts/bin ^
     --emit-asm ^
     --emit-obj
@@ -45,7 +46,8 @@ set txt_menu_o=%OUT_DIR%/text/bin/txt_menu.o
 echo asset: %txt_menu_json%
 python -m v6gel.cli.v6export ^
     %txt_menu_json% ^
-    -o %OUT_DIR%/text/meta ^
+    -o %OUT_DIR%/text/asm ^
+    --manifest-dir %OUT_DIR%/text/manifests ^
     --bin-dir %OUT_DIR%/text/bin ^
     --emit-asm ^
     --emit-obj
@@ -58,7 +60,8 @@ set pal_lv1_o=%OUT_DIR%/palettes/bin/pal_lv1.o
 echo asset: %pal_lv1_json%
 python -m v6gel.cli.v6export ^
     %pal_lv1_json% ^
-    -o %OUT_DIR%/palettes/meta ^
+    -o %OUT_DIR%/palettes/asm ^
+    --manifest-dir %OUT_DIR%/palettes/manifests ^
     --bin-dir %OUT_DIR%/palettes/bin ^
     --emit-asm ^
     --emit-obj

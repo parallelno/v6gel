@@ -88,10 +88,11 @@ def main(argv=None):
 	config_name = common.path_to_basename(args.config)
 
 	out_dir = args.out_dir
-	meta_dir = os.path.join(out_dir, "meta")
+	asm_dir = os.path.join(out_dir, "asm")
+	manifest_dir = os.path.join(out_dir, "manifests")
 	bin_dir = os.path.join(out_dir, "bin")
 	code_dir = os.path.join(out_dir, "code")
-	for d in (meta_dir, bin_dir, code_dir):
+	for d in (asm_dir, manifest_dir, bin_dir, code_dir):
 		os.makedirs(d, exist_ok=True)
 
 	transport = args.transport
@@ -108,7 +109,8 @@ def main(argv=None):
 			meta_path = _resolve_asset(asset_path, config_dir)
 			export_argv = [
 				meta_path,
-				"-o", meta_dir,
+				"-o", asm_dir,
+				"--manifest-dir", manifest_dir,
 				"--bin-dir", bin_dir,
 				"--asm", args.asm,
 				"--packer", args.packer,
@@ -131,7 +133,7 @@ def main(argv=None):
 		# --- loads / consts / includes / autoexec ---
 		loads_argv = [
 			args.config,
-			"--manifest-dir", meta_dir,
+			"--manifest-dir", manifest_dir,
 			"-o", code_dir,
 			"--bin-dir", bin_dir,
 			"--com-name", asmgen.cpm_filename("app", consts.EXT_COM),

@@ -34,7 +34,8 @@ set song_o=%OUT_DIR%\music\bin\song01.o
 echo asset: %song01_json%
 python -m v6gel.cli.v6export ^
     %song01_json% ^
-    -o %OUT_DIR%\music\meta ^
+    -o %OUT_DIR%\music\asm ^
+    --manifest-dir %OUT_DIR%\music\manifests ^
     --bin-dir %OUT_DIR%\music\bin ^
     --emit-asm ^
     --emit-obj ^
@@ -49,7 +50,8 @@ set pal_lv1_o=%OUT_DIR%\palettes\bin\pal_lv1.o
 echo asset: %pal_lv1_json%
 python -m v6gel.cli.v6export ^
     %pal_lv1_json% ^
-    -o %OUT_DIR%\palettes\meta ^
+    -o %OUT_DIR%\palettes\asm ^
+    --manifest-dir %OUT_DIR%\palettes\manifests ^
     --bin-dir %OUT_DIR%\palettes\bin ^
     --emit-asm ^
     --emit-obj
@@ -63,7 +65,8 @@ set knight_o=%OUT_DIR%\sprites\bin\knight.o
 echo asset: %knight_json%
 python -m v6gel.cli.v6export ^
     %knight_json% ^
-    -o %OUT_DIR%\sprites\meta ^
+    -o %OUT_DIR%\sprites\asm ^
+    --manifest-dir %OUT_DIR%\sprites\manifests ^
     --bin-dir %OUT_DIR%\sprites\bin ^
     --emit-asm ^
     --emit-obj

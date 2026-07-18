@@ -35,7 +35,11 @@ def parse_args(argv=None):
 	parser.add_argument("meta", help="path to the asset meta JSON file")
 	parser.add_argument(
 		"-o", "--out-dir", default=None,
-		help="directory for *_meta.asm / manifest (default: meta file dir)",
+		help="directory for generated ASM files (default: <meta file dir>/asm)",
+	)
+	parser.add_argument(
+		"--manifest-dir", default=None,
+		help="directory for <name>.manifest.json (default: sibling manifests dir)",
 	)
 	parser.add_argument(
 		"--bin-dir", default=None,
@@ -101,9 +105,12 @@ def build_context(args):
 	if not asset_type:
 		raise ExportError(f'no "asset_type" in {args.meta}')
 
-	out_dir = args.out_dir or os.path.dirname(os.path.abspath(args.meta))
+	asset_dir = os.path.dirname(os.path.abspath(args.meta))
+	out_dir = args.out_dir or os.path.join(asset_dir, "asm")
+	manifest_dir = args.manifest_dir or os.path.join(os.path.dirname(out_dir), "manifests")
 	bin_dir = args.bin_dir or out_dir
 	os.makedirs(out_dir, exist_ok=True)
+	os.makedirs(manifest_dir, exist_ok=True)
 	os.makedirs(bin_dir, exist_ok=True)
 
 	name = os.path.splitext(os.path.basename(args.meta))[0]
@@ -120,6 +127,7 @@ def build_context(args):
 		asset_type=asset_type,
 		name=name,
 		out_dir=out_dir,
+		manifest_dir=manifest_dir,
 		bin_dir=bin_dir,
 		v6asm_path=tools.resolve_v6asm(args.v6asm),
 		packer_path=tools.resolve_zx0(args.packer),

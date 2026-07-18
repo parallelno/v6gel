@@ -30,7 +30,8 @@ class ExportContext:
 	meta: dict  # parsed meta JSON
 	asset_type: str  # meta["asset_type"], may be refined by the CLI
 	name: str  # asset base name, e.g. "song01"
-	out_dir: str  # where *_meta.asm / manifest / optional *_data.asm go
+	out_dir: str  # where *_meta.asm / optional *_data.asm go
+	manifest_dir: str  # where <name>.manifest.json goes
 	bin_dir: str  # where the raw .bin blob is written
 	v6asm_path: str  # external assembler used to produce the blob
 	packer_path: str  # external zx0 packer (format-intrinsic compression only)
@@ -81,14 +82,14 @@ class ExportContext:
 
 	@property
 	def manifest_path(self) -> str:
-		return os.path.join(self.out_dir, self.name + consts.EXT_MANIFEST)
+		return os.path.join(self.manifest_dir, self.name + consts.EXT_MANIFEST)
 
 
 @dataclass
 class AssetManifest:
 	"""Placement-agnostic description of an exported asset.
 
-	Written next to the asset's outputs as ``<name>.manifest.json`` and later
+	Written to the generated ``manifests`` directory as ``<name>.manifest.json`` and later
 	consumed by ``v6loads`` for RAM Disk packing and load-routine generation.
 	"""
 

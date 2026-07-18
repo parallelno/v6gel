@@ -59,11 +59,12 @@ stack, zeroes `.bss`, installs the interrupt vector, and calls your `main`.
 ### One asset at a time — `v6export`
 
 ```bat
-python -m v6gel.cli.v6export <asset.json> -o <meta-dir> --bin-dir <bin-dir> [--emit-asm]
+python -m v6gel.cli.v6export <asset.json> -o <asm-dir> --manifest-dir <manifests-dir> --bin-dir <bin-dir> [--emit-asm]
 ```
 
 `v6export` reads the asset's `asset_type`, dispatches to the matching exporter,
-and produces three outputs:
+and produces three outputs. By default, ASM is written to an `asm` directory and
+the manifest to its sibling `manifests` directory.
 
 - `<NAME>.BIN` — the raw blob (already format-compressed where applicable).
 - `<name>_meta.asm` — small assembly file linked into your program: the blob's
@@ -118,7 +119,8 @@ Output layout under the build root:
 
 ```
 build/release/
-  meta/    <name>_meta.asm + <name>.manifest.json
+  asm/     <name>_meta.asm + optional <name>_data.asm
+  manifests/ <name>.manifest.json
   bin/     <NAME>.BIN  (the stored blobs) + AUTOEXEC.BAT
   code/    loads.asm, code_consts.asm, build_includes.asm, build_consts.asm
   config.fdd

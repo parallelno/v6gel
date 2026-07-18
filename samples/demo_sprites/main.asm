@@ -22,8 +22,8 @@
 ;    It is usually included in the program.
 ; 2. *_data.asm: contains the actual bytes to be loaded into the RAM disk. It
 ;    can be included, linked or loaded from FDD at runtime.
-.include "build/demo_sprites/palettes/meta/pal_lv1_meta.asm"
-.include "build/demo_sprites/sprites/meta/knight_meta.asm"
+.include "build/demo_sprites/palettes/asm/pal_lv1_meta.asm"
+.include "build/demo_sprites/sprites/asm/knight_meta.asm"
 
 ; ---------------------------------------------------------------------------
 ; Entry point

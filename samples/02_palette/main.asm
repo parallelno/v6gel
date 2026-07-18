@@ -44,7 +44,7 @@
 ; Check the `pal_lv0.json` file in the `assets/palettes` folder for examples.
 
 ; Include generated metadata for palette.
-.include "build/demo_sprites/palettes/meta/pal_lv0_meta.asm"
+.include "build/02_palette/palettes/asm/pal_lv0_meta.asm"
 
 
 ; ---------------------------------------------------------------------------

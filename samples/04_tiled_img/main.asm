@@ -99,8 +99,8 @@
 .include "../../engine/common/v6_macros.asm"
 
 ; Include generated metadata for tiled image data and palette.
-.include "build/04_tiled_img/tiled_imgs/meta/tim_data_meta.asm"
-.include "build/04_tiled_img/palettes/meta/pal_lv1_meta.asm"
+.include "build/04_tiled_img/tiled_imgs/asm/tim_data_meta.asm"
+.include "build/04_tiled_img/palettes/asm/pal_lv1_meta.asm"
 
 .global main
 

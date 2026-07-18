@@ -33,7 +33,8 @@ set tim_data_o=%OUT_DIR%/tiled_imgs/bin/tim_data.o
 echo asset: %tim_data_json%
 python -m v6gel.cli.v6export ^
     %tim_data_json% ^
-    -o %OUT_DIR%/tiled_imgs/meta ^
+    -o %OUT_DIR%/tiled_imgs/asm ^
+    --manifest-dir %OUT_DIR%/tiled_imgs/manifests ^
     --bin-dir %OUT_DIR%/tiled_imgs/bin ^
     --emit-asm ^
     --emit-obj
@@ -47,7 +48,8 @@ set tim_gfx_o=%OUT_DIR%/tiled_imgs/bin/tim_gfx.o
 echo asset: %tim_gfx_json%
 python -m v6gel.cli.v6export ^
     %tim_gfx_json% ^
-    -o %OUT_DIR%/tiled_imgs/meta ^
+    -o %OUT_DIR%/tiled_imgs/asm ^
+    --manifest-dir %OUT_DIR%/tiled_imgs/manifests ^
     --bin-dir %OUT_DIR%/tiled_imgs/bin ^
     --emit-asm ^
     --emit-obj
@@ -60,7 +62,8 @@ set pal_lv1_o=%OUT_DIR%/palettes/bin/pal_lv1.o
 echo asset: %pal_lv1_json%
 python -m v6gel.cli.v6export ^
     %pal_lv1_json% ^
-    -o %OUT_DIR%/palettes/meta ^
+    -o %OUT_DIR%/palettes/asm ^
+    --manifest-dir %OUT_DIR%/palettes/manifests ^
     --bin-dir %OUT_DIR%/palettes/bin ^
     --emit-asm ^
     --emit-obj

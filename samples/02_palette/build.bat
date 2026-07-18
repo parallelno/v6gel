@@ -32,7 +32,8 @@ set pal_lv0_o=%OUT_DIR%/palettes/bin/pal_lv0.o
 echo asset: %pal_lv0_json%
 python -m v6gel.cli.v6export ^
     %pal_lv0_json% ^
-    -o %OUT_DIR%/palettes/meta ^
+    -o %OUT_DIR%/palettes/asm ^
+    --manifest-dir %OUT_DIR%/palettes/manifests ^
     --bin-dir %OUT_DIR%/palettes/bin ^
     --emit-asm ^
     --emit-obj
