@@ -3,15 +3,11 @@
 ;    * play music track
 ;
 ; Notes:
-;  - the music format contains 14 commpressed streams, each for AY register
-;    supplied runtime
 ;  - for ROM executibles export the music track compressed (--compress) to save
 ;    RAM
 ;  - for COM executibles keep the track uncompressed to let the engine move it
 ;    to RAM disk while loading from FDD
 ;  - the exporter packs music data and produces a symbol (e.g. `_song01`)
-;  - `v6_gc_unpack_init_play_song` unpacks the data to the RAM disk and starts
-;    the built-in music player
 ;  - for COM executibles the metadata must be included because it provides the
 ;    the filename and the size
 ; ---------------------------------------------------------------------------
@@ -83,14 +79,15 @@
 ;  v6_gc_pause - pause the player
 ;  v6_gc_unpause - unpause the player
 ;  v6_gc_flip_pause - flip pause/unpause
+;  v6_gc_unpack_init_play_song - unpacks the data to the RAM disk and starts
+;    the built-in music player. Usable only for ROMs, COMs loads uncompressed
+;    track BIN to be able to move them to the RAM disk.
 ; ---------------------------------------------------------------------------
 
-; Import engine constants, control codes, and helper macros.
+; Import engine constants, control codes, and helper macros, and utility functions.
 .include "../../engine/common/v6_consts.asm"
 .include "../../engine/common/v6_macros.asm"
 .include "../../engine/controls/v6_controls_consts.asm"
-
-; common utility functions for demos, such as `wait_until_any_key_pressed`
 .include "../common/utils.asm"
 
 .global main
