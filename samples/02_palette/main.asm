@@ -27,7 +27,7 @@
 ;    It is usually included in the program.
 ; 2. *_data.asm: contains the actual bytes to be loaded into the RAM disk. It
 ;    can be included, linked or loaded from FDD at runtime. Each object file
-;    contains a label that points to the data in a format `_<asset_json_file_name>_data`.
+;    contains a label that points to the data in a format `_<asset_json_file_name>`.
 
 ; The palette asset json includes the following fields:
 ; 	"path_png" : path to the source PNG file
@@ -70,15 +70,15 @@ main:
             ; relative label that points to the fade animation data in the
             ; object file. The global address where the actual data is linked
             ; provided by the linked object file in a format
-            ; `_<asset_json_file_name>_data`.
-            lxi d, _pal_lv0_data + _pal_lv0_palette_fade_to_black_relative
+            ; `_<asset_json_file_name>`.
+            lxi d, _pal_lv0 + _pal_lv0_palette_fade_to_black_relative
             call palette_fade_reverse
 
             call wait_until_any_key_pressed
 
 @fade_out:
             ; Fade-out the palette from our exported palette to black.
-            lxi d, _pal_lv0_data + _pal_lv0_palette_fade_to_black_relative
+            lxi d, _pal_lv0 + _pal_lv0_palette_fade_to_black_relative
             call palette_fade
 
             call wait_until_any_key_pressed

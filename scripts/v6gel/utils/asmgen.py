@@ -120,9 +120,9 @@ def obj_asm(name: str, bin_path: str) -> str:
 	"""Generate the wrapper ASM source that embeds a binary blob as an object file.
 
 	The resulting assembly, when assembled with ``-f obj``, produces a linkable
-	object file that exports ``_{name}_data`` pointing at the raw blob bytes.
+	object file that exports ``_{name}`` pointing at the raw blob bytes.
 	"""
-	global_name = f"_{name}_data"
+	global_name = f"_{name}"
 	incbin_path = bin_path.replace("\\", "/")
 	asm = f".global {global_name}\n\n"
 	asm += ".opt\n"
@@ -140,7 +140,7 @@ def assemble_obj(
 	temp_dir: str,
 	keep_asm_path: str = None,
 ) -> None:
-	"""Assemble an object-file wrapper that embeds *bin_path* as ``_{name}_data``.
+	"""Assemble an object-file wrapper that embeds *bin_path* as ``_{name}``.
 
 	If *keep_asm_path* is given the generated wrapper ASM is written there and
 	kept (used by the ``--emit-asm`` debug option); otherwise it is written to a

@@ -1,4 +1,9 @@
 @memusage_v6_tiled_img_draw:
+
+.global tiled_img_init_idxs
+.global tiled_img_init_gfx
+.global tiled_img_draw
+
 TILED_IMG_SCR_BUFFS = 4
 TILED_IMG_TILE_H = 8
 TILE_IMG_TILE_LEN = TILED_IMG_TILE_H * TILED_IMG_SCR_BUFFS + 2 ; 8*4 bytes + a couple of safety bytes

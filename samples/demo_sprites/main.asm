@@ -47,13 +47,13 @@ main:
             ; The meta file defines the fade animation offset
             ; label `_pal_lv1_palette_fade_to_black_relative`.
             ; The object file contains the actual data and the label that points
-            ; to it in a format `_<asset_json_file_name>_data`.
-            lxi d, _pal_lv1_data + _pal_lv1_palette_fade_to_black_relative
+            ; to it in a format `_<asset_json_file_name>`.
+            lxi d, _pal_lv1 + _pal_lv1_palette_fade_to_black_relative
             call palette_fade_reverse
 
             ; Unpack the packed song into the RAM disk and start playback.
-            ; `_song01_data` is produced by the exporter and points to the packed bytes.
-            lxi h, _song01_data
+            ; `_song01` is produced by the exporter and points to the packed bytes.
+            lxi h, _song01
             call v6_gc_unpack_init_play_song
 
 ; ---------------------------------------------------------------------------
@@ -124,14 +124,14 @@ render:
             ; next two bytes are width/height (width is stored as width-1 in
             ; exporter for performance reasons).
             ; Load a frame width/height.
-            lhld _knight_data + _knight_idle_0_0_relative + 2
+            lhld _knight + _knight_idle_0_0_relative + 2
             ; DE = screen addr to clear, HL = width,height pair expected by routine
             call sprite_erase
 
 draw_sprites:
             ; Draw a frame 0, pixel preshift 0 of the idle animation at current
             ; screen position.
-            lxi b, _knight_data + _knight_idle_0_0_relative
+            lxi b, _knight + _knight_idle_0_0_relative
             lhld knight_scr_addr
             xchg
             ; BC = Sprite data, DE = Screen addr

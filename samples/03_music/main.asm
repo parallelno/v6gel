@@ -9,7 +9,7 @@
 ;    RAM
 ;  - for COM executibles keep the track uncompressed to let the engine move it
 ;    to RAM disk while loading from FDD
-;  - the exporter packs music data and produces a symbol (e.g. `_song01_data`)
+;  - the exporter packs music data and produces a symbol (e.g. `_song01`)
 ;  - `v6_gc_unpack_init_play_song` unpacks the data to the RAM disk and starts
 ;    the built-in music player
 ;  - for COM executibles the metadata must be included because it provides the
@@ -97,7 +97,7 @@
 
 main:
             ; Unpack and start the packed song included with this sample.
-            lxi h, _song01_data
+            lxi h, _song01
             call v6_gc_unpack_init_play_song
 
 @loop:

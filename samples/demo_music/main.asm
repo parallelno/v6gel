@@ -29,9 +29,9 @@ main:
 
             ; ------------------------------------------------------------------
             ; Unpack the packed song data into the RAM disk and start the
-            ; music player. The symbol `_little_mermaid_data` points to the packed
+            ; music player. The symbol `_little_mermaid` points to the packed
             ; data included with this sample.
-            lxi h, _little_mermaid_data
+            lxi h, _little_mermaid
             call v6_gc_unpack_init_play_song
 
             ; ------------------------------------------------------------------

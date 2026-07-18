@@ -1,22 +1,34 @@
-; ---------------------------------------------------------------------------
-; This demo shows how to use engine-provided services:
-;    * play music track
-;
-; Key concepts demonstrated:
-;  - the exporter packs music data and produces a symbol (e.g. `_song01_data`)
-;  - `v6_gc_unpack_init_play_song` unpacks the data to the RAM disk and starts
-;    the built-in music player
-; ---------------------------------------------------------------------------
-
 .global main
 
-; NOTE: the exporter produces meta/object files in `build\03_music\music\...`.
-; The packed data symbol `_song01_data` is available after linking the
-; exported object produced by the build script.
+; Import engine constants and helper macros.
+.include "../../engine/common/v6_consts.asm"
+.include "../../engine/common/v6_macros.asm"
+
+.include "build/04_tiled_img/tiled_imgs/meta/tim_data_meta.asm"
+; Include generated metadata for palette.
+.include "build/04_tiled_img/palettes/meta/pal_lv1_meta.asm"
 
 main:
-            ;
+            lxi d, _pal_lv1 + _pal_lv1_palette_fade_to_black_relative
+            call palette_fade_reverse
 
+            A_TO_ZERO(RAM_DISK_OFF_CMD)
+            lxi h, _tim_data
+            call tiled_img_init_idxs
+            A_TO_ZERO(RAM_DISK_OFF_CMD)
+            lxi h, _tim_gfx
+            call tiled_img_init_gfx
+            lxi d, _tim_main_menu_back
+            call tiled_img_draw
+
+            A_TO_ZERO(RAM_DISK_OFF_CMD)
+            lxi h, _tim_data
+            call tiled_img_init_idxs
+            A_TO_ZERO(RAM_DISK_OFF_CMD)
+            lxi h, _tim_gfx
+            call tiled_img_init_gfx
+            lxi d, _tim_main_menu_front
+            call tiled_img_draw
 
             ; An infinite loop to keep the program running for demonstrating
             ; purposes.
