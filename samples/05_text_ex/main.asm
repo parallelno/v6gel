@@ -1,6 +1,6 @@
 ; ---------------------------------------------------------------------------
 ; This demo shows how to use engine-provided services:
-;    * draw text with a proportional font
+;    * draw text with a non-monospaced font
 ; Notes:
 ;   - The font and text source files are JSON assets exported by v6gel.
 ;   - The font asset contains the glyph graphics and metadata needed by the
@@ -19,31 +19,37 @@
 
 ; ---------------------------------------------------------------------------
 ; Font asset format:
-;   The source asset is a JSON file that contains font metadata, including the
-;   source graphics path, palette path, and asset type. The exported font
-;   metadata provides `font_gfx_ptrs` and `font_global_gfx_addr` labels used to
-;   initialize the text drawing routines.
+;   The source asset (``assets/fonts/sys_font/font.json``) contains font
+;   metadata, including the source graphics path, palette path, and asset type.
+;   The exported font metadata provides `font_gfx_ptrs` and
+;   `font_global_gfx_addr` labels used to initialize the text drawing routines.
 ; ---------------------------------------------------------------------------
 
 ; ---------------------------------------------------------------------------
 ; Text asset format:
-;   The source asset is a JSON file that contains text data and references the
-;   font used to render it. The exporter generates text metadata and data files;
-;   labels such as `_demo_test_text` point to text entries inside the data blob.
+;   The source asset (``assets/text/txt_menu.json``) contains text data. The
+;   exporter generates text metadata and data files. Labels such as
+;   `_demo_test_text` point to text entries inside the data blob.
 ; ---------------------------------------------------------------------------
 
 ; ---------------------------------------------------------------------------
-; Font and text metadata format:
-;   The generated `*_meta.asm` files expose labels and file-size information
-;   for the exported assets. The labels are used by ROM links and the local
-;   offsets in the text metadata are used by the drawing routine.
+; Font metadata format:
+;   The generated `*_meta.asm` file TODO
+; ---------------------------------------------------------------------------
+
+; ---------------------------------------------------------------------------
+; Text metadata format:
+;   The generated `*_meta.asm` file TODO
+; ---------------------------------------------------------------------------
+
+; ---------------------------------------------------------------------------
+; Font data format:
+;   The generated font data contains TODO
 ; ---------------------------------------------------------------------------
 
 ; ---------------------------------------------------------------------------
 ; Text data format:
-;   The generated text data contains the encoded glyph runs and layout values
-;   consumed by `text_ex_draw`. The text asset must be initialized after the
-;   font so both assets are available when a text entry is drawn.
+;   The generated text data contains TODO
 ; ---------------------------------------------------------------------------
 
 ; ---------------------------------------------------------------------------
