@@ -27,7 +27,7 @@ echo === Build the assets ======================================================
 
 echo.
 rem Export font: font
-set font_json=%CURRENT_DIR%assets/fonts/eng/font.json
+set font_json=%CURRENT_DIR%assets/fonts/sys_font/font.json
 set font_o=%OUT_DIR%/fonts/bin/font.o
 echo asset: %font_json%
 python -m v6gel.cli.v6export ^

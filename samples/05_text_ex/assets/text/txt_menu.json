@@ -127,9 +127,11 @@
 				"scr_pos" : [18, 224],
 				"text": [
 					"   Welcome to 05 Text Example!_PARAG_BREAK_",
-					"     Great to have you here.",
-					"Explore, learn, and enjoy your crafts.",
-					"  Thank you for choosing the V6 Gel!"
+					"    Great to have you here._PARAG_BREAK_",
+					"     Explore,",
+					"        learn, and",
+					"          enjoy your crafts!_PARAG_BREAK_",
+					"Thank you for choosing the V6Gel!"
 				]
 			}
 		}

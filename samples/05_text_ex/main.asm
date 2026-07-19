@@ -134,7 +134,7 @@ main:
             mvi a, >SCR_BUFF2_ADDR
             call text_ex_set_scr_addr
 
-            lxi d, _main_menu_license
+            lxi d, _demo_test_text
 			call text_ex_draw
 
             ret
