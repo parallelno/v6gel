@@ -5,13 +5,17 @@
 .setting force_once, true
 
 .include "common/v6_consts.asm"
+.include "common/v6_level_consts.asm"
 .include "common/v6_macros.asm"
 .include "misc/v6_interruption.asm"
 .include "gfx/v6_sprite.asm"
 .include "gfx/v6_sprite_draw.asm"
 .include "gfx/v6_sprite_erase.asm"
+.include "gfx/v6_tile_draw.asm"
 .include "gfx/v6_tiled_img_draw.asm"
 .include "gfx/v6_text_ex_draw.asm"
+.include "gfx/v6_tile_draw.asm"
+.include "gfx/v6_tilemap_draw.asm"
 .include "v6_buffs.asm"
 
 

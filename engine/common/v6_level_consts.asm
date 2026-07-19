@@ -1,0 +1,6 @@
+ROOM_WIDTH		= 16 ; in tiles
+ROOM_HEIGHT		= 15 ; in tiles
+
+TILE_WIDTH		= 16
+TILE_WIDTH_B	= 2
+TILE_HEIGHT		= 16

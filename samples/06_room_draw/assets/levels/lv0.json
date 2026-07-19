@@ -1,0 +1,31 @@
+{
+	"path_png" : "tiled/art/lv0.png",
+	"palette_path" : "../palettes/pal_lv0.json",
+	"asset_type" : "level",
+	"hero_start_pos" : {
+		"x" : 128,
+		"y" : 140
+	},
+	"rooms" : [
+		{"path" : "tiled/lv0_00_home.tmj"},
+		{"path" : "tiled/lv0_01_farm_fence.tmj"},
+		{"path" : "tiled/lv0_02_road_to_friends_home.tmj"},
+		{"path" : "tiled/lv0_03_friends_home.tmj"},
+		{"path" : "tiled/lv0_04_friends_home_backyard.tmj"},
+		{"path" : "tiled/lv0_05_friends_secret_place.tmj"},
+		{"path" : "tiled/lv0_06_crossroad.tmj"},
+		{"path" : "tiled/lv0_07_farm_entrance.tmj"},
+		{"path" : "tiled/lv0_08_farm_storage.tmj"},
+		{"path" : "tiled/lv0_09_loop.tmj"},
+		{"path" : "tiled/lv0_10_dungeon_entrance.tmj"},
+		{"path" : "tiled/lv0_11_abandoned_home.tmj"},
+		{"path" : "tiled/lv0_12_lost_coins.tmj"},
+		{"path" : "tiled/lv0_13_forest.tmj"},
+		{"path" : "tiled/lv0_14_farmer_bob.tmj"},
+		{"path" : "tiled/lv0_15_backyard.tmj"},
+		{"path" : "tiled/lv0_16_closed_gate.tmj"},
+		{"path" : "tiled/lv0_17_dottys_home.tmj"},
+		{"path" : "tiled/lv0_18_forest.tmj"},
+		{"path" : "tiled/lv0_19_forest.tmj"}
+	]
+}
