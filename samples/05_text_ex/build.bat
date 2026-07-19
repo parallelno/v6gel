@@ -1,8 +1,8 @@
 @echo off
 
 echo.
-echo === samples/05_text_ex: Build script ====================================
-echo Purpose: Demonstrate how to export and draw text with non monospaced fonts.
+echo === samples/05_text_ex: Build script =====================================
+echo Purpose: Demonstrate how to export and draw text with a proportional font.
 echo Prerequisites: add `v6asm`, `clang`, and emulator to PATH
 echo Note: update the TOOLS PATHS below if your tools are installed elsewhere.
 
@@ -26,7 +26,7 @@ echo.
 echo === Build the assets ======================================================
 
 echo.
-rem Export font: font
+rem Export font graphics and metadata used by text_ex_draw.
 set font_json=%CURRENT_DIR%assets/fonts/sys_font/font.json
 set font_o=%OUT_DIR%/fonts/bin/font.o
 echo asset: %font_json%
@@ -40,7 +40,7 @@ python -m v6gel.cli.v6export ^
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 echo.
-rem Export text: txt_menu.json
+rem Export encoded text and layout data referenced by local text labels.
 set txt_menu_json=%CURRENT_DIR%assets/text/txt_menu.json
 set txt_menu_o=%OUT_DIR%/text/bin/txt_menu.o
 echo asset: %txt_menu_json%
@@ -79,12 +79,14 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 
 echo.
 echo === Assemble the main file ================================================
+rem Assemble the demo and resolve its generated asset metadata includes.
 %v6asm% "%CURRENT_DIR%main.asm" -o "%OUT_DIR%/main/main.o" -f obj
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 
 echo.
 echo === Link the main program with the v6 library =============================
+rem Link the demo, engine, and exported asset objects into one ROM.
 set target=-target i8080-unknown-v6c
 set STACK_MAIN_PROGRAM_ADDR=0x100
 set STACK_DEF=-Wl,--defsym=__stack_top=%STACK_MAIN_PROGRAM_ADDR%
