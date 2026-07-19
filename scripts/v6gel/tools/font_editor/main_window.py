@@ -497,6 +497,16 @@ class FontEditorMainWindow(QMainWindow):
             self._load_font_data(fd)
             # Save JSON immediately alongside the already-written PNG
             self._do_save(json_path)
+            overwide_names = [g.name for g in fd.gfx if g.pixel_width > 8]
+            if overwide_names:
+                QMessageBox.warning(
+                    self,
+                    "Glyphs wider than 8 pixels",
+                    "The engine supports glyphs up to 8 pixels wide.\n\n"
+                    "These glyphs have ink wider than 8 pixels and are marked "
+                    "with red borders in the atlas:\n"
+                    + ", ".join(overwide_names),
+                )
 
     def action_load_png(self):
         path, _ = QFileDialog.getOpenFileName(

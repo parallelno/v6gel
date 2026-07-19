@@ -11,15 +11,34 @@ import os
 from typing import Optional
 
 from PIL import Image as PILImage
-from PyQt6.QtCore import QBuffer, QIODevice, QRect, Qt
-from PyQt6.QtGui import QColor, QFont, QFontMetrics, QImage, QPainter
+from PyQt6.QtCore import QBuffer, QIODevice, Qt
+from PyQt6.QtGui import QColor, QFont, QFontMetrics, QImage, QPainter, QPen
 from PyQt6.QtWidgets import (
-    QCheckBox, QDialog, QDialogButtonBox, QFormLayout, QFontComboBox,
-    QGroupBox, QHBoxLayout, QLabel, QMessageBox, QSpinBox, QVBoxLayout,
-    QWidget,
+    QCheckBox,
+    QDialog,
+    QDialogButtonBox,
+    QFontComboBox,
+    QFormLayout,
+    QGroupBox,
+    QLabel,
+    QMessageBox,
+    QSpinBox,
+    QVBoxLayout,
 )
 
 from .glyph_model import FontData, GlyphEntry
+from .templates import ENG_GFX_PTRS
+
+
+def _build_gfx_ptrs(chars: list[tuple[str, str]]) -> list[str]:
+    """Map imported Latin glyphs to the engine's C64-compatible charset."""
+    names = {name for _, name in chars}
+    gfx_ptrs = [name if name in names else "space" for name in ENG_GFX_PTRS]
+
+    # Cyrillic has no C64-compatible code-page mapping, so keep its selected
+    # order after the standard Latin table.
+    gfx_ptrs.extend(name for _, name in chars if name not in ENG_GFX_PTRS)
+    return gfx_ptrs
 
 
 class SystemFontDialog(QDialog):
@@ -38,8 +57,8 @@ class SystemFontDialog(QDialog):
         # -- Font selection --------------------------------------------------
         self._font_combo = QFontComboBox()
         self._size_spin = QSpinBox()
-        self._size_spin.setRange(4, 72)
-        self._size_spin.setValue(10)
+        self._size_spin.setRange(4, 24)
+        self._size_spin.setValue(8)
 
         font_form = QFormLayout()
         font_form.addRow("Font family:", self._font_combo)
@@ -141,6 +160,8 @@ class SystemFontDialog(QDialog):
                 chars.append((c, c))
             for c in "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ":
                 chars.append((c, c))
+        if not any(name == "space" for _, name in chars):
+            chars.append((" ", "space"))
         return chars
 
     def _render_to_pil(self) -> tuple[PILImage.Image, list[GlyphEntry]]:
@@ -149,7 +170,8 @@ class SystemFontDialog(QDialog):
             return PILImage.new("P", (8, 8)), []
 
         qfont = QFont(self._font_combo.currentFont().family(),
-                      self._size_spin.value())
+                  self._size_spin.value())
+        qfont.setStyleStrategy(QFont.StyleStrategy.NoAntialias)
         fm = QFontMetrics(qfont)
         padding = self._padding_spin.value()
         per_row = self._per_row_spin.value()
@@ -161,9 +183,7 @@ class SystemFontDialog(QDialog):
         draw_h = cell_h - 2 * padding   # inner draw-rect height = fm.height()
 
         # Baseline position within each cell (Qt y-down).
-        # AlignVCenter centres the text vertically inside draw_h.
-        vert_pad = (draw_h - fm.height()) // 2
-        baseline_in_cell = vert_pad + fm.ascent()  # offset from cell_y to baseline
+        baseline_in_cell = padding + fm.ascent()
 
         n = len(chars)
         cols = min(per_row, n)
@@ -178,19 +198,15 @@ class SystemFontDialog(QDialog):
         painter.setFont(qfont)
         painter.setPen(QColor(255, 255, 255))
 
-        cell_info: list[tuple[int, int, int, int]] = []  # cell_x, cell_y, adv, search_h
+        cell_info: list[tuple[int, int, int]] = []  # cell origin x, y, advance
         for idx, (char, name) in enumerate(chars):
             col_i = idx % cols
             row_i = idx // cols
-            cell_x = col_i * cell_w + padding
-            cell_y = row_i * cell_h + padding
+            cell_x = col_i * cell_w
+            cell_y = row_i * cell_h
             adv = fm.horizontalAdvance(char)
 
-            painter.drawText(
-                QRect(cell_x, cell_y, cell_w, draw_h),
-                Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
-                char,
-            )
+            painter.drawText(cell_x + padding, cell_y + baseline_in_cell, char)
             cell_info.append((cell_x, cell_y, adv))
         painter.end()
 
@@ -204,14 +220,14 @@ class SystemFontDialog(QDialog):
         pal = [0] * 768
         pal[3:6] = [255, 255, 255]
         indexed.putpalette(pal)
-        indexed.putdata([1 if p > 128 else 0 for p in pil_rgb.getdata()])
+        indexed.putdata([1 if p else 0 for p in pil_rgb.getdata()])
 
         # Auto-detect tight pixel bounds for each glyph and derive offset_y.
         from .auto_detect import detect_bounds
         entries: list[GlyphEntry] = []
         for (cell_x, cell_y, adv), (char, name) in zip(cell_info, chars):
             result = detect_bounds(indexed, 0,
-                                   (cell_x, cell_y, cell_w, draw_h))
+                                   (cell_x, cell_y, cell_w, cell_h))
             if result:
                 gx, gy, gw, gh = result
                 # offset_y = baseline_qt − glyph_bottom_qt
@@ -222,30 +238,40 @@ class SystemFontDialog(QDialog):
                     name=name,
                     x=gx,
                     y=gy,
-                    width=max(1, adv),   # cursor advance stays as font-metric value
+                    width=max(1, gw),  # tight ink width; the engine adds global spacing
                     height=max(1, gh),
                     offset_y=int(round(offset_y)),
+                    pixel_width=gw,
                 ))
             else:
-                # Invisible glyph (e.g. space) — minimal placeholder
+                # Invisible glyph (e.g. space) keeps its font-metric advance.
                 entries.append(GlyphEntry(
                     name=name,
-                    x=cell_x,
-                    y=cell_y,
+                    x=cell_x + padding,
+                    y=cell_y + padding,
                     width=max(1, adv),
                     height=1,
+                    pixel_width=0,
                 ))
         return indexed, entries
 
     def _update_preview(self, *_):
         try:
-            img, _ = self._render_to_pil()
+            img, entries = self._render_to_pil()
             buf = io.BytesIO()
             img.save(buf, format="PNG")
             buf.seek(0)
             from PyQt6.QtGui import QPixmap
             pm = QPixmap()
             pm.loadFromData(buf.read())
+            painter = QPainter(pm)
+            warning_pen = QPen(QColor(230, 50, 50), 1)
+            painter.setPen(warning_pen)
+            painter.setBrush(Qt.BrushStyle.NoBrush)
+            for glyph in entries:
+                if glyph.pixel_width > 8:
+                    painter.drawRect(glyph.x, glyph.y, glyph.pixel_width - 1, glyph.height - 1)
+            painter.end()
             scaled = pm.scaled(
                 self._preview_label.size(),
                 Qt.AspectRatioMode.KeepAspectRatio,
@@ -259,7 +285,7 @@ class SystemFontDialog(QDialog):
         try:
             img, entries = self._render_to_pil()
             chars = self._get_charset()
-            gfx_ptrs = [name for _, name in chars]
+            gfx_ptrs = _build_gfx_ptrs(chars)
 
             # Save PNG as art/<stem>.png
             art_dir = os.path.join(self.out_dir, "art")

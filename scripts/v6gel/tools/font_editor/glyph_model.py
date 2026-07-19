@@ -34,6 +34,7 @@ class GlyphEntry:
     height: int
     offset_x: int = 0
     offset_y: int = 0
+    pixel_width: int = 0  # transient detected ink width; 0 means unknown
 
 
 @dataclass

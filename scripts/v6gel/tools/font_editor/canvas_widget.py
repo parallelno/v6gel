@@ -32,10 +32,12 @@ from PyQt6.QtWidgets import (
 from .glyph_model import FontData, GlyphEntry, GlyphTableModel
 
 # ---------------------------------------------------------------------------
-# Glyph rect colours — always orange; brighter when selected
+# Glyph rect colours — red identifies glyphs too wide for the 8-pixel renderer
 # ---------------------------------------------------------------------------
 _ORANGE     = QColor(255, 140,  0)   # normal border
 _ORANGE_SEL = QColor(255, 200, 50)   # selected border / handles
+_RED        = QColor(230,  50,  50)   # glyph ink wider than 8 pixels
+_RED_SEL    = QColor(255, 110, 80)    # selected overwide glyph
 
 
 # ---------------------------------------------------------------------------
@@ -77,6 +79,7 @@ class GlyphRectItem(QGraphicsObject):
         self._rect = QRectF(glyph.x, glyph.y, glyph.width, glyph.height)
         self._offset_x: int = glyph.offset_x
         self._offset_y: int = glyph.offset_y
+        self._pixel_width: int = glyph.pixel_width
         self._active_handle = self.HANDLE_NONE
         self._drag_start: Optional[QPointF] = None
         self._drag_start_rect: Optional[QRectF] = None
@@ -96,6 +99,7 @@ class GlyphRectItem(QGraphicsObject):
         self._rect = QRectF(glyph.x, glyph.y, glyph.width, glyph.height)
         self._offset_x = glyph.offset_x
         self._offset_y = glyph.offset_y
+        self._pixel_width = glyph.pixel_width
         self.update()
 
     def _handle_centers(self) -> list[QPointF]:
@@ -133,7 +137,10 @@ class GlyphRectItem(QGraphicsObject):
     def paint(self, painter: QPainter, _option, _widget=None):
         r = self._rect
         is_sel = self.isSelected()
-        color  = _ORANGE_SEL if is_sel else _ORANGE
+        is_overwide = self._pixel_width > 8 if self._pixel_width else r.width() > 8
+        color = _RED_SEL if is_overwide and is_sel else (
+            _RED if is_overwide else (_ORANGE_SEL if is_sel else _ORANGE)
+        )
 
         # No fill — keep glyph pixels fully visible
         painter.setBrush(Qt.BrushStyle.NoBrush)
