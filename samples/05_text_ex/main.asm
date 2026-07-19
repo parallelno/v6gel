@@ -21,8 +21,8 @@
 ; Font asset format:
 ;   The source asset (``assets/fonts/sys_font/font.json``) contains font
 ;   metadata, including the source graphics path, palette path, and asset type.
-;   The exported font metadata provides `font_gfx_ptrs` and
-;   `font_global_gfx_addr` labels used to initialize the text drawing routines.
+;   The exported font metadata provides `font_gfx_ptrs`; the linked font object
+;   exposes `_font`, the global address used to initialize the drawing routines.
 ; ---------------------------------------------------------------------------
 
 ; ---------------------------------------------------------------------------
@@ -34,22 +34,50 @@
 
 ; ---------------------------------------------------------------------------
 ; Font metadata format:
-;   The generated `*_meta.asm` file TODO
+;   The generated `*_meta.asm` file contains the exported binary size, a local
+;   offset label for every glyph, and `font_gfx_ptrs`. `font_gfx_ptrs` maps
+;   character codes 1 through 255 to glyph offsets and ends with `EOD`.
 ; ---------------------------------------------------------------------------
 
 ; ---------------------------------------------------------------------------
 ; Text metadata format:
-;   The generated `*_meta.asm` file TODO
+;   The generated `*_meta.asm` file contains the exported binary size and a
+;   local offset label for every text entry. Pass one of these labels, such as
+;   `_demo_test_text`, in DE to `text_ex_draw`.
 ; ---------------------------------------------------------------------------
 
 ; ---------------------------------------------------------------------------
 ; Font data format:
-;   The generated font data contains TODO
+;   Each glyph starts with a two-byte safety value, then contains:
+;     - `.byte` - glyph Y and X offsets from the cursor position.
+;     - `.word` - one 16-pixel scanline per glyph row.
+;     - `.byte` - Y and X cursor offsets for the next glyph.
+;   The renderer reads the scanlines until it reaches the nonzero X advance.
 ; ---------------------------------------------------------------------------
 
 ; ---------------------------------------------------------------------------
 ; Text data format:
-;   The generated text data contains TODO
+;   Each text entry starts with a two-byte safety value, then contains:
+;     - `.word` - byte count copied to the temporary RAM buffer.
+;     - `.byte` - initial screen Y and X positions.
+;     - `.byte` - character codes and text control codes.
+;   The renderer copies the entry to RAM before it draws the character stream.
+; ---------------------------------------------------------------------------
+
+; ---------------------------------------------------------------------------
+; Text control constants and macro:
+;   `TEXT("string", end_code)` emits a string using the configured screen-code
+;   encoding and appends `end_code`. Use `_EOD_` (0) to end text,
+;   `_LINE_BREAK_` (0x6A) to advance one line, and `_PARAG_BREAK_` (0xFF) to
+;   advance one paragraph. They are defined in `v6_text_ex_consts.asm`.
+; ---------------------------------------------------------------------------
+
+; ---------------------------------------------------------------------------
+; Font editor:
+;   `python -m v6gel.tools.font_editor` creates and edits `font.json` assets,
+;   including glyph bounds, offsets, cursor advances, and the character map. It
+;   can also generate a new font source from an installed system font.
+;   See `docs/05-font-editor.md` for the editor workflow and field reference.
 ; ---------------------------------------------------------------------------
 
 ; ---------------------------------------------------------------------------
