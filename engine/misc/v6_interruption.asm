@@ -131,15 +131,6 @@ v6_game_draw_counter = interruption_fps + 1
 v6_palette_update_request = palette_update_request_ + 1
 
 
-.opt
-; Counts pending game updates to sync the game loop with interrupts.
-; If < 0, no updates are pending.
-; Incremented in the interruption routine.
-; Checked and decremented in the game update.
-game_updates_required:
-			.byte NULL
-.endopt
-
 ; Restores the RAM disk mode after the interruption routine.
 .opt
 v6_ram_disk_mode:

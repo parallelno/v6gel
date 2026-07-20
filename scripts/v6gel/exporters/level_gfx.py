@@ -113,7 +113,7 @@ def _ram_data_to_asm(level_j_path, relative_ptrs, remap_idxs):
 	asm += f"			lxi h, {data_init_tbl_label}\n"
 	asm += "			lxi d, lv_gfx_init_tbl\n"
 	asm += f"			lxi b, {data_init_tbl_label.upper()}_LEN\n"
-	asm += "			call mem_copy_len\n"
+	asm += "			call mem_copy\n"
 	asm += "			ret\n\n"
 
 	for label, addr in relative_ptrs.items():

@@ -15,19 +15,33 @@
 .include "../../engine/common/v6_macros.asm"
 
 ; Include generated metadata for the font, text, and palette assets.
-.include "build/06_tile_draw/palettes/asm/pal_lv0_meta.asm"
-
+.include "build/06_room_draw/palettes/asm/pal_lv0_meta.asm"
+.include "build/06_room_draw/levels/asm/lv0_data_meta.asm"
+.include "build/06_room_draw/levels/asm/lv0_gfx_meta.asm"
 
 main:
             ; Fade-in the palette from black to our exported palette.
             lxi d, _pal_lv0 + _pal_lv0_palette_fade_to_black_relative
             call palette_fade_reverse
 
-            // lxi h,
-            // shld lv_rooms_pptr
 
+            lxi b, _lv0_data
+            lxi h, RAM_DISK_OFF_CMD<<8 | RAM_DISK_OFF_CMD
+            ; bc - LV0_DATA_ADDR
+            ; l - RAM_DISK_S
+            ; h - RAM_DISK_M
+            ; ex. hl = RAM_DISK_M_LV0_GFX<<8 | RAM_DISK_S_LV0_GFX
+            call lv0_data_init
 
-			// call room_unpack
-			// call room_init_tiles_gfx
-			// call room_draw_tiles
+            lxi b, _lv0_gfx
+            lxi h, RAM_DISK_OFF_CMD<<8 | RAM_DISK_OFF_CMD
+            ; bc - LV0_DATA_ADDR
+            ; l - RAM_DISK_S
+            ; h - RAM_DISK_M
+            ; ex. hl = RAM_DISK_M_LV0_GFX<<8 | RAM_DISK_S_LV0_GFX
+            call lv0_gfx_init
+
+			call room_unpack
+			call room_init_tiles_gfx
+			call room_draw_tiles
             ret

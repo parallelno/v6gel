@@ -1,6 +1,7 @@
 ; V6 runtime buffers
 
 
+.opt
 ;===============================================================================
 ; Pointers to Current Level Data & Graphics
 ;===============================================================================
@@ -14,25 +15,58 @@
 ;------------------------------
 ; Level Data Table
 ;------------------------------
-lv_data_init_tbl:				= $7602
-  lv_ram_disk_s_data:				= lv_data_init_tbl		; .byte RAM-disk command for Stack access
-  lv_ram_disk_m_data:				= lv_data_init_tbl + 1	; .byte RAM-disk command for Non-Stack access
-  lv_rooms_pptr:					= lv_data_init_tbl + 2	; .word Pointer to packed room data (tiledata + graphics tile idxs)
-  lv_resources_inst_data_pptr:	= lv_data_init_tbl + 4	; .word Pointer to resource instance data
-  lv_containers_inst_data_pptr:	= lv_data_init_tbl + 6	; .word Pointer to container instance data
-  lv_start_pos:					= lv_data_init_tbl + 8	; .word Hero start position (Y, X)
+lv_data_init_tbl:
+  lv_ram_disk_s_data:			.storage 1 ; .byte RAM-disk command for Stack access
+  lv_ram_disk_m_data:			.storage 1 ; .byte RAM-disk command for Non-Stack access
+  lv_rooms_pptr:				.storage 2 ; .word Pointer to packed room data (tiledata + graphics tile idxs)
+  lv_resources_inst_data_pptr:	.storage 2 ; .word Pointer to resource instance data
+  lv_containers_inst_data_pptr:	.storage 2 ; .word Pointer to container instance data
+  lv_start_pos:					.storage 2 ; .word Hero start position (Y, X)
 ;------------------------------
 ; Graphics Init Table
 ;------------------------------
-lv_gfx_init_tbl:				= lv_start_pos + WORD_LEN
-  lv_ram_disk_s_gfx:				= lv_gfx_init_tbl		; .byte RAM-disk command for Stack access
-  lv_ram_disk_m_gfx:				= lv_gfx_init_tbl + 1	; .byte RAM-disk command for Non-Stack access
-  lv_tiles_pptr:					= lv_gfx_init_tbl + 2	; .word Pointer to tile graphics data
-@data_end:						= lv_gfx_init_tbl + 4
+lv_gfx_init_tbl:
+  lv_ram_disk_s_gfx:			.storage 1 ; .byte RAM-disk command for Stack access
+  lv_ram_disk_m_gfx:			.storage 1 ; .byte RAM-disk command for Non-Stack access
+  lv_tiles_pptr:				.storage 2 ; .word Pointer to tile graphics data
+@data_end:
 LEVEL_INIT_TBL_LEN = @data_end - lv_data_init_tbl
+.endopt
 
 
+.opt
+;===============================================================================
+; Global Runtime States
+;===============================================================================
 
+global_states:
+; The current room idx within the current level
+room_id:				.storage 1 ; .byte ; Range: [0, ROOMS_MAX-1]
+
+; The index of the current level (must be located immediately after room_id)
+level_id:				.storage 1 ; .byte
+
+; Currently visible item in the game UI panel
+; Value corresponds to item ID, range: [0, ITEMS_MAX-1]
+game_ui_item_visible_addr:  .storage 1 ; .byte
+
+border_color_idx:		.storage 1 ; .byte Current border color index
+scr_offset_y:			.storage 1 ; .byte Vertical screen offset ($255 by default)
+
+; Counts pending game updates to sync the game loop with interrupts.
+; If < 0, no updates are pending.
+; Incremented in the interruption routine.
+; Checked and decremented in the game update.
+game_updates_required:	.storage 1 ; .byte
+
+; Temporary coordinates used during character movement logic:
+char_temp_x:			.storage 2 ; .word
+char_temp_y:			.storage 2 ; .word
+@data_end:		= global_states + 10
+GLOBAL_STATES_LEN = @data_end - global_states
+.endopt
+
+.opt
 ;===============================================================================
 ; Temporary Buffer
 ;===============================================================================
@@ -42,8 +76,12 @@ LEVEL_INIT_TBL_LEN = @data_end - lv_data_init_tbl
 
 TEMP_BUFF_LEN	= $200
 temp_buff: 		.storage TEMP_BUFF_LEN
+.endopt
 
 
+.opt
+; TODO make a new asm directive that align inside the 0x100
+; TODO think of a way to pack the storage blocks inside gaps between aligned sections
 ;===============================================================================
 ; Room Tile Graphics Pointer Table
 ;===============================================================================
@@ -102,3 +140,32 @@ room_tiles_gfx_ptrs_end:	= room_tiles_gfx_ptrs + ROOM_TILES_GFX_PTRS_LEN
 ROOM_TILEDATA_LEN	= ROOM_WIDTH * ROOM_HEIGHT
 room_tiledata:		= $7B00
 room_tiledata_end:	= room_tiledata + ROOM_TILEDATA_LEN
+.endopt
+
+.opt
+;===============================================================================
+; Teleport Room IDs
+;===============================================================================
+; A table to convert teleport IDs to room IDs for the current room.
+; NOTE:
+; - When the hero steps on a teleport tile, the tiledata provides a teleport ID.
+; - The teleport ID is used to look up the destination room ID in this table.
+; - When a hero enters a room, the room's teleport data is copied from
+;     the RAM-disk into this buffer.
+;
+;-------------------------------------------------------------------------------
+; Data Layout:
+;-------------------------------------------------------------------------------
+; .byte - room_id for teleport_id = 0
+; .byte - room_id for teleport_id = 1
+; ...
+; .byte - room_id for teleport_id = N
+; Where N = TELEPORT_IDS_MAX - 1
+
+; Defines the maximum number of unique teleport IDs per room.
+TELEPORT_IDS_MAX = 16
+ROOM_TELEPORTS_DATA_LEN = TELEPORT_IDS_MAX
+
+room_teleports_data:
+.storage TELEPORT_IDS_MAX
+.endopt

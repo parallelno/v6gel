@@ -24,7 +24,7 @@ PORT_AY_DATA			= 0x14
 PALETTE_LEN			    = 16
 PALETTE_UPD_REQ_NO		= 0
 PALETTE_UPD_REQ_YES		= 1
-BORDER_COLOR_IDX		= 1
+BORDER_COLOR_IDX_C		= 1
 
 ;=======================================================
 ; Screen Buffer
