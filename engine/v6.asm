@@ -16,7 +16,7 @@
 .include "gfx/v6_text_ex_draw.asm"
 .include "gfx/v6_tile_draw.asm"
 .include "gfx/v6_tilemap_draw.asm"
-.include "v6_buffs.asm"
+.include "v6_runtime_data.asm"
 
 
 ;

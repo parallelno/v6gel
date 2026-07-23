@@ -4,48 +4,23 @@ echo.
 echo === samples/01_controls: Build script ====================================
 echo Purpose: build and run the controls sample that demonstrates reading input
 echo and sending debug output.
-echo Prerequisites: add `v6asm`, `clang`, and emulator to PATH
-echo Note: update the TOOLS PATHS below if your tools are installed elsewhere.
-
-
-echo.
-echo === TOOLS PATHS (update if required) ======================================
-set v6asm=C:/Work/Programming/v6asm/target/release/v6asm
-set compiler=C:/Work/Programming/v6llvmc/llvm-build/bin/clang
-set emu=C:/Work/Programming/devector/bin/devector
-echo v6asm=%v6asm%
-echo compiler=%compiler%
-echo emu=%emu%
 
 rem === Set the current directory to the location of this script. ==============
 set CURRENT_DIR=%~dp0
-for %%I in ("%CURRENT_DIR:~0,-1%") do set "PROJECT_NAME=%%~nxI"
-set OUT_DIR=build\%PROJECT_NAME%
 
-
-echo.
-echo === Build the v6 library ==================================================
-set v6_o=build/v6/v6.o
-rem Build engine library (use --symbols to emit symbol table useful for debugging)
+rem === Define (V6_ASM, V6_LLVMC, EMU) build paths =====
 pushd .
-call engine/build.bat --symbols
+call samples\common\paths.bat
+rem === Define (OUT_DIR, PROJECT_NAME, v6_o) vars, compile main and v6 library =====
+call samples\common\build_setup.bat --symbols
 popd
-if %errorlevel% neq 0 exit /b %errorlevel%
-
-
-echo.
-echo === Assemble the main file ================================================
-%v6asm% "%CURRENT_DIR%main.asm" -o "%OUT_DIR%/main/main.o" -f obj
-if %errorlevel% neq 0 exit /b %errorlevel%
 
 
 echo.
 echo === Link the main program with the v6 library =============================
 set target=-target i8080-unknown-v6c
-set STACK_MAIN_PROGRAM_ADDR=0x100
 set STACK_DEF=-Wl,--defsym=__stack_top=%STACK_MAIN_PROGRAM_ADDR%
-
-%compiler% %target% %STACK_DEF% -nostdlib -O2 ^
+%V6_LLVMC% %target% %STACK_DEF% -nostdlib -O2 ^
     "%OUT_DIR%/main/main.o" ^
     %v6_o% ^
     -o "%OUT_DIR%/%PROJECT_NAME%.rom"
@@ -54,5 +29,5 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 
 echo.
 echo === Run the ROM in the emulator ===========================================
-echo Running: %emu% "%OUT_DIR%/%PROJECT_NAME%.rom"
-%emu% "%OUT_DIR%/%PROJECT_NAME%.rom"
+echo Running: %EMU% "%OUT_DIR%/%PROJECT_NAME%.rom"
+%EMU% "%OUT_DIR%/%PROJECT_NAME%.rom"

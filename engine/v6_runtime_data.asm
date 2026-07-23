@@ -1,7 +1,7 @@
 ; V6 runtime buffers
 
 
-.opt
+.pack
 ;===============================================================================
 ; Pointers to Current Level Data & Graphics
 ;===============================================================================
@@ -31,10 +31,9 @@ lv_gfx_init_tbl:
   lv_tiles_pptr:				.storage 2 ; .word Pointer to tile graphics data
 @data_end:
 LEVEL_INIT_TBL_LEN = @data_end - lv_data_init_tbl
-.endopt
+.endpack
 
-
-.opt
+.pack
 ;===============================================================================
 ; Global Runtime States
 ;===============================================================================
@@ -64,9 +63,9 @@ char_temp_x:			.storage 2 ; .word
 char_temp_y:			.storage 2 ; .word
 @data_end:		= global_states + 10
 GLOBAL_STATES_LEN = @data_end - global_states
-.endopt
+.endpack
 
-.opt
+.pack
 ;===============================================================================
 ; Temporary Buffer
 ;===============================================================================
@@ -76,12 +75,12 @@ GLOBAL_STATES_LEN = @data_end - global_states
 
 TEMP_BUFF_LEN	= $200
 temp_buff: 		.storage TEMP_BUFF_LEN
-.endopt
+.endpack
 
 
-.opt
-; TODO make a new asm directive that align inside the 0x100
-; TODO think of a way to pack the storage blocks inside gaps between aligned sections
+.pack align
+.storage 0x20 ; to align the room_tiledata block to a 0x100 boundary
+
 ;===============================================================================
 ; Room Tile Graphics Pointer Table
 ;===============================================================================
@@ -104,7 +103,7 @@ temp_buff: 		.storage TEMP_BUFF_LEN
 ; .endloop
 
 ROOM_TILES_GFX_PTRS_LEN	= ROOM_WIDTH * ROOM_HEIGHT * ADDR_LEN
-room_tiles_gfx_ptrs:		= $7920
+room_tiles_gfx_ptrs:		  .storage ROOM_TILES_GFX_PTRS_LEN
 room_tiles_gfx_ptrs_end:	= room_tiles_gfx_ptrs + ROOM_TILES_GFX_PTRS_LEN
 
 
@@ -138,11 +137,11 @@ room_tiles_gfx_ptrs_end:	= room_tiles_gfx_ptrs + ROOM_TILES_GFX_PTRS_LEN
 ; .endloop
 
 ROOM_TILEDATA_LEN	= ROOM_WIDTH * ROOM_HEIGHT
-room_tiledata:		= $7B00
+room_tiledata:		  .storage ROOM_TILEDATA_LEN
 room_tiledata_end:	= room_tiledata + ROOM_TILEDATA_LEN
-.endopt
+.endpack
 
-.opt
+.pack
 ;===============================================================================
 ; Teleport Room IDs
 ;===============================================================================
@@ -168,4 +167,4 @@ ROOM_TELEPORTS_DATA_LEN = TELEPORT_IDS_MAX
 
 room_teleports_data:
 .storage TELEPORT_IDS_MAX
-.endopt
+.endpack
