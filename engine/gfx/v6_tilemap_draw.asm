@@ -24,6 +24,7 @@
 ; !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 ; packed room data has to be stored into $8000-$FFFF segment to be properly unzipped
+.opt
 room_unpack:
 			lhld lv_rooms_pptr
 			; convert a room_id into the addr of the room data (gfx tile idxs & tiledata)
@@ -79,11 +80,13 @@ room_unpack:
 			ori RAM_DISK_M_8F
 			call mem_copy_from_ram_disk
 			ret
+.endopt
 
 
 
 
 ; convert room gfx tile_idxs into room gfx tile ptrs
+.opt
 room_init_tiles_gfx:
 			lhld lv_tiles_pptr
 			shld @gfx_tiles_ptrs + 1
@@ -125,10 +128,12 @@ room_init_tiles_gfx:
 			dcr a
 			jnz @loop
 			ret
+.endopt
 
 
 ;=========================================================
 ; draw a room tiles. It might be a main screen, or a back buffer
+.opt
 room_draw_tiles:
 			mvi a, ROOM_HEIGHT * TILE_HEIGHT
 ; in:
@@ -175,3 +180,4 @@ room_draw_tiles_ex:
 			jc @new_line
 			RAM_DISK_OFF()
 			ret
+.endopt

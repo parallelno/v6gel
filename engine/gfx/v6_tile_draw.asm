@@ -21,6 +21,7 @@
 ; SCR_BUFF2_ADDR : same
 ; SCR_BUFF3_ADDR : same
 
+.opt
 draw_tile_16x16:
 			; store sp
 			lxi h, $0000
@@ -110,3 +111,4 @@ draw_tile_16x16_end:
 			mov m, a
 			dcr h
 .endmacro
+.endopt

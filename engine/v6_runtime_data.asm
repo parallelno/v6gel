@@ -33,6 +33,7 @@ lv_gfx_init_tbl:
 LEVEL_INIT_TBL_LEN = @data_end - lv_data_init_tbl
 .endpack
 
+
 .pack
 ;===============================================================================
 ; Global Runtime States
