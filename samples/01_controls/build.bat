@@ -1,33 +1,32 @@
 @echo off
 
 echo.
-echo === samples/01_controls: Build script ====================================
-echo Purpose: build and run the controls sample that demonstrates reading input
-echo and sending debug output.
+echo === samples/01_controls/build.bat: samples/01_controls ====================
+echo Demonstrates reading input and sending debug output. Use arrow keys and
+echo check the keycode response in stdout output.
 
-rem === Set the current directory to the location of this script. ==============
 set CURRENT_DIR=%~dp0
 
-rem === Define (V6_ASM, V6_LLVMC, EMU) build paths =====
 pushd .
-call samples\common\paths.bat
-rem === Define (OUT_DIR, PROJECT_NAME, v6_o) vars, compile main and v6 library =====
-call samples\common\build_setup.bat --symbols
+rem Define V6_ASM, V6_LLVMC, EMU build paths
+call samples/common/paths.bat
+rem Define (OUT_DIR, OUT_ROM, PROJECT_NAME, v6_o) vars, compile main and v6 library
+call samples/common/build_setup.bat --symbols
 popd
 
-
 echo.
-echo === Link the main program with the v6 library =============================
+echo === samples/01_controls/build.bat: Linking ================================
 set target=-target i8080-unknown-v6c
 set STACK_DEF=-Wl,--defsym=__stack_top=%STACK_MAIN_PROGRAM_ADDR%
 %V6_LLVMC% %target% %STACK_DEF% -nostdlib -O2 ^
     "%OUT_DIR%/main/main.o" ^
     %v6_o% ^
-    -o "%OUT_DIR%/%PROJECT_NAME%.rom"
+    -o "%OUT_ROM%"
 if %errorlevel% neq 0 exit /b %errorlevel%
+echo Linking output to: %OUT_ROM%
 
 
 echo.
-echo === Run the ROM in the emulator ===========================================
-echo Running: %EMU% "%OUT_DIR%/%PROJECT_NAME%.rom"
-%EMU% "%OUT_DIR%/%PROJECT_NAME%.rom"
+echo === samples/01_controls/build.bat: Run the ROM in the emulator ============
+echo Running: %EMU% "%OUT_ROM%"
+%EMU% "%OUT_ROM%"
