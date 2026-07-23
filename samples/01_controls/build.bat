@@ -18,7 +18,7 @@ echo.
 echo === samples/01_controls/build.bat: Linking ================================
 set target=-target i8080-unknown-v6c
 set STACK_DEF=-Wl,--defsym=__stack_top=%STACK_MAIN_PROGRAM_ADDR%
-%V6_LLVMC% %target% %STACK_DEF% -nostdlib -O2 ^
+%V6_LLVMC%/clang %target% %STACK_DEF% -nostdlib -O2 ^
     "%OUT_DIR%/main/main.o" ^
     %v6_o% ^
     -o "%OUT_ROM%"

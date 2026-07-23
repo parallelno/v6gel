@@ -7,7 +7,7 @@ rem clang (https://github.com/parallelno/v6llvmc)
 rem emulator (https://github.com/parallelno/devector)
 
 set V6_ASM=C:/Work/Programming/v6asm/target/release/v6asm
-set V6_LLVMC=C:/Work/Programming/v6llvmc/llvm-build/bin/clang
+set V6_LLVMC=C:/Work/Programming/v6llvmc/llvm-build/bin
 set EMU=C:/Work/Programming/devector/bin/devector
 
 echo V6_ASM=%V6_ASM%
