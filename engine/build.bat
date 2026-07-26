@@ -12,7 +12,11 @@ echo.
 echo === engine/build.bat: Build the v6 library ================================
 setlocal
 set CURRENT_DIR=%~dp0
-%V6_ASM% %CURRENT_DIR%v6.asm -o %v6_o% -f obj
+%V6_ASM% %CURRENT_DIR%v6.asm ^
+    -D V6_CONTROLS=%V6_CONTROLS% ^
+    -D V6_MUSIC=%V6_MUSIC% ^
+    -o %v6_o% ^
+    -f obj
 endlocal
 if %errorlevel% neq 0 exit /b %errorlevel%
 

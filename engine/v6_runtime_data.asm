@@ -36,9 +36,62 @@ LEVEL_INIT_TBL_LEN = @data_end - lv_data_init_tbl
 
 .pack
 ;===============================================================================
-; Global Runtime States
+; V6 Engine Runtime States
 ;===============================================================================
+v6_global_states:
 
+border_color_idx:		.storage 1 ; .byte Current border color index
+
+; Vertical scrolling. It applies every frame.
+; The range from 0 to 255. The normal, non scrolled value is 255
+v6_scr_offset_y:			.storage 1
+
+; Counts pending game updates to sync the game loop with interrupts.
+; If < 0, no updates are pending.
+; Incremented in the interruption routine.
+; Checked and decremented in the game update.
+game_updates_required:	.storage 1 ; .byte
+
+; Restores the RAM disk mode after the interruption routine.
+v6_ram_disk_mode:
+			.storage 1 ; .byte RAM_DISK_OFF_CMD
+
+@data_end:
+V6_STATES_LEN = @data_end - v6_global_states
+.endpack
+
+
+.pack
+; V6 palette.
+; To update the palette:
+; * Copy new colors into this array.
+; * Set v6_palette_update_request = PALETTE_UPD_REQ_YES.
+; The interruption routine will apply new colors, then reset the
+; v6_palette_update_request back to PALETTE_UPD_REQ_NO.
+
+v6_palette:
+			.storage PALETTE_LEN
+.endpack
+
+
+.pack
+;===============================================================================
+; V6 Engine Control States
+;===============================================================================
+; Stores the current and previous frame action codes for the V6 engine.
+; - v6_action_code holds the action code for the current frame.
+; - v6_action_code_old holds the action code for the previous frame.
+; - use v6_action_code_old to prevent repeating key presses.
+v6_action_code:
+			.storage 2 ; .word CONTROL_CODE_NO<<8 || CONTROL_CODE_NO
+v6_action_code_old: = v6_action_code + 1 ; to take the previous frame action code
+.endpack
+
+
+.pack
+;===============================================================================
+; Global Game Runtime States
+;===============================================================================
 global_states:
 ; The current room idx within the current level
 room_id:				.storage 1 ; .byte ; Range: [0, ROOMS_MAX-1]
@@ -50,21 +103,13 @@ level_id:				.storage 1 ; .byte
 ; Value corresponds to item ID, range: [0, ITEMS_MAX-1]
 game_ui_item_visible_addr:  .storage 1 ; .byte
 
-border_color_idx:		.storage 1 ; .byte Current border color index
-scr_offset_y:			.storage 1 ; .byte Vertical screen offset ($255 by default)
-
-; Counts pending game updates to sync the game loop with interrupts.
-; If < 0, no updates are pending.
-; Incremented in the interruption routine.
-; Checked and decremented in the game update.
-game_updates_required:	.storage 1 ; .byte
-
 ; Temporary coordinates used during character movement logic:
 char_temp_x:			.storage 2 ; .word
 char_temp_y:			.storage 2 ; .word
-@data_end:		= global_states + 10
+@data_end:
 GLOBAL_STATES_LEN = @data_end - global_states
 .endpack
+
 
 .pack
 ;===============================================================================
