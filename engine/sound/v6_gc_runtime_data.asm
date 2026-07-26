@@ -1,9 +1,5 @@
-	; This line is for proper formatting in VSCode
-@memusage_v6_gc_runtime_data:
-
 
 V6_GC_BUFFER_LEN = GC_BUFFER_SIZE * GC_TASKS
-
 
 /*
 ; ==--------------------------------------------------------------------------==
@@ -28,7 +24,7 @@ v6_gc_task_stack:
 v6_gc_task_stack_end:
 */
 
-.opt
+.pack
 ; array of task stack pointers. v6_gc_task_sps[i] = taskSP
 V6_GC_TASK_SPS_LEN = GC_TASKS * WORD_LEN
 v6_gc_task_sps:
@@ -51,3 +47,5 @@ v6_gc_task_id:
 
 v6_song_reg_data_ptrs_end: ; contains the end of the array of ptrs to the song reg data
 			.storage WORD_LEN
+
+.endpack

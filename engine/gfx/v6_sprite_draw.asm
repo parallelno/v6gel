@@ -2,6 +2,8 @@
 
 .global *
 
+.opt
+
 ; sharetable chunk of code to restore SP and
 ; return a couple of parameters within HL, C
 draw_sprite_ret:
@@ -445,3 +447,5 @@ sprite_draw_vm:	; VM stands for: V - variable height, M - mask support
 			ora b
 			mov m, a
 .endmacro
+
+.endopt

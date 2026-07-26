@@ -7,16 +7,28 @@
 .include "common/v6_consts.asm"
 .include "common/v6_level_consts.asm"
 .include "common/v6_macros.asm"
+
+.include "v6_runtime_data.asm"
+
+.if V6_CONTROLS == 1
+.include "controls/v6_controls.asm"
+.endif
+
+.if V6_MUSIC == 1
+    .include "sound/v6_sound.asm"
+.endif
+
+.if V6_INTERRUPTIONS
 .include "misc/v6_interruption.asm"
+.endif
+
 .include "gfx/v6_sprite.asm"
 .include "gfx/v6_sprite_draw.asm"
 .include "gfx/v6_sprite_erase.asm"
-.include "gfx/v6_tile_draw.asm"
 .include "gfx/v6_tiled_img_draw.asm"
 .include "gfx/v6_text_ex_draw.asm"
 .include "gfx/v6_tile_draw.asm"
 .include "gfx/v6_tilemap_draw.asm"
-.include "v6_runtime_data.asm"
 
 
 ;
@@ -73,13 +85,14 @@ _crt0_bss_done:
 	RAM_DISK_OFF_NO_RESTORE(true, RAM_DISK0_PORT)
 	RAM_DISK_OFF_NO_RESTORE() ; disable RAM Disk used by the game
 
-	; set the interrupt routine vector
+.if V6_INTERRUPTIONS == 1
+    ; set the interrupt routine vector
 	mvi a, OPCODE_JMP
 	sta INT_ADDR
 	lxi h, v6_interruption
 	shld INT_ADDR + 1
-
 	ei
+.endif
 
     CALL __entry             ; Run user entry (default: main; override: --defsym=__entry=NAME)
 

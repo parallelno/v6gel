@@ -2,6 +2,8 @@
 
 .global *
 
+.opt
+
 ; get a sprite data addr
 ; in:
 ; hl - anim_ptr
@@ -225,3 +227,5 @@ sprite_update_labels:
 			ora a
 			jp @update_frame_labels
 			ret
+
+.endopt

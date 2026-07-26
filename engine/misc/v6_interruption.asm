@@ -8,11 +8,8 @@
 .include "common/v6_macros.asm"
 .include "common/v6_consts.asm"
 .include "misc/v6_utils.asm"
-.include "controls/v6_controls.asm"
-.include "sound/v6_sound.asm"
 
-
-
+.opt
 ;----------------------------------------------------------------
 ; The interruption sub which supports stack manipulations in
 ; the main program without di/ei.
@@ -51,10 +48,12 @@ v6_interruption:
 			push d
 
 
+		.if V6_CONTROLS == 1
 			;================================================================
 			; interruption main logic start
 			;================================================================
 			call controls_check
+		.endif
 
 			;check for a palette update
 palette_update_request_:
@@ -98,11 +97,15 @@ interruption_fps: ; output this value to the screen via Devector scripts
 			mvi m, INTS_PER_SEC
 interruption_no_fps_update:
 
+
+		.if V6_MUSIC == 1
 			;================================================================
 			; music update
 			;================================================================
 			CALL_RAM_DISK_FUNC_NO_RESTORE(v6_sound_update, RAM_DISK_MUSIC)
+		.endif
 
+			; restore regs before interrupt routine exit
 			pop d
 			pop b
 			pop psw
@@ -119,38 +122,12 @@ interruption_restoreSP:
 			ei
 interruption_return:
 			jmp TEMP_ADDR
-.endopt
 
-.opt
 ints_per_sec_counter:
 			.byte INTS_PER_SEC
-.endopt
 
 ; a lopped counter increased every game draw call
 v6_game_draw_counter = interruption_fps + 1
 v6_palette_update_request = palette_update_request_ + 1
 
-
-; Restores the RAM disk mode after the interruption routine.
-.opt
-v6_ram_disk_mode:
-			.byte RAM_DISK_OFF_CMD
-.endopt
-
-; Vertical scrolling. It applies every frame.
-; The range from 0 to 255. The normal, non scrolled value is 255
-.opt
-v6_scr_offset_y:
-			.byte 255
-.endopt
-
-; V6 palette.
-; To update the palette:
-; * Copy new colors into this array.
-; * Set v6_palette_update_request = PALETTE_UPD_REQ_YES.
-; The interruption routine will apply new colors, then reset the
-; v6_palette_update_request back to PALETTE_UPD_REQ_NO.
-.opt
-v6_palette:
-			.storage PALETTE_LEN
 .endopt

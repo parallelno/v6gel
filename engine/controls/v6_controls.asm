@@ -1,29 +1,20 @@
-.global v6_action_code
-.global v6_action_code_old
-
 @memusage_v6_controls:
 
 .include "controls/v6_controls_consts.asm"
 
 
-.optional
-v6_action_code:
-			.word CONTROL_CODE_NO<<8 || CONTROL_CODE_NO
-v6_action_code_old: = v6_action_code + 1
-.endopt
-
-.optional
+.opt
 controls_check:
 			jmp controls_keys_check
 controls_check_func_ptr: = controls_check + 1
 .endopt
 
-.optional
+.opt
 controls_check_func_ptr_flipped:
 			.word controls_joy_check
 .endopt
 
-.optional
+.opt
 controls_keys_check:
 			mvi a, PORT0_OUT_IN
 			out 0

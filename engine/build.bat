@@ -15,6 +15,7 @@ set CURRENT_DIR=%~dp0
 %V6_ASM% %CURRENT_DIR%v6.asm ^
     -D V6_CONTROLS=%V6_CONTROLS% ^
     -D V6_MUSIC=%V6_MUSIC% ^
+    -D V6_INTERRUPTIONS=%V6_INTERRUPTIONS% ^
     -o %v6_o% ^
     -f obj
 endlocal

@@ -13,6 +13,8 @@
 LINE_SPACING_DEFAULT = -12
 PARAG_SPACING_DEFAULT = -24
 
+.opt
+
 ; set a default line and a paragraph spacing
 text_ex_reset_spacing:
 			mvi a, LINE_SPACING_DEFAULT
@@ -310,3 +312,5 @@ text_ex_restore_pos_x:
 
 text_ex_draw_skip_dad_ptrs:
 			.word text_ex_draw_shift0, text_ex_draw_shift1,	text_ex_draw_shift2, text_ex_draw_shift3, text_ex_draw_shift4, text_ex_draw_shift5, text_ex_draw_shift6, text_ex_draw_shift7
+
+.endopt

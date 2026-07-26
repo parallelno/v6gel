@@ -13,6 +13,7 @@ REPEATER_CODE = $FF
 TILED_IMG_DRAW_UP = true
 TILED_IMG_DRAW_DOWN = false
 
+.opt
 
 ; init the tiled image idx data
 ; in:
@@ -301,3 +302,5 @@ tiled_img_draw_repeating_counter:
 
 			lxi sp, STACK_TEMP_ADDR
 .endmacro
+
+.endopt
