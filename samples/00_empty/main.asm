@@ -17,5 +17,5 @@ main:
 
 @exit:
             ; Return to crt0, then halt (DI, HLT): engine\v6.asm, lines #86-87
-            ; In the next v6 gel releases COM executibles will properly return to OS.
+            ; In the next v6 gel releases COM executibles will return to OS.
             ret
