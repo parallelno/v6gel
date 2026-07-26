@@ -36,3 +36,4 @@ echo.
 echo === samples/00_empty/build.bat: Run the ROM in the emulator ===============
 echo Running: %EMU% "%OUT_ROM%"
 %EMU% "%OUT_ROM%"
+if %errorlevel% neq 0 exit /b %errorlevel%

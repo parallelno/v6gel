@@ -2,20 +2,13 @@
 ; This demo shows how to use engine-provided services:
 ;    * main entry point setup
 ;    * debug output
-;    * disabled V6_MUSIC, V6_CONTROLS, V6_INTERRUPTION features in build.bat
+;    * disabled V6_MUSIC, V6_CONTROLS, V6_INTERRUPTIONS features in build.bat
 ; ------------------------------------------------------------------------------
 
 ; Expose `main` symbol so the linker and engine can call into this demo.
 .global main
 
-; ---------------------------------------------------------------------------
-; Entry point
-; Notes for learners:
-;  - The `out 0xED` instruction writes A to the emulator debug port
-;    the Devector emulator can show this value in a console window.
-; ---------------------------------------------------------------------------
 main:
-@debug_output:
             ; Send the `42` test value to the emulator debug port which redirects
             ; it to the stdout for inspection.
             ; Learners can send any bytes here for debugging purposes.
