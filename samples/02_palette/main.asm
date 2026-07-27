@@ -11,7 +11,6 @@
 ;  - a simple frame-sync wait loop using `hlt`
 ; ------------------------------------------------------------------------------
 
-; Expose `main` symbol so the linker and engine can call into this demo.
 .global main
 
 ; Import engine constants, control codes, and helper macros.
@@ -21,6 +20,7 @@
 
 ; common utility functions for demos, such as `wait_until_any_key_pressed`
 .include "../common/utils.asm"
+
 
 ; Note: Each asset in the assets folder is exported into two files:
 ; 1. *_meta.asm: contains relative labels to the data file and usefull constants.

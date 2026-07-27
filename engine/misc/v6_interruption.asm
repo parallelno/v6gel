@@ -126,6 +126,11 @@ interruption_return:
 ints_per_sec_counter:
 			.byte INTS_PER_SEC
 
+; Vertical scrolling. It applies every frame.
+; The range from 0 to 255. The normal, non scrolled value is 255
+v6_scr_offset_y:
+			.byte 255
+
 ; a lopped counter increased every game draw call
 v6_game_draw_counter = interruption_fps + 1
 v6_palette_update_request = palette_update_request_ + 1

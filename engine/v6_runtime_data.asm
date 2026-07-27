@@ -42,10 +42,6 @@ v6_global_states:
 
 border_color_idx:		.storage 1 ; .byte Current border color index
 
-; Vertical scrolling. It applies every frame.
-; The range from 0 to 255. The normal, non scrolled value is 255
-v6_scr_offset_y:			.storage 1
-
 ; Counts pending game updates to sync the game loop with interrupts.
 ; If < 0, no updates are pending.
 ; Incremented in the interruption routine.

@@ -6,7 +6,6 @@
 ;    * use of macros for safe zero comparison and zeroing A register
 ; ------------------------------------------------------------------------------
 
-; Expose `main` symbol so the linker and engine can call into this demo.
 .global main
 
 ; Import engine constants, control codes, and helper macros.
@@ -69,8 +68,4 @@ main:
             jmp @loop
 
 @exit:
-            ; Print zero to the stdout to indicate graceful exit.
-            A_TO_ZERO(NULL)
-            out 0xED
-            ; For ROMs it stops the program, for COMs it returns to the OS.
             ret

@@ -36,13 +36,11 @@
 ; To make it happen, opt out for crt0 via -nostdlib, and link v6.o
 ;
 ; Responsibilities:
-;   1. Set SP = __stack_top
 ;   2. Zero [__bss_start, __bss_end).
 ;   3. CALL __entry  (defaults to `main`; override with --defsym=__entry=NAME).
 ;   4. HLT on return (no exit syscall on bare V6C).
 ;
 ; Symbols supplied by the linker script:
-;   __stack_top  - initial SP value (default 0x0000 -> first PUSH lands at 0xFFFE)
 ;   __bss_start  - first byte of .bss (inclusive)
 ;   __bss_end    - one-past-last byte of .bss (exclusive)
 ;   __entry      - C entry point alias (default: main).
@@ -61,7 +59,7 @@
     .globl _start
 _start:
     DI                       			; Disable interrupts during setup
-    LXI SP, STACK_MAIN_PROGRAM_ADDR		; Initialize V6 stack pointer
+    LXI SP, STACK_MAIN_PROGRAM_ADDR		; defined via `-D` cli flag
 
     ; Zero [__bss_start, __bss_end). Empty range is handled correctly
     ; (loop exits immediately when HL == DE).

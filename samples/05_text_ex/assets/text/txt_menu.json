@@ -126,7 +126,7 @@
 			"test_text" : {
 				"scr_pos" : [18, 224],
 				"text": [
-					"   Welcome to 05 Text Example!_PARAG_BREAK_",
+					"   Welcome to 05 Text Example!",
 					"    Great to have you here._PARAG_BREAK_",
 					"     Explore,",
 					"        learn, and",

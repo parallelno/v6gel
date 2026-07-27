@@ -120,7 +120,7 @@ TMP_STACK_LEN	= 2  ; used as a temp 2 byte space in the render routines such as 
 
 ; defines available user space
 ; "-2" because screen erase funcs can let the interruption call corrupt 0x7ffe, @7fff bytes.
-STACK_MAIN_PROGRAM_ADDR	= 0x8000 - 2
+; defined by the linker STACK_MAIN_PROGRAM_ADDR	= 0x8000 - 2
 ; used by the iterruption func
 STACK_INTERRUPTION_ADDR	= STACK_MAIN_PROGRAM_ADDR - MAIN_STACK_LEN
 ; used as a temp 2 byte space in the render routines such as sprite_copy_to_scr_v
