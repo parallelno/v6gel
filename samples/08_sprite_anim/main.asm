@@ -20,8 +20,8 @@
 ;    It is usually included in the program.
 ; 2. *_data.asm: contains the actual bytes to be loaded into the RAM disk. It
 ;    can be included, linked or loaded from FDD at runtime.
-.include "build/07_sprite_frames/palettes/asm/pal_lv1_meta.asm"
-.include "build/07_sprite_frames/sprites/asm/knight_meta.asm"
+.include "build/08_sprite_anim/palettes/asm/pal_lv1_meta.asm"
+.include "build/08_sprite_anim/sprites/asm/knight_meta.asm"
 
 ; ---------------------------------------------------------------------------
 ; Entry point
@@ -63,6 +63,7 @@ SPRITE_INIT_POS_Y = 128
 main_loop:
             ; Synchronize with the frame start.
             hlt
+
 
             ; Prepare the screen address pointer for the knight sprite.
             lxi h, knight_scr_addr

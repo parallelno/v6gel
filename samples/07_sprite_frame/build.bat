@@ -1,7 +1,7 @@
 @echo off
 
 echo.
-echo === samples/07_sprite_frames: Build script ================================
+echo === samples/07_sprite_frame: Build script ================================
 echo Purpose: Demonstrate sprite frames.
 echo Prerequisites: add v6asm, clang, and an emulator to PATH.
 echo Note: update the TOOLS PATHS in ./samples/common/paths.bat if your tools
@@ -61,7 +61,7 @@ popd
 
 
 echo.
-echo === samples/07_sprite_frames/build.bat: Linking =================================
+echo === samples/07_sprite_frame/build.bat: Linking =================================
 set target=-target i8080-unknown-v6c
 %V6LLVMC%/clang %target% -nostdlib -O2 ^
     "%OUT_DIR%/main/main.o" ^
@@ -76,6 +76,6 @@ echo Linking output to: %OUT_ROM%
 
 
 echo.
-echo === samples/07_sprite_frames/build.bat: Run the ROM in the emulator ============
+echo === samples/07_sprite_frame/build.bat: Run the ROM in the emulator ============
 echo Running: %EMU% "%OUT_ROM%"
 %EMU% "%OUT_ROM%"
