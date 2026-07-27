@@ -2,14 +2,12 @@
 ; This demo shows how to use engine-provided services:
 ;    * palette update
 ;    * palette fade
-;    * play compressed music
 ;    * sprite erase
 ;    * sprite draw
 ;    * read controls
 ;    * export assets into meta-data and data files, and reference it in assembly
 ; ------------------------------------------------------------------------------
 
-; Expose `main` symbol so the linker and engine can call into this demo.
 .global main
 
 ; Import engine constants and control codes
@@ -22,16 +20,15 @@
 ;    It is usually included in the program.
 ; 2. *_data.asm: contains the actual bytes to be loaded into the RAM disk. It
 ;    can be included, linked or loaded from FDD at runtime.
-.include "build/demo_sprites/palettes/asm/pal_lv1_meta.asm"
-.include "build/demo_sprites/sprites/asm/knight_meta.asm"
+.include "build/07_sprite_frames/palettes/asm/pal_lv1_meta.asm"
+.include "build/07_sprite_frames/sprites/asm/knight_meta.asm"
 
 ; ---------------------------------------------------------------------------
 ; Entry point
 ; Steps performed here:
 ;  1. Request the engine to apply the palette stored in `v6_palette`.
 ;  2. Start a fade-in animation from a constant color to our exported palette.
-;  3. Unpack & play the compressed song.
-;  4. Enter the main loop which syncs to frames, handles controls and
+;  3. Enter the main loop which syncs to frames, handles controls and
 ;     renders the animated sprite.
 ; ---------------------------------------------------------------------------
 main:
@@ -50,11 +47,6 @@ main:
             ; to it in a format `_<asset_json_file_name>`.
             lxi d, _pal_lv1 + _pal_lv1_palette_fade_to_black_relative
             call palette_fade_reverse
-
-            ; Unpack the packed song into the RAM disk and start playback.
-            ; `_song01` is produced by the exporter and points to the packed bytes.
-            lxi h, _song01
-            call v6_gc_unpack_init_play_song
 
 ; ---------------------------------------------------------------------------
 ; Configuration: initial sprite position
@@ -84,7 +76,6 @@ main_loop:
             ani CONTROL_CODE_UP
             jz check_key_down
             inr m                 ; increment low byte (Y)
-            out 0xED              ; optional debug output (leave for learners)
             jmp check_key_left
 
 check_key_down:
@@ -92,7 +83,6 @@ check_key_down:
             ani CONTROL_CODE_DOWN
             jz check_key_left
             dcr m                 ; decrement low byte (Y)
-            out 0xED              ; optional debug output (leave for learners)
 
 check_key_left:
             inx h                 ; advance HL to the X position byte (screen X in bytes)
@@ -100,7 +90,6 @@ check_key_left:
             ani CONTROL_CODE_LEFT
             jz check_key_right
             dcr m                 ; decrement X (move left)
-            out 0xED              ; optional debug output (leave for learners)
             jmp render
 
 check_key_right:
@@ -108,7 +97,6 @@ check_key_right:
             ani CONTROL_CODE_RIGHT
             jz render
             inr m                 ; increment X (move right)
-            out 0xED              ; optional debug output (leave for learners)
 
 ; ---------------------------------------------------------------------------
 ; Rendering: erase previous sprite then draw the new one
