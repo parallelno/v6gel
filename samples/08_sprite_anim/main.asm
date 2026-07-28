@@ -12,6 +12,7 @@
 
 ; Import engine constants and control codes
 .include "../../engine/common/v6_consts.asm"
+.include "../../engine/common/v6_macros.asm"
 .include "../../engine/controls/v6_controls_consts.asm"
 
 ; Include generated metadata for palette and sprite assets.
@@ -63,6 +64,7 @@ SPRITE_INIT_POS_Y = 128
 main_loop:
             ; Synchronize with the frame start.
             hlt
+            DEBUG_BORDER_LINE(0)
 
 
             ; Prepare the screen address pointer for the knight sprite.
@@ -77,12 +79,14 @@ main_loop:
             ani CONTROL_CODE_UP
             jz check_key_down
             inr m                 ; increment low byte (Y)
+            inr m                 ; increment low byte (Y)
             jmp check_key_left
 
 check_key_down:
             mov a, c
             ani CONTROL_CODE_DOWN
             jz check_key_left
+            dcr m                 ; decrement low byte (Y)
             dcr m                 ; decrement low byte (Y)
 
 check_key_left:
@@ -99,11 +103,7 @@ check_key_right:
             jz render
             inr m                 ; increment X (move right)
 
-; ---------------------------------------------------------------------------
-; Rendering: erase previous sprite then draw the new one
-; - `knight_scr_addr_old` stores previous screen coordinates
-; - sprite metadata contains frame width/height and pixel data
-; ---------------------------------------------------------------------------
+
 render:
             ; Erase the sprite at the old position (read address, then call erase)
             lhld knight_scr_addr_old
@@ -130,18 +130,14 @@ draw_sprites:
             lhld knight_scr_addr
             shld knight_scr_addr_old
 
+            DEBUG_BORDER_LINE(1)
             jmp main_loop
             ret
 
-; ---------------------------------------------------------------------------
-; Screen address variables (stored as low/high byte pairs matching engine API)
-; `SPRITE_X_SCR_ADDR` is an engine constant pointing to the X base offset.
-; We add `SPRITE_INIT_POS_X` to place the sprite horizontally.
-; ---------------------------------------------------------------------------
-knight_scr_addr:
+knight_pos:
             .db SPRITE_INIT_POS_Y
             .db SPRITE_X_SCR_ADDR + SPRITE_INIT_POS_X
 
-knight_scr_addr_old:
+knight_pos_old:
             .db SPRITE_INIT_POS_Y
             .db SPRITE_X_SCR_ADDR + SPRITE_INIT_POS_X

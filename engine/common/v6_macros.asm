@@ -489,21 +489,14 @@ BY_A			= 5
 ;===============================================================================
 
 .macro DEBUG_BORDER_LINE(_borderColorIdx = 1)
-		.if SHOW_CPU_HIGHLOAD_ON_BORDER
 			mvi a, PORT0_OUT_OUT
 			out 0
 			mvi a, _borderColorIdx
 			out 2
-			lda scr_offset_y
+			lda v6_scr_offset_y
 			out 3
-		.endif
 .endmacro
 
-.macro DEBUG_HLT()
-		.if SHOW_CPU_HIGHLOAD_ON_BORDER
-			hlt
-		.endif
-.endmacro
 
 ; for a jmp table with 4 byte allignment
 .macro JMP_4(DST_ADDR)
