@@ -35,6 +35,23 @@ that the executable actually exists before use. If it does not, the build stops
 immediately with a clear error message indicating the source of the bad path
 (e.g. `ZX0 environment variable`) rather than crashing inside a subprocess.
 
+## Python environment
+
+The pipeline's Python steps need `Pillow` and `lhafile` (plus `PyQt6` for the
+font editor). The repository's Makefiles run every one of them — `v6export`,
+`v6loads`, `build_assets`, `clear`, `install_tools.py` and the sample asset
+exports — through a project-local `.venv/`. Create it once from the repo root:
+
+```bat
+make venv
+```
+
+which is shorthand for `uv venv .venv` followed by `uv pip install -e .` (the
+`-e .` installs the `v6gel` package and its dependencies). The
+`python -m v6gel.cli.*` commands below assume that interpreter; `make` selects it
+automatically (`.venv/Scripts/python` on Windows, `.venv/bin/python` on POSIX),
+falling back to `python` on `PATH` when the virtualenv is absent.
+
 ## Building the engine library
 
 The library compiles to a single object file you link with your game:

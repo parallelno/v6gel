@@ -23,6 +23,7 @@ BUILD_STEPS.txt
 # Python
 __pycache__/
 *.pyc
+.venv/
 
 # temporary files
 temp/

@@ -134,10 +134,10 @@ draw_sprites:
             jmp main_loop
             ret
 
-knight_pos:
+knight_scr_addr:
             .db SPRITE_INIT_POS_Y
             .db SPRITE_X_SCR_ADDR + SPRITE_INIT_POS_X
 
-knight_pos_old:
+knight_scr_addr_old:
             .db SPRITE_INIT_POS_Y
             .db SPRITE_X_SCR_ADDR + SPRITE_INIT_POS_X

@@ -17,11 +17,7 @@
 #  READELF — path to llvm-readelf (default: tools/v6llvmc/bin/llvm-readelf)
 #  V6C     — path to the v6c compiler (default: tools/v6llvmc/bin/clang)
 #
-# The root Makefile downloads the tools,  and then
-# invokes this one with `make -f engine/Makefile`, so it can
-# be run from the repo root or from the engine/ folder. It also sets the default
-# subsystem flags for each sample, so the sample Makefiles can just invoke
-# `make engine` to build the engine library with the right features.
+# The root Makefile downloads the tools and sets the environment variables.
 # ---------------------------------------------------------------------------
 
 .DEFAULT_GOAL := all

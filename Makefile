@@ -21,16 +21,20 @@
 # portable "make a directory" command.
 ifeq ($(OS),Windows_NT)
     EXE := .exe
+    VENV_BIN := .venv/Scripts
     mkdir = @if not exist "$(subst /,\,$1)" mkdir "$(subst /,\,$1)"
 else
     EXE :=
+    VENV_BIN := .venv/bin
     mkdir = @mkdir -p $1
 endif
 
 # --- tools -----------------------------------------------------------------
 # Defaults point at tools/<name>/, the layout produced by install_tools.py.
 # `?=` means "only set if not already provided", so env vars / CLI args win.
-PYTHON ?= python
+# Prefer the project-local .venv interpreter (created by `make venv`) when it
+# exists, otherwise fall back to whatever `python` is on PATH.
+PYTHON ?= $(if $(wildcard $(VENV_BIN)/python$(EXE)),$(VENV_BIN)/python$(EXE),python)
 V6ASM  ?= tools/v6asm/v6asm$(EXE)
 V6FDD  ?= tools/v6asm/v6fdd$(EXE)
 V6C  ?= tools/v6llvmc/bin/clang$(EXE)
@@ -56,13 +60,18 @@ SONG_DATA  := samples/music/out/song01_data.zx0
 SAMPLE_ROM := samples/01/out/main.rom
 
 # ---------------------------------------------------------------------------
-.PHONY: all help tools engine song sample assets run clean
+.PHONY: all help tools venv engine song sample assets run clean
 
 all: engine assets sample ## Build the engine, all assets, and sample 01.
 
 ## tools: download the external toolchain into tools/ (see tools.lock.json).
 tools:
 	$(PYTHON) install_tools.py
+
+## venv: create .venv and install the v6gel pipeline + dependencies (needs uv).
+venv:
+	uv venv --allow-existing .venv
+	uv pip install --python $(VENV_BIN)/python$(EXE) -e .
 
 ## engine: assemble the v6 engine library to engine/out/v6.o.
 engine: $(ENGINE_OBJ)
@@ -104,6 +113,7 @@ help:
 	@echo v6gel make targets:
 	@echo.
 	@echo   tools    Download the external toolchain into tools/
+	@echo   venv     Create .venv and install the pipeline + dependencies
 	@echo   engine   Assemble the v6 engine library
 	@echo   song     Assemble + compress the sample song
 	@echo   assets   Build all assets into a bootable .fdd

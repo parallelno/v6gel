@@ -34,14 +34,20 @@ get you started quickly.
 
 ## Quick start
 
-Prerequisites: **Python 3.10+**. Everything else (the **v6asm**/**v6fdd**
-toolchain, the **zx0** compressor, the **V6C** compiler, and the emulators) is
-fetched for you by the bundled installer.
+Prerequisites: **[uv](https://docs.astral.sh/uv/)** (used to create the project's
+Python environment). Everything else (the **v6asm**/**v6fdd** toolchain, the
+**zx0** compressor, the **V6C** compiler, and the emulators) is fetched for you
+by the bundled installer.
+
+The Makefiles use a project-local `.venv/` (created by `make venv`); every Python
+step they run — `v6export`, `build_assets`, `install_tools.py` and the sample
+asset exports — goes through that interpreter. Without `make`, the equivalent is
+`uv venv .venv` followed by `uv pip install -e .`.
 
 ```bat
-REM 0. Install the Python deps and the external tools.
-pip install -e .
-python install_tools.py
+REM 0. Create .venv/ with the Python deps and install the external tools.
+make venv
+make tools
 
 REM 1. Build the engine library.
 cd engine
