@@ -47,8 +47,8 @@ ROOT_DIR   := $(abspath $(SAMPLE_DIR)/../..)
 
 # --- tools (overridable) ---------------------------------------------------
 V6ASM   ?= $(ROOT_DIR)/tools/v6asm/v6asm$(EXE)
-V6C     ?= $(ROOT_DIR)/tools/v6llvmc/bin/clang$(EXE)
-READELF ?= $(ROOT_DIR)/tools/v6llvmc/bin/llvm-readelf$(EXE)
+V6CLANG     ?= $(ROOT_DIR)/tools/v6clang/bin/clang$(EXE)
+READELF ?= $(ROOT_DIR)/tools/v6clang/bin/llvm-readelf$(EXE)
 EMU     ?= $(ROOT_DIR)/tools/devector/devector$(EXE)
 # Prefer the project-local .venv interpreter (created by `make venv` in the repo
 # root) when it exists, otherwise fall back to whatever `python` is on PATH.
@@ -64,7 +64,7 @@ V6_INTERRUPTIONS        ?= 1
 V6_CONTROLS             ?= 1
 V6_MUSIC                ?= 0
 
-TARGET := -target i8080-unknown-v6c
+TARGET := -target i8080-unknown-v6clang
 
 # --- project paths (mirror samples/common/build_setup.bat) ------------------
 PROJECT_NAME := $(notdir $(SAMPLE_DIR))
@@ -146,12 +146,12 @@ $(MAIN_OBJ): $(SAMPLE_DIR)/main.asm $(ASSET_OBJS)
 $(OUT_ROM): $(MAIN_OBJ) $(V6_OBJ) $(ASSET_OBJS)
 	$(call mkdir,$(OUT_DIR))
 	@echo === samples/02_palette: Linking ===
-	"$(V6C)" $(TARGET) -nostdlib -O2 \
+	"$(V6CLANG)" $(TARGET) -nostdlib -O2 \
 	    "$(MAIN_OBJ)" \
 	    "$(V6_OBJ)" \
 	    $(foreach o,$(ASSET_OBJS),"$(o)") \
 	    -Wl,-Map,"$(OUT_DIR)/$(PROJECT_NAME).map" \
-	    -Wl,--v6c-constants-map,"$(OUT_DIR)/$(PROJECT_NAME).constants.map" \
+	    -Wl,--v6clang-constants-map,"$(OUT_DIR)/$(PROJECT_NAME).constants.map" \
 	    -o "$(OUT_ROM)"
 	@echo Linking output to: $(OUT_ROM)
 

@@ -14,8 +14,8 @@
 #
 # Requires env vars:
 #  V6ASM   — path to the v6asm assembler (default: tools/v6asm/v6asm)
-#  READELF — path to llvm-readelf (default: tools/v6llvmc/bin/llvm-readelf)
-#  V6C     — path to the v6c compiler (default: tools/v6llvmc/bin/clang)
+#  READELF — path to llvm-readelf (default: tools/v6clang/bin/llvm-readelf)
+#  V6CLANG     — path to the v6clang compiler (default: tools/v6clang/bin/clang)
 #
 # The root Makefile downloads the tools and sets the environment variables.
 # ---------------------------------------------------------------------------
@@ -43,7 +43,7 @@ ROOT_DIR   := $(abspath $(ENGINE_DIR)/..)
 
 # --- tools (overridable) ---------------------------------------------------
 V6ASM   ?= $(ROOT_DIR)/tools/v6asm/v6asm$(EXE)
-READELF ?= $(ROOT_DIR)/tools/v6llvmc/bin/llvm-readelf$(EXE)
+READELF ?= $(ROOT_DIR)/tools/v6clang/bin/llvm-readelf$(EXE)
 
 # --- feature flags ---------------------------------------------------------
 # It takes these from the caller's environment; the defaults below build

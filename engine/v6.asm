@@ -32,24 +32,24 @@
 
 
 ;
-; This is a replacement of the standard V6C crt0 startup.
+; This is a replacement of the standard V6CLANG crt0 startup.
 ; To make it happen, opt out for crt0 via -nostdlib, and link v6.o
 ;
 ; Responsibilities:
 ;   2. Zero [__bss_start, __bss_end).
 ;   3. CALL __entry  (defaults to `main`; override with --defsym=__entry=NAME).
-;   4. HLT on return (no exit syscall on bare V6C).
+;   4. HLT on return (no exit syscall on bare V6CLANG).
 ;
 ; Symbols supplied by the linker script:
 ;   __bss_start  - first byte of .bss (inclusive)
 ;   __bss_end    - one-past-last byte of .bss (exclusive)
 ;   __entry      - C entry point alias (default: main).
 ;                  Override at link time: -Wl,--defsym=__entry=myStart
-;                  The PROVIDE in v6c.ld makes __entry = main unless --defsym
+;                  The PROVIDE in v6clang.ld makes __entry = main unless --defsym
 ;                  defines it first.
 ;
 ; Symbol supplied by user code:
-;   main (or the function named by __entry) - C entry point, normal V6C
+;   main (or the function named by __entry) - C entry point, normal V6CLANG
 ;                  calling convention
 ;
 ; Calling convention reminder (V6C_CConv):

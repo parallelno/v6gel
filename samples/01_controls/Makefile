@@ -16,8 +16,8 @@
 #
 # Requires env vars:
 #  V6ASM   — path to the v6asm assembler (default: tools/v6asm/v6asm)
-#  READELF — path to llvm-readelf (default: tools/v6llvmc/bin/llvm-readelf)
-#  V6C     — path to the v6c compiler (default: tools/v6llvmc/bin/clang)
+#  READELF — path to llvm-readelf (default: tools/v6clang/bin/llvm-readelf)
+#  V6CLANG     — path to the v6clang compiler (default: tools/v6clang/bin/clang)
 #  EMU     — path to the emulator (default: tools/devector/devector)
 #
 # The root Makefile downloads the tools and sets the environment variables.
@@ -43,8 +43,8 @@ ROOT_DIR   := $(abspath $(SAMPLE_DIR)/../..)
 
 # --- tools (overridable) ---------------------------------------------------
 V6ASM   ?= $(ROOT_DIR)/tools/v6asm/v6asm$(EXE)
-V6C     ?= $(ROOT_DIR)/tools/v6llvmc/bin/clang$(EXE)
-READELF ?= $(ROOT_DIR)/tools/v6llvmc/bin/llvm-readelf$(EXE)
+V6CLANG     ?= $(ROOT_DIR)/tools/v6clang/bin/clang$(EXE)
+READELF ?= $(ROOT_DIR)/tools/v6clang/bin/llvm-readelf$(EXE)
 EMU     ?= $(ROOT_DIR)/tools/devector/devector$(EXE)
 
 # --- sample settings (from build.bat, overridable) -------------------------
@@ -53,7 +53,7 @@ V6_INTERRUPTIONS        ?= 1
 V6_CONTROLS             ?= 1
 V6_MUSIC                ?= 0
 
-TARGET := -target i8080-unknown-v6c
+TARGET := -target i8080-unknown-v6clang
 
 # --- project paths (mirror samples/common/build_setup.bat) ------------------
 PROJECT_NAME := $(notdir $(SAMPLE_DIR))
@@ -98,11 +98,11 @@ $(MAIN_OBJ): $(SAMPLE_DIR)/main.asm
 $(OUT_ROM): $(MAIN_OBJ) $(V6_OBJ)
 	$(call mkdir,$(OUT_DIR))
 	@echo === samples/01_controls: Linking ===
-	"$(V6C)" $(TARGET) -nostdlib -O2 \
+	"$(V6CLANG)" $(TARGET) -nostdlib -O2 \
 	    "$(MAIN_OBJ)" \
 	    "$(V6_OBJ)" \
 	    -Wl,-Map,"$(OUT_DIR)/$(PROJECT_NAME).map" \
-	    -Wl,--v6c-constants-map,"$(OUT_DIR)/$(PROJECT_NAME).constants.map" \
+	    -Wl,--v6clang-constants-map,"$(OUT_DIR)/$(PROJECT_NAME).constants.map" \
 	    -o "$(OUT_ROM)"
 	@echo Linking output to: $(OUT_ROM)
 

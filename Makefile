@@ -37,7 +37,7 @@ endif
 PYTHON ?= $(if $(wildcard $(VENV_BIN)/python$(EXE)),$(VENV_BIN)/python$(EXE),python)
 V6ASM  ?= tools/v6asm/v6asm$(EXE)
 V6FDD  ?= tools/v6asm/v6fdd$(EXE)
-V6C  ?= tools/v6llvmc/bin/clang$(EXE)
+V6CLANG  ?= tools/v6clang/bin/clang$(EXE)
 
 # Make the v6gel pipeline package importable from the in-repo scripts/ dir for
 # every recipe, so `python -m v6gel.cli.*` works without a separate install.
@@ -49,7 +49,7 @@ BUILD_DIR    := build/release
 FDD_TEMPLATE := assets/basefdd/rds308.fdd
 
 # i8080 / Vector-06c target and stack top (see engine/common/v6_consts.asm).
-TARGET    := -target i8080-unknown-v6c
+TARGET    := -target i8080-unknown-v6clang
 STACK_TOP := 0x7FFE
 STACK_DEF := -Wl,--defsym=__stack_top=$(STACK_TOP)
 
@@ -97,7 +97,7 @@ sample: $(SAMPLE_ROM)
 
 $(SAMPLE_ROM): samples/01/main.c $(ENGINE_OBJ) $(SONG_OBJ)
 	$(call mkdir,samples/01/out)
-	"$(V6C)" $(TARGET) -nostdlib -O2 $(STACK_DEF) \
+	"$(V6CLANG)" $(TARGET) -nostdlib -O2 $(STACK_DEF) \
 		samples/01/main.c $(ENGINE_OBJ) $(SONG_OBJ) -o $(SAMPLE_ROM)
 
 ## run: build sample 01 and launch it in the v6emul emulator.

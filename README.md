@@ -2,7 +2,7 @@
 
 > A practical, performance-focused engine library that helps newcomers build
 > fast games for the **Vector-06c** 8-bit computer in classic 8080/Z80-style
-> assembly — and in **C** via the V6C toolchain.
+> assembly — and in **C** via the V6CLANG toolchain.
 
 v6gel bundles a hand-tuned runtime library, a complete asset pipeline that turns
 artist-facing source files into compact runtime blobs, and sample projects to
@@ -36,7 +36,7 @@ get you started quickly.
 
 Prerequisites: **[uv](https://docs.astral.sh/uv/)** (used to create the project's
 Python environment). Everything else (the **v6asm**/**v6fdd** toolchain, the
-**zx0** compressor, the **V6C** compiler, and the emulators) is fetched for you
+**zx0** compressor, the **V6CLANG** compiler, and the emulators) is fetched for you
 by the bundled installer.
 
 The Makefiles use a project-local `.venv/` (created by `make venv`); every Python

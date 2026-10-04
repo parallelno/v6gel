@@ -5,7 +5,7 @@ The runtime library lives in `engine/` and is assembled by `engine/build.bat` in
 (`_start`) that sets the stack, clears `.bss`, installs the 50 Hz interrupt
 vector, and calls your `main`.
 
-Routines follow the V6C calling convention, so they are callable from C or
+Routines follow the V6CLANG calling convention, so they are callable from C or
 assembly. Register usage for each routine is noted where the source comments make
 it clear; consult the corresponding `.asm` file for exact register contracts.
 

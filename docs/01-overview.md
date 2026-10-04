@@ -5,7 +5,7 @@
 **v6gel** is a game engine library for the **Vector-06c**, a Soviet-era 8-bit home
 computer based on the i8080 CPU. It gives newcomers a practical, well-factored
 foundation for writing **performant** games in classic 8080/Z80-style assembly —
-and, where convenient, in **C** (via the [V6C](https://github.com/parallelno/v6llvmc) toolchain) — without having to
+and, where convenient, in **C** (via the [V6CLANG](https://github.com/parallelno/v6clang) toolchain) — without having to
 reinvent sprite blitting, tile maps, music playback, input handling, or
 RAM-disk asset streaming from scratch.
 
@@ -26,7 +26,7 @@ The repository bundles three things:
   plane-packed so the runtime does the least possible work per frame.
 - **Approachable.** A newcomer can build the sample, swap in their own art, and
   iterate without deep knowledge of the hardware quirks.
-- **Asm + C friendly.** The library follows the V6C calling convention so you can
+- **Asm + C friendly.** The library follows the V6CLANG calling convention so you can
   call engine routines from C or drop down to assembly for hot paths.
 - **One-command asset builds.** A single driver converts every asset listed in a
   build config and packs them into a bootable floppy image.
@@ -65,7 +65,7 @@ dependencies and every external tool are installed for you:
 
 ```bat
 pip install -e .            REM Pillow, lhafile (the pipeline's Python deps)
-python install_tools.py     REM v6asm, v6fdd, zx0, V6C, emulators -> tools/
+python install_tools.py     REM v6asm, v6fdd, zx0, V6CLANG, emulators -> tools/
 ```
 
 `install_tools.py` reads [`tools.lock.json`](../tools.lock.json) and downloads
@@ -79,7 +79,7 @@ The tools it manages:
 |------|---------|
 | [**v6asm** / **v6fdd**](https://github.com/parallelno/v6asm) | The assembler (engine + asset data) and the bootable-`.fdd` packer. |
 | [**zx0** (salvador)](https://github.com/emmanuel-marty/salvador) | ZX0 compressor, used inside some formats and as optional transport compression. |
-| [**V6C**](https://github.com/parallelno/v6llvmc) | LLVM/Clang toolchain for compiling C to the Vector-06c. |
+| [**V6CLANG**](https://github.com/parallelno/v6clang) | LLVM/Clang toolchain for compiling C to the Vector-06c. |
 | [**Devector**](https://github.com/parallelno/Devector) | GUI emulator/debugger. |
 | [**v6emul**](https://github.com/parallelno/v6emul) | Command-line emulator for quick debug iterations. |
 

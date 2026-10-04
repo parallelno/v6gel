@@ -31,13 +31,13 @@
 				}
 			}
 		},
-		"v6llvmc": {
-			"description": "V6C LLVM/Clang toolchain (compile C for the Vector-06c). Windows release only; ~120 MB.",
+		"v6clang": {
+			"description": "V6CLANG LLVM/Clang toolchain (compile C for the Vector-06c). Windows release only; ~120 MB.",
 			"version": "2026.06.08",
-			"dest": "v6llvmc",
+			"dest": "v6clang",
 			"platforms": {
 				"windows-x86_64": {
-					"url": "https://github.com/parallelno/v6llvmc/releases/download/v2026.06.08/v6c-2026.06.08-windows-x64.zip",
+					"url": "https://github.com/parallelno/v6clang/releases/download/v2026.06.08/v6clang-2026.06.08-windows-x64.zip",
 					"sha256": null
 				}
 			}

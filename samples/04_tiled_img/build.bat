@@ -78,7 +78,7 @@ popd
 
 echo.
 echo === samples/04_tiled_img/build.bat: Linking =================================
-set target=-target i8080-unknown-v6c
+set target=-target i8080-unknown-v6clang
 %V6LLVMC%/clang %target% -nostdlib -O2 ^
     "%OUT_DIR%/main/main.o" ^
     %v6_o% ^
@@ -86,7 +86,7 @@ set target=-target i8080-unknown-v6c
     %tim_gfx_o% ^
     %pal_lv1_o% ^
     -Wl,-Map,"%OUT_DIR%/%PROJECT_NAME%.map" ^
-    -Wl,--v6c-constants-map,"%OUT_DIR%/%PROJECT_NAME%.constants.map" ^
+    -Wl,--v6clang-constants-map,"%OUT_DIR%/%PROJECT_NAME%.constants.map" ^
     -o "%OUT_ROM%"
 if %errorlevel% neq 0 exit /b %errorlevel%
 echo Linking output to: %OUT_ROM%
