@@ -1,7 +1,6 @@
 # v6gel — root Makefile
 #
-# A thin, cross-platform task runner. Each target mirrors what the old .bat
-# files did, but in one place that works the same on Windows, Linux and macOS.
+# A thin, cross-platform task runner.
 #
 # Quick start:
 #   make tools      # download the external tools into tools/
@@ -34,7 +33,7 @@ endif
 PYTHON ?= python
 V6ASM  ?= tools/v6asm/v6asm$(EXE)
 V6FDD  ?= tools/v6asm/v6fdd$(EXE)
-CLANG  ?= tools/v6llvmc/bin/clang$(EXE)
+V6C  ?= tools/v6llvmc/bin/clang$(EXE)
 
 # Make the v6gel pipeline package importable from the in-repo scripts/ dir for
 # every recipe, so `python -m v6gel.cli.*` works without a separate install.
@@ -89,7 +88,7 @@ sample: $(SAMPLE_ROM)
 
 $(SAMPLE_ROM): samples/01/main.c $(ENGINE_OBJ) $(SONG_OBJ)
 	$(call mkdir,samples/01/out)
-	"$(CLANG)" $(TARGET) -nostdlib -O2 $(STACK_DEF) \
+	"$(V6C)" $(TARGET) -nostdlib -O2 $(STACK_DEF) \
 		samples/01/main.c $(ENGINE_OBJ) $(SONG_OBJ) -o $(SAMPLE_ROM)
 
 ## run: build sample 01 and launch it in the v6emul emulator.
