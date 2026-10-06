@@ -1,5 +1,5 @@
 ; V6 runtime startup
-; Built by build.bat. Output is in out\v6.o.
+; Built by ./engine/Makefile. Output is in out\v6.o.
 
 ; Include this file and all files it includes at most once
 .setting force_once, true

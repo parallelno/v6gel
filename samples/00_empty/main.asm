@@ -2,7 +2,7 @@
 ; This demo shows how to use engine-provided services:
 ;    * main entry point setup
 ;    * debug output
-;    * disabled V6_MUSIC, V6_CONTROLS, V6_INTERRUPTIONS features in build.bat
+;    * disabled V6_MUSIC, V6_CONTROLS, V6_INTERRUPTIONS features in Makefile.
 ; ------------------------------------------------------------------------------
 
 ; Expose `main` symbol so the linker and engine can call into this demo.

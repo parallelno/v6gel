@@ -17,18 +17,14 @@
 #
 # Override any tool path or define on the command line or via the environment:
 #
-#   make V6ASM=/custom/v6asm EMU=/custom/emulator
+#   make V6ASM=/custom/v6asm DEVECTOR=/custom/emulator
 #   make V6_MUSIC=0
 #
-# The .bat version read tool paths from ./samples/common/paths.bat and drove the
-# asset exports with `python -m v6gel.cli.v6export`; here the tools default to
-# the tools/ layout produced by `python install_tools.py`, matching the
-# repository root Makefile.
-# ---------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 .PHONY: all assets engine run rom clean help
 
-# --- platform detection ----------------------------------------------------
+# --- platform detection -------------------------------------------------------
 ifeq ($(OS),Windows_NT)
     EXE      := .exe
     VENV_BIN := .venv/Scripts
@@ -46,11 +42,11 @@ endif
 SAMPLE_DIR := $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
 ROOT_DIR   := $(abspath $(SAMPLE_DIR)/../..)
 
-# --- tools (overridable) ---------------------------------------------------
+# --- tools (overridable) ------------------------------------------------------
 V6ASM   ?= $(ROOT_DIR)/tools/v6asm/v6asm$(EXE)
 V6CLANG     ?= $(ROOT_DIR)/tools/v6clang/bin/clang$(EXE)
 READELF ?= $(ROOT_DIR)/tools/v6clang/bin/llvm-readelf$(EXE)
-EMU     ?= $(ROOT_DIR)/tools/devector/devector$(EXE)
+DEVECTOR     ?= $(ROOT_DIR)/tools/devector/devector$(EXE)
 # Prefer the project-local .venv interpreter (created by `make venv` in the repo
 # root) when it exists, otherwise fall back to whatever `python` is on PATH.
 PYTHON  ?= $(if $(wildcard $(ROOT_DIR)/$(VENV_BIN)/python$(EXE)),$(ROOT_DIR)/$(VENV_BIN)/python$(EXE),python)
@@ -59,7 +55,7 @@ PYTHON  ?= $(if $(wildcard $(ROOT_DIR)/$(VENV_BIN)/python$(EXE)),$(ROOT_DIR)/$(V
 # root Makefile's `export PYTHONPATH := scripts`).
 export PYTHONPATH := $(ROOT_DIR)/scripts
 
-# --- sample settings (from build.bat, overridable) -------------------------
+# --- sample settings (overridable) --------------------------------------------
 STACK_MAIN_PROGRAM_ADDR ?= 0x100
 V6_INTERRUPTIONS        ?= 1
 V6_CONTROLS             ?= 1
@@ -67,7 +63,7 @@ V6_MUSIC                ?= 1
 
 TARGET := -target i8080-unknown-v6clang
 
-# --- project paths (mirror samples/common/build_setup.bat) ------------------
+# --- project paths ------------------------------------------------------------
 PROJECT_NAME := $(notdir $(SAMPLE_DIR))
 OUT_DIR      := $(ROOT_DIR)/build/$(PROJECT_NAME)
 OUT_ROM      := $(OUT_DIR)/$(PROJECT_NAME).rom
@@ -79,13 +75,13 @@ MAIN_OBJ     := $(OUT_DIR)/main/main.o
 # expressed relative to ROOT_DIR for those recipes.
 OUT_REL      := build/$(PROJECT_NAME)
 
-# The engine object lives under build/v6/ (mirror engine/build.bat).
+# The engine object lives under build/v6/.
 V6_OBJ       := $(ROOT_DIR)/build/v6/v6.o
 V6_SYMTAB    := $(V6_OBJ).symtab
 ENGINE_DIR   := $(ROOT_DIR)/engine
 ENGINE_SRCS  := $(wildcard $(ENGINE_DIR)/*.asm) $(wildcard $(ENGINE_DIR)/*/*.asm)
 
-# --- assets (mirror the v6export calls in build.bat) -----------------------
+# --- assets -------------------------------------------------------------------
 # export_asset <meta.json> <asset-out-dir-relative-to-root> [extra flags]
 # Runs from ROOT_DIR (so generated ASM uses root-relative paths) and emits
 # <dir>/asm, <dir>/manifests and <dir>/bin, assembling <name>.o into bin.
@@ -102,7 +98,7 @@ define export_asset
 	    $(3)
 endef
 
-# The song is transport-compressed with zx0 (build.bat passes --compress).
+# The song is transport-compressed with zx0.
 song01_JSON := $(SAMPLE_DIR)/assets/music/song01.json
 song01_REL  := $(OUT_REL)/music
 song01_DIR  := $(ROOT_DIR)/$(song01_REL)
@@ -110,7 +106,7 @@ song01_OBJ  := $(song01_DIR)/bin/song01.o
 
 ASSET_OBJS := $(song01_OBJ)
 
-# ---------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 all: $(OUT_ROM) ## Export assets, assemble + link the sample ROM.
 
 ## assets: (re)export this sample's assets via v6export.
@@ -160,8 +156,8 @@ $(OUT_ROM): $(MAIN_OBJ) $(V6_OBJ) $(ASSET_OBJS)
 ## run: build the ROM and launch it in the emulator.
 run: $(OUT_ROM)
 	@echo === samples/03_music: Run the ROM in the emulator ===
-	@echo Running: $(EMU) $(OUT_ROM)
-	"$(EMU)" "$(OUT_ROM)"
+	@echo Running: $(DEVECTOR) $(OUT_ROM)
+	"$(DEVECTOR)" "$(OUT_ROM)"
 
 ## clean: remove this sample's build output (ROM, assets and engine object).
 clean:

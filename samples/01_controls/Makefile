@@ -18,7 +18,7 @@
 #  V6ASM   — path to the v6asm assembler (default: tools/v6asm/v6asm)
 #  READELF — path to llvm-readelf (default: tools/v6clang/bin/llvm-readelf)
 #  V6CLANG     — path to the v6clang compiler (default: tools/v6clang/bin/clang)
-#  EMU     — path to the emulator (default: tools/devector/devector)
+#  DEVECTOR     — path to the emulator (default: tools/devector/devector)
 #
 # The root Makefile downloads the tools and sets the environment variables.
 # ---------------------------------------------------------------------------
@@ -36,18 +36,18 @@ else
     rmdir = @rm -rf $1
 endif
 
-# --- locate the repository root from this makefile's own path --------------
+# --- locate the repository root from this makefile's own path -----------------
 # Makes the file work whether invoked from the repo root (-f) or from here.
 SAMPLE_DIR := $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
 ROOT_DIR   := $(abspath $(SAMPLE_DIR)/../..)
 
-# --- tools (overridable) ---------------------------------------------------
+# --- tools (overridable) ------------------------------------------------------
 V6ASM   ?= $(ROOT_DIR)/tools/v6asm/v6asm$(EXE)
 V6CLANG     ?= $(ROOT_DIR)/tools/v6clang/bin/clang$(EXE)
 READELF ?= $(ROOT_DIR)/tools/v6clang/bin/llvm-readelf$(EXE)
-EMU     ?= $(ROOT_DIR)/tools/devector/devector$(EXE)
+DEVECTOR     ?= $(ROOT_DIR)/tools/devector/devector$(EXE)
 
-# --- sample settings (from build.bat, overridable) -------------------------
+# --- sample settings (overridable) --------------------------------------------
 STACK_MAIN_PROGRAM_ADDR ?= 0x100
 V6_INTERRUPTIONS        ?= 1
 V6_CONTROLS             ?= 1
@@ -55,19 +55,19 @@ V6_MUSIC                ?= 0
 
 TARGET := -target i8080-unknown-v6clang
 
-# --- project paths (mirror samples/common/build_setup.bat) ------------------
+# --- project paths ------------------------------------------------------------
 PROJECT_NAME := $(notdir $(SAMPLE_DIR))
 OUT_DIR      := $(ROOT_DIR)/build/$(PROJECT_NAME)
 OUT_ROM      := $(OUT_DIR)/$(PROJECT_NAME).rom
 MAIN_OBJ     := $(OUT_DIR)/main/main.o
 
-# The engine object lives under build/v6/ (mirror engine/build.bat).
+# The engine object lives under build/v6/.
 V6_OBJ       := $(ROOT_DIR)/build/v6/v6.o
 V6_SYMTAB    := $(V6_OBJ).symtab
 ENGINE_DIR   := $(ROOT_DIR)/engine
 ENGINE_SRCS  := $(wildcard $(ENGINE_DIR)/*.asm) $(wildcard $(ENGINE_DIR)/*/*.asm)
 
-# ---------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 all: $(OUT_ROM) ## Assemble + link the sample ROM.
 
 ## engine: assemble the v6 engine library with this sample's feature flags.
@@ -109,8 +109,8 @@ $(OUT_ROM): $(MAIN_OBJ) $(V6_OBJ)
 ## run: build the ROM and launch it in the emulator.
 run: $(OUT_ROM)
 	@echo === samples/01_controls: Run the ROM in the emulator ===
-	@echo Running: $(EMU) $(OUT_ROM)
-	"$(EMU)" "$(OUT_ROM)"
+	@echo Running: $(DEVECTOR) $(OUT_ROM)
+	"$(DEVECTOR)" "$(OUT_ROM)"
 
 ## clean: remove this sample's build output (ROM and engine object).
 clean:
