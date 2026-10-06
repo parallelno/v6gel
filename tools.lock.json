@@ -3,19 +3,19 @@
 	"tools": {
 		"v6asm": {
 			"description": "v6asm assembler + v6fdd FDD packer (shipped together).",
-			"version": "2026.06.14",
+			"version": "2026.10.03",
 			"dest": "v6asm",
 			"platforms": {
 				"windows-x86_64": {
-					"url": "https://github.com/parallelno/v6asm/releases/download/v2026.06.14/v6asm-2026.06.14-windows-x86_64.zip",
+					"url": "https://github.com/parallelno/v6asm/releases/download/v2026.10.03/v6asm-2026.10.03-windows-x86_64.zip",
 					"sha256": null
 				},
 				"linux-x86_64": {
-					"url": "https://github.com/parallelno/v6asm/releases/download/v2026.06.14/v6asm-2026.06.14-linux-x86_64.tar.gz",
+					"url": "https://github.com/parallelno/v6asm/releases/download/v2026.10.03/v6asm-2026.10.03-linux-x86_64.tar.gz",
 					"sha256": null
 				},
 				"macos-x86_64": {
-					"url": "https://github.com/parallelno/v6asm/releases/download/v2026.06.14/v6asm-2026.06.14-macos-x86_64.tar.gz",
+					"url": "https://github.com/parallelno/v6asm/releases/download/v2026.10.03/v6asm-2026.10.03-macos-x86_64.tar.gz",
 					"sha256": null
 				}
 			}
@@ -33,41 +33,41 @@
 		},
 		"v6clang": {
 			"description": "V6CLANG LLVM/Clang toolchain (compile C for the Vector-06c). Windows release only; ~120 MB.",
-			"version": "2026.06.08",
+			"version": "2026.10.06",
 			"dest": "v6clang",
 			"platforms": {
 				"windows-x86_64": {
-					"url": "https://github.com/parallelno/v6clang/releases/download/v2026.06.08/v6clang-2026.06.08-windows-x64.zip",
+					"url": "https://github.com/parallelno/v6clang/releases/download/v2026.10.06/v6clang-2026.10.06-windows-x64.zip",
 					"sha256": null
 				}
 			}
 		},
 		"devector": {
 			"description": "Devector GUI emulator/debugger. Windows release only.",
-			"version": "9.5.0",
+			"version": "9.6.0",
 			"dest": "devector",
 			"platforms": {
 				"windows-x86_64": {
-					"url": "https://github.com/parallelno/Devector/releases/download/v9.5.0/devector-windows-x64.zip",
+					"url": "https://github.com/parallelno/Devector/releases/download/v9.6.0/devector-windows-x64.zip",
 					"sha256": null
 				}
 			}
 		},
 		"v6emul": {
 			"description": "v6emul command-line emulator for quick debug iterations.",
-			"version": "1.0.0",
+			"version": "1.0.2",
 			"dest": "v6emul",
 			"platforms": {
 				"windows-x86_64": {
-					"url": "https://github.com/parallelno/v6emul/releases/download/v1.0.0/v6emul-2026.04.28-windows-x86_64.zip",
+					"url": "https://github.com/parallelno/v6emul/releases/download/v1.0.2/v6emul-2026.10.06-windows-x86_64.zip",
 					"sha256": null
 				},
 				"linux-x86_64": {
-					"url": "https://github.com/parallelno/v6emul/releases/download/v1.0.0/v6emul-2026.04.28-linux-x86_64.tar.gz",
+					"url": "https://github.com/parallelno/v6emul/releases/download/v1.0.2/v6emul-2026.10.06-linux-x86_64.tar.gz",
 					"sha256": null
 				},
 				"macos-x86_64": {
-					"url": "https://github.com/parallelno/v6emul/releases/download/v1.0.0/v6emul-2026.04.28-macos-x86_64.tar.gz",
+					"url": "https://github.com/parallelno/v6emul/releases/download/v1.0.2/v6emul-2026.10.06-macos-x86_64.tar.gz",
 					"sha256": null
 				}
 			}
