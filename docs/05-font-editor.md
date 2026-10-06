@@ -6,14 +6,14 @@ existing hand-drawn PNG spritesheet or generate one from any system font.
 
 ## Quick start
 
-```bat
-REM Install the Python deps (includes PyQt6)
-pip install -e .
+```sh
+# Install the Python deps (includes PyQt6)
+make venv
 
-REM Open an existing font
-v6font-editor samples\del_me_all_assets_here\assets\fonts\eng\font.json
+# Open an existing font
+v6font-editor samples/del_me_all_assets_here/assets/fonts/eng/font.json
 
-REM Or run as a module
+# Or run as a module
 python -m v6gel.tools.font_editor
 ```
 

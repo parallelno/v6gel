@@ -7,7 +7,7 @@ Consumes a build config JSON plus the per-asset manifests emitted by
 * ``build_includes.asm`` - includes every asset ``*_meta.asm`` + loads.asm
 * ``code_consts.asm``    - config consts + RAM Disk reservations
 * ``build_consts.asm``   - wrapper that includes code_consts.asm
-* ``autoexec`` (.bat)    - CP/M autoexec for the produced COM
+* ``AUTOEXEC.BAT``       - CP/M autoexec for the produced COM
 
 This is a faithful port of the old ``export_config_utils`` + ``export_config``
 orchestration, with staleness checking removed and asset placement driven by

@@ -42,7 +42,7 @@ font editor). The repository's Makefiles run every one of them — `v6export`,
 `v6loads`, `build_assets`, `clear`, `install_tools.py` and the sample asset
 exports — through a project-local `.venv/`. Create it once from the repo root:
 
-```bat
+```sh
 make venv
 ```
 
@@ -54,18 +54,16 @@ falling back to `python` on `PATH` when the virtualenv is absent.
 
 ## Building the engine library
 
-The library compiles to a single object file you link with your game:
+The library compiles to a single object file you link with your game. Build it
+with the engine Makefile (from the repo root or from `engine/`):
 
-```bat
-cd engine
-build.bat
+```sh
+make -C engine     # -> build/v6/v6.o
 ```
 
-`build.bat` runs:
-
-```bat
-v6asm v6.asm -o out\v6.o -f obj
-```
+The engine Makefile runs `v6asm` on `engine/v6.asm` with this build's subsystem
+feature flags (`V6_CONTROLS`, `V6_MUSIC`, `V6_INTERRUPTIONS`,
+`STACK_MAIN_PROGRAM_ADDR`) and writes `build/v6/v6.o`.
 
 `v6.asm` `.include`s every subsystem (`common`, `controls`, `gfx`, `misc`, `os`,
 `sound`) and supplies a custom crt0 startup (`_start`) that initializes the
@@ -75,7 +73,7 @@ stack, zeroes `.bss`, installs the interrupt vector, and calls your `main`.
 
 ### One asset at a time — `v6export`
 
-```bat
+```sh
 python -m v6gel.cli.v6export <asset.json> -o <asm-dir> --manifest-dir <manifests-dir> --bin-dir <bin-dir> [--emit-asm]
 ```
 
@@ -98,7 +96,7 @@ it from an FDD. The `.o` is written to `--bin-dir` by default; override with
 
 ### Linking & RAM-disk packing — `v6loads`
 
-```bat
+```sh
 python -m v6gel.cli.v6loads <config.json> --manifest-dir <dir> -o <code-dir>
 ```
 
@@ -114,14 +112,14 @@ python -m v6gel.cli.v6loads <config.json> --manifest-dir <dir> -o <code-dir>
 
 The driver does everything for a config in one shot:
 
-```bat
-python -m v6gel.cli.build_assets assets\config.json -o build\release ^
-    --fdd-template assets\basefdd\rds308.fdd
+```sh
+python -m v6gel.cli.build_assets assets/config.json -o build/release \
+    --fdd-template assets/basefdd/rds308.fdd
 ```
 
 For each asset listed in the config it runs `v6export`, optionally transport-
 compresses the blob, then runs `v6loads` and finally `v6fdd` to write
-`build\release\config.fdd`.
+`build/release/config.fdd`.
 
 Useful flags:
 
@@ -145,7 +143,7 @@ build/release/
 
 ### Cleaning
 
-```bat
+```sh
 python -m v6gel.cli.clear [path] [--all]
 ```
 

@@ -44,19 +44,19 @@ step they run — `v6export`, `build_assets`, `install_tools.py` and the sample
 asset exports — goes through that interpreter. Without `make`, the equivalent is
 `uv venv .venv` followed by `uv pip install -e .`.
 
-```bat
-REM 0. Create .venv/ with the Python deps and install the external tools.
+```sh
+# 0. Create .venv/ with the Python deps and install the external tools.
 make venv
 make tools
 
-REM 1. Build the engine library.
-cd engine
-build.bat
-cd ..
+# 1. Build the engine library (engine/Makefile -> build/v6/v6.o).
+make -C engine
 
-REM 2. Build all assets and pack them into a floppy image.
-python -m v6gel.cli.build_assets assets\config.json -o build\release ^
-    --fdd-template assets\basefdd\rds308.fdd
+# 2. Build all assets and pack them into a floppy image.
+make assets
+
+# 3. Build a sample ROM (each samples/<name>/ has its own Makefile).
+make -C samples/03_music
 ```
 
 The tools land in `tools/` (gitignored) and are discovered automatically — no
@@ -64,7 +64,7 @@ The tools land in `tools/` (gitignored) and are discovered automatically — no
 see what is available and what is already installed, or pass tool names (e.g.
 `python install_tools.py v6asm zx0`) to install a subset.
 
-The result is `build\release\config.fdd`, ready to boot in a Vector-06c
+The result is `build/release/config.fdd`, ready to boot in a Vector-06c
 emulator. For iterating on a single asset, use `v6export` directly — see
 [Building & Tooling](docs/02-building.md#one-asset-at-a-time--v6export).
 

@@ -42,7 +42,7 @@ engine/        The runtime engine library (assembly).
   os/            CP/M-style file I/O, OS init, RAM-disk control.
   sound/         AY-3-8910 music player ("GigaChad") + 8253 sound effects.
   v6.asm         Library entry point that .includes every module.
-  build.bat      Assembles the library to an object file.
+  Makefile       Assembles the library to an object file.
 
 scripts/       The asset pipeline (Python 3).
   v6export.py    CLI: export one asset (dispatch by asset_type).
@@ -60,12 +60,13 @@ docs/          This documentation hub.
 
 ## Prerequisites
 
-The only thing you need to install by hand is **Python 3.10+**. The Python
-dependencies and every external tool are installed for you:
+The only thing you need to install by hand is **[uv](https://docs.astral.sh/uv/)**
+(which provides Python 3.10+) and **GNU Make**. The Python dependencies and every
+external tool are installed for you:
 
-```bat
-pip install -e .            REM Pillow, lhafile (the pipeline's Python deps)
-python install_tools.py     REM v6asm, v6fdd, zx0, V6CLANG, emulators -> tools/
+```sh
+make venv     # create .venv/ and install the pipeline's Python deps (Pillow, lhafile)
+make tools    # download v6asm, v6fdd, zx0, V6CLANG, emulators -> tools/
 ```
 
 `install_tools.py` reads [`tools.lock.json`](../tools.lock.json) and downloads

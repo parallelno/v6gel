@@ -189,8 +189,8 @@ Each step is independently verifiable via a `make` target; no long broken
 window.
 
 **Step 1 — Foundations (rename + package-ify).**
-- Rename `v6/` → `engine/`; update include paths in `engine/build.bat`,
-  Makefile, and docs.
+- Rename `v6/` → `engine/`; update include paths in the Makefiles
+  (`engine/Makefile`, the root `Makefile`) and docs.
 - Make `scripts/` an importable package (`scripts/v6gel/…`), drop every
   `sys.path.insert(...)`; wire console entry points in `pyproject.toml`.
 - Verify: `make engine`, `make assets` (legacy path) still pass.
