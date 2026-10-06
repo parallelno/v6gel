@@ -1,5 +1,3 @@
-@memusage_v6_controls:
-
 .include "controls/v6_controls_consts.asm"
 
 

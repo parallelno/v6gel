@@ -1,4 +1,3 @@
-@memusage_v6_text_mono_draw:
 ; The monospaced text render procedure and the font data
 
 ; draw an FPS counter every second on the screen at FPS_SCR_ADDR addr

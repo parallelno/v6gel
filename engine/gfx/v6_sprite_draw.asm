@@ -1,5 +1,3 @@
-@memusage_v6_sprite_draw:
-
 .global *
 
 .opt

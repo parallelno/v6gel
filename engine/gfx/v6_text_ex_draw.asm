@@ -1,5 +1,3 @@
-@memusage_v6_text_ex_draw:
-
 .global text_ex_reset_spacing
 .global text_ex_set_spacing
 .global text_ex_set_scr_addr

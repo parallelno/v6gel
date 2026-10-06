@@ -1,4 +1,3 @@
-@memusage_v6_sprite_draw_hit:
 ; =============================================
 ;
 ; OLD! the sprite format got changed

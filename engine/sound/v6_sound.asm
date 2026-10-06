@@ -1,5 +1,3 @@
-@memusage_v6_sound:
-
 .include "sound/v6_gc.asm"
 .include "sound/v6_gc_utils.asm"
 .include "sound/v6_sfx.asm"

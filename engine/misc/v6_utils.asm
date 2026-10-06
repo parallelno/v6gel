@@ -1,4 +1,3 @@
-@memusage_v6_utils:
 .global *
 
 .include "misc/v6_rnd.asm"

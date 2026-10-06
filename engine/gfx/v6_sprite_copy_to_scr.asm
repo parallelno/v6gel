@@ -1,4 +1,3 @@
-@memusage_v6_sprite_copy_to_scr:
 ; copy a sprite from the back buff to the screen
 ; in:
 ; de - scr addr

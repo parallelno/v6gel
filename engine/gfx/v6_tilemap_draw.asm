@@ -1,5 +1,3 @@
-@memusage_v6_tile_draw:
-
 .global room_unpack
 .global room_init_tiles_gfx
 .global room_draw_tiles

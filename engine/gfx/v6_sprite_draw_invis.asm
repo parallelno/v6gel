@@ -1,4 +1,3 @@
-@memusage_v6_sprite_draw_invis:
 ; =============================================
 ; It does not draw a sprite, but saves a return scr addr, width, height
 ; it is used for invinceble status

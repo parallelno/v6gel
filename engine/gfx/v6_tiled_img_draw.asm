@@ -1,5 +1,3 @@
-@memusage_v6_tiled_img_draw:
-
 .global tiled_img_init_idxs
 .global tiled_img_init_gfx
 .global tiled_img_draw

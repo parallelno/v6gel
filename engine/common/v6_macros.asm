@@ -1,4 +1,3 @@
-@memusage_v6_macros:
 .macro HLT_(i)
 		.loop i
 			hlt

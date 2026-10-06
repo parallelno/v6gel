@@ -1,5 +1,3 @@
-@memusage_v6_os:
-
 .include "os\v6_os_consts.asm"
 .include "os\v6_os_macros.asm"
 ;=======================================================

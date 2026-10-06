@@ -1,4 +1,3 @@
-@memusage_v6_decal_draw:
 ;----------------------------------------------------------------
 ; draw a decal sprite with an alpha channel (16xN pixels)
 ; TODO: support width = 8
