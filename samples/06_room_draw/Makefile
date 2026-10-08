@@ -74,11 +74,24 @@ MAIN_OBJ     := $(OUT_DIR)/main/main.o
 # OUT_DIR expressed relative to ROOT_DIR for those recipes.
 OUT_REL      := build/$(PROJECT_NAME)
 
-# The engine object lives under build/v6/.
-V6_OBJ       := $(ROOT_DIR)/build/v6/v6.o
+# The v6 engine object and its debug files are isolated per sample under this
+# sample's build dir, so building every sample at once never clobbers a shared
+# build/v6/v6.o. engine/Makefile is the single source of truth and produces it
+# via the recursive `engine` rule below.
+V6_DIR       := $(OUT_DIR)/v6
+V6_OBJ       := $(V6_DIR)/v6.o
 V6_SYMTAB    := $(V6_OBJ).symtab
 ENGINE_DIR   := $(ROOT_DIR)/engine
 ENGINE_SRCS  := $(wildcard $(ENGINE_DIR)/*.asm) $(wildcard $(ENGINE_DIR)/*/*.asm)
+
+# Feature flags forwarded to engine/Makefile. V6_CHARS is forwarded only when a
+# sample defines it (only 08_sprite_anim needs the character subsystem).
+V6_DEFS := \
+    V6_CONTROLS=$(V6_CONTROLS) \
+    V6_MUSIC=$(V6_MUSIC) \
+    V6_INTERRUPTIONS=$(V6_INTERRUPTIONS) \
+    STACK_MAIN_PROGRAM_ADDR=$(STACK_MAIN_PROGRAM_ADDR) \
+    $(if $(V6_CHARS),V6_CHARS=$(V6_CHARS))
 
 # --- assets -------------------------------------------------------------------
 # export_asset <meta.json> <asset-out-dir-relative-to-root> [extra flags]
@@ -130,20 +143,15 @@ $(lv0_data_OBJ): $(lv0_data_JSON)
 $(lv0_gfx_OBJ): $(lv0_gfx_JSON)
 	$(call export_asset,$(lv0_gfx_JSON),$(lv0_gfx_REL))
 
-## engine: assemble the v6 engine library with this sample's feature flags.
+## engine: assemble the v6 engine library via engine/Makefile (isolated output).
 engine: $(V6_OBJ)
 
 $(V6_OBJ): $(ENGINE_SRCS)
-	$(call mkdir,$(dir $(V6_OBJ)))
 	@echo === samples/06_room_draw: Build the v6 library ===
-	"$(V6ASM)" "$(ENGINE_DIR)/v6.asm" \
-	    -D V6_CONTROLS=$(V6_CONTROLS) \
-	    -D V6_MUSIC=$(V6_MUSIC) \
-	    -D V6_INTERRUPTIONS=$(V6_INTERRUPTIONS) \
-	    -D STACK_MAIN_PROGRAM_ADDR=$(STACK_MAIN_PROGRAM_ADDR) \
-	    -o "$(V6_OBJ)" -f obj
-	@echo === samples/06_room_draw: Emit engine symbol table ===
-	"$(READELF)" -s "$(V6_OBJ)" > "$(V6_SYMTAB)"
+	cd "$(ENGINE_DIR)" && $(MAKE) engine symbols \
+	    V6ASM=$(V6ASM) READELF=$(READELF) \
+	    V6_OBJ=$(V6_OBJ) \
+	    $(V6_DEFS)
 
 ## rom: assemble main.asm and link it with the engine and assets into the ROM.
 rom: $(OUT_ROM)
@@ -177,7 +185,6 @@ run: $(OUT_ROM)
 ## clean: remove this sample's build output (ROM, assets and engine object).
 clean:
 	$(call rmdir,$(OUT_DIR))
-	$(call rmdir,$(dir $(V6_OBJ)))
 
 ## help: list the available targets.
 help:

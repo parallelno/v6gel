@@ -237,8 +237,41 @@ chars_runtime_data:
 
 chars_runtime_data_end_marker:	= chars_runtime_data + CHAR_RUNTIME_DATA_LEN * CHARS_MAX	; .word ACTOR_RUNTIME_DATA_END << 8
 chars_runtime_data_end:			= chars_runtime_data_end_marker + ADDR_LEN
-CHARS_RUNTIME_DATA_LEN			= chars_runtime_data_end - chars_runtime_data
+; Pure constant form: a .storage count must not depend on pack label addresses.
+CHARS_RUNTIME_DATA_LEN			= CHAR_RUNTIME_DATA_LEN * CHARS_MAX + ADDR_LEN
 
 .storage CHARS_RUNTIME_DATA_LEN ; reserve space for all char runtime data
+.endpack
+.endif
+
+
+.if V6_ROOMS == 1
+.pack window
+;===============================================================================
+; Room Spawn Rates
+;===============================================================================
+; Defines char spawn rates for each room in the level.
+; NOTE:
+; - Each byte represents the spawn rate for one room (indexed by room_id).
+; - Value meaning:
+;     0   → 100% spawn chance (always spawn)
+;     255 → 0% spawn chance (never spawn)
+; - Data must fit inside $100 block.
+;
+;-------------------------------------------------------------------------------
+; Data format:
+;-------------------------------------------------------------------------------
+; rooms_spawn_rate:
+;   .byte [spawn rate room_id = 0]
+;   .byte [... room_id = 1]
+;   ...
+;   .byte [... room_id = ROOMS_MAX-1]
+;-------------------------------------------------------------------------------
+
+rooms_spawn_rate:
+rooms_spawn_rate_end:	= rooms_spawn_rate + ROOMS_MAX
+ROOMS_SPAWN_RATE_LEN = ROOMS_MAX
+
+.storage ROOMS_SPAWN_RATE_LEN
 .endpack
 .endif

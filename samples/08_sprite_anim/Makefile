@@ -58,7 +58,7 @@ export PYTHONPATH := $(ROOT_DIR)/scripts
 STACK_MAIN_PROGRAM_ADDR ?= 0x100
 V6_INTERRUPTIONS        ?= 1
 V6_CONTROLS             ?= 1
-V6_MUSIC                ?= 0
+V6_CHARS                ?= 1
 
 TARGET := -target i8080-unknown-v6clang
 
@@ -74,11 +74,19 @@ MAIN_OBJ     := $(OUT_DIR)/main/main.o
 # OUT_DIR expressed relative to ROOT_DIR for those recipes.
 OUT_REL      := build/$(PROJECT_NAME)
 
-# The engine object lives under build/v6/.
-V6_OBJ       := $(ROOT_DIR)/build/v6/v6.o
+V6_DIR       := $(OUT_DIR)/v6
+V6_OBJ       := $(V6_DIR)/v6.o
 V6_SYMTAB    := $(V6_OBJ).symtab
 ENGINE_DIR   := $(ROOT_DIR)/engine
 ENGINE_SRCS  := $(wildcard $(ENGINE_DIR)/*.asm) $(wildcard $(ENGINE_DIR)/*/*.asm)
+
+# Feature flags forwarded to engine/Makefile.
+V6_DEFS := \
+    V6_CONTROLS=$(V6_CONTROLS) \
+    V6_MUSIC=$(V6_MUSIC) \
+    V6_INTERRUPTIONS=$(V6_INTERRUPTIONS) \
+    V6_CHARS=$(V6_CHARS) \
+    STACK_MAIN_PROGRAM_ADDR=$(STACK_MAIN_PROGRAM_ADDR)
 
 # --- assets -------------------------------------------------------------------
 # export_asset <meta.json> <asset-out-dir-relative-to-root> [extra flags]
@@ -122,20 +130,15 @@ $(pal_lv1_OBJ): $(pal_lv1_JSON)
 $(knight_OBJ): $(knight_JSON)
 	$(call export_asset,$(knight_JSON),$(knight_REL))
 
-## engine: assemble the v6 engine library with this sample's feature flags.
+## engine: assemble the v6 engine library.
 engine: $(V6_OBJ)
 
 $(V6_OBJ): $(ENGINE_SRCS)
-	$(call mkdir,$(dir $(V6_OBJ)))
 	@echo === samples/08_sprite_anim: Build the v6 library ===
-	"$(V6ASM)" "$(ENGINE_DIR)/v6.asm" \
-	    -D V6_CONTROLS=$(V6_CONTROLS) \
-	    -D V6_MUSIC=$(V6_MUSIC) \
-	    -D V6_INTERRUPTIONS=$(V6_INTERRUPTIONS) \
-	    -D STACK_MAIN_PROGRAM_ADDR=$(STACK_MAIN_PROGRAM_ADDR) \
-	    -o "$(V6_OBJ)" -f obj
-	@echo === samples/08_sprite_anim: Emit engine symbol table ===
-	"$(READELF)" -s "$(V6_OBJ)" > "$(V6_SYMTAB)"
+	cd "$(ENGINE_DIR)" && $(MAKE) engine symbols \
+	    V6ASM=$(V6ASM) READELF=$(READELF) \
+	    V6_OBJ=$(V6_OBJ) \
+	    $(V6_DEFS)
 
 ## rom: assemble main.asm and link it with the engine and assets into the ROM.
 rom: $(OUT_ROM)
@@ -169,7 +172,6 @@ run: $(OUT_ROM)
 ## clean: remove this sample's build output (ROM, assets and engine object).
 clean:
 	$(call rmdir,$(OUT_DIR))
-	$(call rmdir,$(dir $(V6_OBJ)))
 
 ## help: list the available targets.
 help:

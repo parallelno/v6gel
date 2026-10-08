@@ -92,10 +92,11 @@ char_init:
 			shld @restore_sp + 1
 
 			dcr b
+.if V6_ROOMS
 			jnz @no_spawn_rate_check
 			ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate, @exit)
 @no_spawn_rate_check:
-
+.endif
 			lxi h, char_update_ptr + 1
 			mvi e, CHAR_RUNTIME_DATA_LEN
 			call actor_get_empty_data_ptr

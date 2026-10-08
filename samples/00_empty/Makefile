@@ -60,29 +60,37 @@ OUT_DIR      := $(ROOT_DIR)/build/$(PROJECT_NAME)
 OUT_ROM      := $(OUT_DIR)/$(PROJECT_NAME).rom
 MAIN_OBJ     := $(OUT_DIR)/main/main.o
 
-# The engine object lives under build/v6/.
-V6_OBJ       := $(ROOT_DIR)/build/v6/v6.o
+# The v6 engine object and its debug files are isolated per sample under this
+# sample's build dir, so building every sample at once never clobbers a shared
+# build/v6/v6.o. engine/Makefile is the single source of truth and produces it
+# via the recursive `engine` rule below.
+V6_DIR       := $(OUT_DIR)/v6
+V6_OBJ       := $(V6_DIR)/v6.o
 V6_SYMTAB    := $(V6_OBJ).symtab
 ENGINE_DIR   := $(ROOT_DIR)/engine
 ENGINE_SRCS  := $(wildcard $(ENGINE_DIR)/*.asm) $(wildcard $(ENGINE_DIR)/*/*.asm)
 
+# Feature flags forwarded to engine/Makefile. V6_CHARS is forwarded only when a
+# sample defines it (only 08_sprite_anim needs the character subsystem).
+V6_DEFS := \
+    V6_CONTROLS=$(V6_CONTROLS) \
+    V6_MUSIC=$(V6_MUSIC) \
+    V6_INTERRUPTIONS=$(V6_INTERRUPTIONS) \
+    STACK_MAIN_PROGRAM_ADDR=$(STACK_MAIN_PROGRAM_ADDR) \
+    $(if $(V6_CHARS),V6_CHARS=$(V6_CHARS))
+
 # ------------------------------------------------------------------------------
 all: $(OUT_ROM) ## Assemble + link the sample ROM.
 
-## engine: assemble the v6 engine library with this sample's feature flags.
+## engine: assemble the v6 engine library via engine/Makefile (isolated output).
 engine: $(V6_OBJ)
 
 $(V6_OBJ): $(ENGINE_SRCS)
-	$(call mkdir,$(dir $(V6_OBJ)))
 	@echo === samples/00_empty: Build the v6 library ===
-	"$(V6ASM)" "$(ENGINE_DIR)/v6.asm" \
-	    -D V6_CONTROLS=$(V6_CONTROLS) \
-	    -D V6_MUSIC=$(V6_MUSIC) \
-	    -D V6_INTERRUPTIONS=$(V6_INTERRUPTIONS) \
-	    -D STACK_MAIN_PROGRAM_ADDR=$(STACK_MAIN_PROGRAM_ADDR) \
-	    -o "$(V6_OBJ)" -f obj
-	@echo === samples/00_empty: Emit engine symbol table ===
-	"$(READELF)" -s "$(V6_OBJ)" > "$(V6_SYMTAB)"
+	cd "$(ENGINE_DIR)" && $(MAKE) engine symbols \
+	    V6ASM=$(V6ASM) READELF=$(READELF) \
+	    V6_OBJ=$(V6_OBJ) \
+	    $(V6_DEFS)
 
 ## rom: assemble main.asm and link it with the engine into the ROM.
 rom: $(OUT_ROM)
@@ -114,7 +122,6 @@ run: $(OUT_ROM)
 ## clean: remove this sample's build output (ROM and engine object).
 clean:
 	$(call rmdir,$(OUT_DIR))
-	$(call rmdir,$(dir $(V6_OBJ)))
 
 ## help: list the available targets.
 help:

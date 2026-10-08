@@ -4,15 +4,34 @@
 ; Include this file and all files it includes at most once
 .setting force_once, true
 
+
+; --- CONSTS -------------------------------------------------------------------
 .include "common/v6_consts.asm"
 .include "common/v6_level_consts.asm"
 .include "actor/v6_actor_consts.asm"
+.if V6_CHARS
+    .include "char/v6_char_consts.asm"
+.endif
+.if V6_ROOMS
+    .include "room/v6_room_consts.asm"
+.endif
 
+
+;--- MACROS --------------------------------------------------------------------
 .include "common/v6_macros.asm"
 .include "actor/v6_actor_macros.asm"
+.if V6_CHARS
+    .include "char/v6_char_macros.asm"
+.endif
+.if V6_ROOMS
+    .include "room/v6_room_macros.asm"
+.endif
 
+;--- RUNTIME DATA -------------------------------------------------------------
 .include "v6_runtime_data.asm"
 
+
+;--- SUBSYSTEMS ---------------------------------------------------------------
 .if V6_CONTROLS
     .include "controls/v6_controls.asm"
 .endif
@@ -37,9 +56,10 @@
 .include "actor/v6_actor_draw.asm"
 
 .if V6_CHARS
-    .include "char/v6_char_consts.asm"
-    .include "char/v6_char_macros.asm"
     .include "char/v6_char.asm"
+.endif
+.if V6_ROOMS
+    .include "room/v6_room.asm"
 .endif
 
 ;

@@ -52,10 +52,14 @@ V6_CONTROLS             ?= 0
 V6_MUSIC                ?= 0
 V6_INTERRUPTIONS        ?= 0
 V6_CHARS                ?= 0
+V6_ROOMS                ?= 0
+
 STACK_MAIN_PROGRAM_ADDR ?= 0x100
 
 # --- output -------------------------------------------------------------------
-V6_OBJ    := $(ROOT_DIR)/build/v6/v6.o
+# Overridable so a caller (e.g. a sample) can isolate the object under its own
+# build dir; defaults to the shared build/v6/ location when invoked directly.
+V6_OBJ    ?= $(ROOT_DIR)/build/v6/v6.o
 V6_SYMTAB := $(V6_OBJ).symtab
 
 # v6.asm plus every assembler source it can pull in.
@@ -75,6 +79,7 @@ $(V6_OBJ): $(ENGINE_SRCS)
 	    -D V6_MUSIC=$(V6_MUSIC) \
 	    -D V6_INTERRUPTIONS=$(V6_INTERRUPTIONS) \
 	    -D V6_CHARS=$(V6_CHARS) \
+	    -D V6_ROOMS=$(V6_ROOMS) \
 	    -D STACK_MAIN_PROGRAM_ADDR=$(STACK_MAIN_PROGRAM_ADDR) \
 	    -o "$(V6_OBJ)" -f obj
 
