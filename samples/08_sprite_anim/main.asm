@@ -13,8 +13,13 @@
 
 ; Import engine constants, control codes, and helper macros.
 .include "../../engine/common/v6_consts.asm"
-.include "../../engine/common/v6_macros.asm"
 .include "../../engine/controls/v6_controls_consts.asm"
+.include "../../engine/actor/v6_actor_consts.asm"
+.include "../../engine/char/v6_char_consts.asm"
+
+.include "../../engine/common/v6_macros.asm"
+.include "../../engine/actor/v6_actor_macros.asm"
+.include "../../engine/char/v6_char_macros.asm"
 
 ; Include generated metadata for the palette and sprite assets.
 ; Each asset is exported into two files:
@@ -24,6 +29,8 @@
 ;    from FDD at runtime.
 .include "build/08_sprite_anim/palettes/asm/pal_lv1_meta.asm"
 .include "build/08_sprite_anim/sprites/asm/knight_meta.asm"
+
+.include "game_consts.asm"
 
 ; ------------------------------------------------------------------------------
 ; Configuration
@@ -266,7 +273,7 @@ knight_next_frame:
 ;   * knight_anim_counts - frame count per animation
 ;   * knight_frames_*    - preshift-0 frame data pointers. `_knight` is the
 ;                          linked sprite blob; the exported *_meta.asm provides
-;                          the relative offsets of each frame inside it.
+;                          the relative offsets of each frame.
 ; ---------------------------------------------------------------------------
 knight_anim_ptrs:
             .word knight_frames_idle

@@ -1,0 +1,1 @@
+BUFF_FREEZE_TIME		= 80

@@ -1,5 +1,6 @@
 ; V6 runtime buffers
 
+.global *
 
 .pack
 ;===============================================================================
@@ -16,19 +17,19 @@
 ; Level Data Table
 ;------------------------------
 lv_data_init_tbl:
-  lv_ram_disk_s_data:			.storage 1 ; .byte RAM-disk command for Stack access
-  lv_ram_disk_m_data:			.storage 1 ; .byte RAM-disk command for Non-Stack access
-  lv_rooms_pptr:				.storage 2 ; .word Pointer to packed room data (tiledata + graphics tile idxs)
+  lv_ram_disk_s_data:			      .storage 1 ; .byte RAM-disk command for Stack access
+  lv_ram_disk_m_data:			      .storage 1 ; .byte RAM-disk command for Non-Stack access
+  lv_rooms_pptr:				        .storage 2 ; .word Pointer to packed room data (tiledata + graphics tile idxs)
   lv_resources_inst_data_pptr:	.storage 2 ; .word Pointer to resource instance data
   lv_containers_inst_data_pptr:	.storage 2 ; .word Pointer to container instance data
-  lv_start_pos:					.storage 2 ; .word Hero start position (Y, X)
+  lv_start_pos:					        .storage 2 ; .word Hero start position (Y, X)
 ;------------------------------
 ; Graphics Init Table
 ;------------------------------
 lv_gfx_init_tbl:
   lv_ram_disk_s_gfx:			.storage 1 ; .byte RAM-disk command for Stack access
   lv_ram_disk_m_gfx:			.storage 1 ; .byte RAM-disk command for Non-Stack access
-  lv_tiles_pptr:				.storage 2 ; .word Pointer to tile graphics data
+  lv_tiles_pptr:				  .storage 2 ; .word Pointer to tile graphics data
 @data_end:
 LEVEL_INIT_TBL_LEN = @data_end - lv_data_init_tbl
 .endpack
@@ -210,3 +211,34 @@ ROOM_TELEPORTS_DATA_LEN = TELEPORT_IDS_MAX
 room_teleports_data:
 .storage TELEPORT_IDS_MAX
 .endpack
+
+.if V6_CHARS == 1
+.pack
+;===============================================================================
+; Characters Runtime Data
+;===============================================================================
+; Defines the per-instance runtime data for chars.
+; NOTE:
+; - A list of structs, one per char instance.
+; - Accessed by the custom update and actor draw routines.
+; - The char_update_ptr + 1 also serves as an Actor Runtime Status Code
+;     (see actor_consts.asm).
+; - CHAR_RUNTIME_DATA_LEN < $100.
+; - Max active chars per room including dying but not dead: CHARS_MAX
+; - The structure from char_update_ptr to char_data_next_ptr must match the
+;     hero's runtime data structure for compatibility with shared functions.
+; - The structure from char_update_ptr to char_speed_y must match the
+;     overlay's runtime data structure for compatibility with shared functions.
+
+CHARS_MAX = 15
+
+; Base address for all char runtime data
+chars_runtime_data:
+
+chars_runtime_data_end_marker:	= chars_runtime_data + CHAR_RUNTIME_DATA_LEN * CHARS_MAX	; .word ACTOR_RUNTIME_DATA_END << 8
+chars_runtime_data_end:			= chars_runtime_data_end_marker + ADDR_LEN
+CHARS_RUNTIME_DATA_LEN			= chars_runtime_data_end - chars_runtime_data
+
+.storage CHARS_RUNTIME_DATA_LEN ; reserve space for all char runtime data
+.endpack
+.endif

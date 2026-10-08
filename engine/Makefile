@@ -51,6 +51,7 @@ READELF ?= $(ROOT_DIR)/tools/v6clang/bin/llvm-readelf$(EXE)
 V6_CONTROLS             ?= 0
 V6_MUSIC                ?= 0
 V6_INTERRUPTIONS        ?= 0
+V6_CHARS                ?= 0
 STACK_MAIN_PROGRAM_ADDR ?= 0x100
 
 # --- output -------------------------------------------------------------------
@@ -73,6 +74,7 @@ $(V6_OBJ): $(ENGINE_SRCS)
 	    -D V6_CONTROLS=$(V6_CONTROLS) \
 	    -D V6_MUSIC=$(V6_MUSIC) \
 	    -D V6_INTERRUPTIONS=$(V6_INTERRUPTIONS) \
+	    -D V6_CHARS=$(V6_CHARS) \
 	    -D STACK_MAIN_PROGRAM_ADDR=$(STACK_MAIN_PROGRAM_ADDR) \
 	    -o "$(V6_OBJ)" -f obj
 

@@ -102,6 +102,9 @@ check_key_right:
 ; Rendering: erase previous sprite then draw the new one
 ; - `knight_scr_addr_old` stores previous screen coordinates
 ; - sprite metadata contains frame width/height and pixel data
+; - `_knight`            - linked sprite blob. The label is defined in the
+;                          exported `knight_obj.asm`.
+; - The exported *_meta.asm provides the relative offsets of each frame.
 ; ---------------------------------------------------------------------------
 render:
             ; Erase the sprite at the old position (read address, then call erase)

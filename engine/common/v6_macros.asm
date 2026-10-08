@@ -243,7 +243,7 @@ BY_A			= 5
 			mov h, a
 		.endif
 		.if (reg_pair == BY_BC || reg_pair == BY_DE )  && diff_addr >= -3 && diff_addr <= 3
-			.error "HL_ADVANCE(" addr_from ", " addr_to", BY_BC/BY_DE) with diff (" diff_addr ") is in too short range [-3, 3]. Keep the third argument undefined."
+			.error "HL_ADVANCE(", addr_from, ", ", addr_to, ", BY_BC/BY_DE) with diff (", diff_addr, ") is in too short range [-3, 3]. Keep the third argument undefined."
 		.endif
 .endmacro
 
@@ -258,7 +258,7 @@ BY_A			= 5
 		.endif
 		; validation
 		.if diff_addr < -3 || diff_addr > 3
-			.error "DE_ADVANCE(" addr_from ", " addr_to") with diff (" diff_addr ") is outside of the required range of [-3, 3]."
+			.error "DE_ADVANCE(", addr_from, ", ", addr_to, ") with diff (", diff_addr, ") is outside of the required range of [-3, 3]."
 		.endif
 .endmacro
 
