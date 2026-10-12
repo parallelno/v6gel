@@ -317,5 +317,63 @@ hero_type:					      .storage BYTE_LEN ; = hero_runtime_data + 30 ; .byte ; acto
 hero_runtime_data_end:
 
 HERO_RUNTIME_DATA_LEN = hero_runtime_data_end - hero_runtime_data
+.endpack
 
+.pack
+;===============================================================================
+; Actor Runtime Data List
+;===============================================================================
+; - The list links the hero and non-dead chars runtime data together.
+; - It's a singly-linked list with the head pointer actor_data_head_ptr.
+; - The head points to the first actor runtime data (`hero_data_next_ptr` or
+;     `char_data_next_ptr`), then the next, etc, ending with NULL.
+; - Used to sort actors by Y position for correct rendering order.
+; - One bubble sorting iteration per update.
+; - The list is updated when chars are spawned or destroyed.
+
+actor_data_head_ptr:	.storage ADDR_LEN ; .word
+.endpack
+
+.pack
+;===============================================================================
+; Game Statuses
+;===============================================================================
+; A collection of game state variables used to track progression, item usage,
+; and trigger one-time events or dialogs.
+
+GAME_STATUS_NOT_ACQUIRED	= 0
+GAME_STATUS_ACQUIRED		  = 1
+GAME_STATUS_USED			    = 2
+
+game_status:
+game_status_cabbage_eaten:		.storage BYTE_LEN ; = game_status		; Number of cabbages eaten
+game_status_fire_extinguished:	.storage BYTE_LEN ; = game_status + 1	; Number of fire walls extinguished
+; To show "first-time use" dialogs
+game_status_cabbage_healing:	.storage BYTE_LEN ; = game_status + 2	; First time healing with cabbage
+game_status_use_pie:			.storage BYTE_LEN ; = game_status + 3	; First time using a pie
+game_status_use_laundry:		.storage BYTE_LEN ; = game_status + 4	; First time using clothes
+game_status_use_spoon:			.storage BYTE_LEN ; = game_status + 5	; First time using a spoon
+game_status_first_freeze:		.storage BYTE_LEN ; = game_status + 6	; First time freezing anyone
+; Special states
+game_status_fart:				.storage BYTE_LEN ; = game_status + 7	; Fart status from cabbage
+game_status_burner_quest_room:	.storage BYTE_LEN ; = game_status + 8	; Index in burner_quest_room_ids array
+game_status_mom:				.storage BYTE_LEN ; = game_status + 9   ; Mom's status
+	MOM_STATUS_FIRST_HI	= 0
+	MOM_STATUS_HELP_BOB	= 1
+	MOM_STATUS_CATCH_CATERPILLARS = 2
+game_status_bob:				.storage BYTE_LEN ; = game_status + 10
+	BOB_STATUS_FIRST_HI			= 0
+	BOB_STATUS_WAITING_SCARE	= 1
+	BOB_STATUS_GOT_SCARECROW	= 2
+	BOB_STATUS_SET_SCARECROW	= 3
+	BOB_STATUS_HAPPY			= 4
+game_status_used_ent:				.storage BYTE_LEN ; = game_status + 11 ; stores first usage of something
+	TRAP_USED	= %0000_0001
+
+game_status_reserved4:			.storage BYTE_LEN ; = game_status + 12
+game_status_reserved5:			.storage BYTE_LEN ; = game_status + 13
+game_status_reserved6:			.storage BYTE_LEN ; = game_status + 14
+game_status_reserved7:			.storage BYTE_LEN ; = game_status + 15
+GAME_STATUS_LEN = 16
+game_status_end:				    = game_status + GAME_STATUS_LEN
 .endpack

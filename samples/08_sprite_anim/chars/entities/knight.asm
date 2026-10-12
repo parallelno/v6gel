@@ -139,6 +139,7 @@ knight_update_detect_hero:
 			CHAR_UPDATE_DETECT_HERO( KNIGHT_DETECT_HERO_DISTANCE, ACTOR_STATUS_KNIGHT_DEFENCE_INIT, NULL, NULL, KNIGHT_ANIM_SPEED_DETECT_HERO, knight_update_anim_check_collision_hero, ACTOR_STATUS_KNIGHT_MOVE_INIT, ACTOR_STATUS_KNIGHT_MOVE_TIME)
 .endif
 
+
 ; in:
 ; hl - ptr to char_status
 knight_update_speedup_init:

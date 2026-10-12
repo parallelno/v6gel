@@ -191,7 +191,9 @@ char_init:
 			HL_ADVANCE(char_pos_y, char_pos_y + 1)
 			mov m, a
 @restore_tile:
+.if V6_ROOMS
 			mvi a, TILEDATA_RESTORE_TILE
+.endif
 			ret
 @exit:
 			pop h ; release
@@ -208,6 +210,10 @@ char_init:
 ; collision 	- hl points to a collided char_update_ptr + 1, (hl) < ACTOR_RUNTIME_DATA_DESTR
 ; use:
 ; b
+; TODO: update magic consts below:
+CHAR_COLLISION_WIDTH	= 15
+CHAR_COLLISION_HEIGHT	= 10
+
 chars_get_first_collided:
 			sta @collider_width + 1
 			mov a, c
@@ -246,7 +252,7 @@ chars_get_first_collided:
 			adi TEMP_BYTE
 			cmp c
 			jc @no_collision
-			mvi a, SKELETON_COLLISION_WIDTH-1
+			mvi a, CHAR_COLLISION_WIDTH-1
 			add c
 			cmp b
 			jc @no_collision
@@ -260,7 +266,7 @@ chars_get_first_collided:
 			adi TEMP_BYTE
 			cmp c
 			jc @no_collision
-			mvi a, SKELETON_COLLISION_HEIGHT-1
+			mvi a, CHAR_COLLISION_HEIGHT-1
 			add c
 			cmp b
 			jc @no_collision
@@ -342,28 +348,34 @@ char_erase:
 ; de - ptr to char_impacted_ptr + 1
 ; c - hero_weapon_id
 char_impacted:
+.if V6_HERO
 			; check the weapon_id
 			mvi a, HERO_WEAPON_ID_SNOWFLAKE
 			cmp c
 			jz @set_state_freeze
+.endif
+.if V6_ROOMS
 			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate, CHAR_SPAWN_RATE_DELTA, CHAR_SPAWN_RATE_MAX)
-
+.endif
 			; play a hit vfx
 			; de - ptr to char_impacted_ptr + 1
 			HL_ADVANCE(char_impacted_ptr + 1, char_pos_x + 1, BY_HL_FROM_DE)
 			mov b, m
 			HL_ADVANCE(char_pos_x + 1, char_pos_y + 1)
+.if V6_VFX
 			mov c, m
 			lxi d, vfx4_hit_anim
 			push h
 			call vfx_init4
 			pop h
+.endif
 
 			; decrease char's health
 			HL_ADVANCE(char_pos_y + 1, char_health, BY_DE)
 			dcr m
 			rnz
 
+.if V6_ROOMS
 			; add score points
 			push h
 			HL_ADVANCE(char_health, char_id)
@@ -372,17 +384,18 @@ char_impacted:
 			call game_score_add
 			call game_ui_draw_score_text
 			pop h
-
+.endif
 			; mark this char dead
 			HL_ADVANCE(char_health, char_update_ptr + 1, BY_DE)
 			jmp char_destroy
 
 @set_state_freeze:
+.if V6_HERO
 			; de - ptr to char_impacted_ptr + 1
 			HL_ADVANCE(char_impacted_ptr + 1, char_status, BY_HL_FROM_DE)
 			mvi m,ACTOR_STATUS_FREEZE
 			HL_ADVANCE(char_status, char_status_timer)
-			mvi m, ACTOR_STATUS_FREEZE_TIME
+			mvi m, BUFF_FREEZE_TIME
 
 			; check if a hero uses a snowflake the first time
 			lda game_status_first_freeze
@@ -395,6 +408,10 @@ char_impacted:
 			lxi h, dialog_callback_room_redraw
 			lxi d, _storytelling_hero_freeze_char
 			jmp dialog_init
+.endif
+.if V6_HERO != 1
+			ret
+.endif
 
 
 ; common freeze update func.

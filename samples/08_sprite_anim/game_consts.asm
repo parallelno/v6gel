@@ -1,1 +1,3 @@
+.global BUFF_FREEZE_TIME
+
 BUFF_FREEZE_TIME		= 80
