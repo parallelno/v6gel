@@ -9,11 +9,16 @@
 ; rev 2 324cc (17.3% faster!)
 ; rev 3 (converted to func)
 .macro ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(actor_collision_w, actor_collision_h, collision_handler)
+.if V6_ROOMS
 			mvi a, ROOM_WIDTH * TILE_WIDTH - TILE_WIDTH - actor_collision_w
 			mvi c, ROOM_HEIGHT * TILE_HEIGHT - TILE_HEIGHT - actor_collision_h
 			lxi d, (actor_collision_w-1)<<8 | actor_collision_h-1
 			call actor_move_check_tile_collision
 			jc collision_handler
+.endif
+.if V6_ROOMS != 1
+			call actor_move
+.endif
 .endmacro
 
 

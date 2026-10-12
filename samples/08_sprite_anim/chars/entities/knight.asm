@@ -135,7 +135,9 @@ knight_update_detect_hero_init:
 ; in:
 ; hl - ptr to char_status
 knight_update_detect_hero:
+.if V6_HERO
 			CHAR_UPDATE_DETECT_HERO( KNIGHT_DETECT_HERO_DISTANCE, ACTOR_STATUS_KNIGHT_DEFENCE_INIT, NULL, NULL, KNIGHT_ANIM_SPEED_DETECT_HERO, knight_update_anim_check_collision_hero, ACTOR_STATUS_KNIGHT_MOVE_INIT, ACTOR_STATUS_KNIGHT_MOVE_TIME)
+.endif
 
 ; in:
 ; hl - ptr to char_status
@@ -166,8 +168,12 @@ knight_update_speedup_init:
 			; advance hl to char_id
 			HL_ADVANCE(char_anim_ptr + 1, char_id, BY_BC)
 			mov a, m
+
+.if V6_ROOMS
 			cpi KNIGHT_VERT_ID
 			jz @speed_vert
+.endif
+
 @speed_horiz:
 			; advance hl to char_speed_x
 			HL_ADVANCE(char_id, char_speed_x, BY_BC)
@@ -258,10 +264,14 @@ knight_update_move_init:
 
 			; advance hl to char_id
 			HL_ADVANCE(char_status, char_id, BY_DE)
+.if V6_ROOMS
 			mov a, m
 			cpi KNIGHT_VERT_ID
+.endif
 			lxi b, (%10000000)<<8 ; tmp c = 0
+.if V6_ROOMS
 			jz @vertical_movement
+.endif
 			mvi b, %00000000
 @vertical_movement:
 			xchg
@@ -368,7 +378,9 @@ knight_update_move:
 ; bc, de, hl, a
 knight_update_anim_check_collision_hero:
 			call actor_anim_update
+.if V6_HERO
 			CHAR_CHECK_COLLISION_HERO(KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, KNIGHT_DAMAGE)
+.endif
 
 ; draw a sprite into a backbuffer
 ; in:

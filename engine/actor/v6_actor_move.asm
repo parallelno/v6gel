@@ -7,6 +7,8 @@
 ; hl - ptr to actor_pos_x + 1
 ; rev 1 268cc
 ; rev 2 212cc (20.9% faster!)
+; rev 3 204cc (23.9% faster!)
+; rev 4 192cc (28.4% faster!)
 ; 27 bytes
 actor_move:
 			HL_ADVANCE(actor_status_timer, actor_speed_y + 1, BY_BC)
@@ -131,7 +133,7 @@ actor_move:
 */
 
 /*
-			; TODO: same layout, slightly faster!
+			; TODO: same layout, slightly faster! different OUT!
 			; read speed_y
 			HL_ADVANCE(actor_status_timer, hero_speed_y+1, BY_BC) ; 6*4=24cc
 			mov d, m
@@ -352,8 +354,15 @@ actor_check_tile_collision:
 			lxi b, TEMP_ADDR
 			; de - new_pos_xy
 			; bc - width, height
+.if V6_ROOMS
 			call room_get_collision_tiledata
 			ani TILEDATA_COLLIDABLE ; set CY=0, didn't collide
+.endif
+.if V6_ROOMS != 1
+			; NULL is the empty (no collision) tile data
+			A_TO_ZERO(NULL)
+.endif
+
 			pop h
 			rz ; no_collision, hl points to pos_y + 1
 			jmp @skip_pop_h

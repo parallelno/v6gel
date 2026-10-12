@@ -58,6 +58,7 @@ actor_move_check_tile_collision:
 			; cc = 312 + 12=324 with pop h
 			; 17.3% faster!
 
+			; TODO: check actor_move optimizations
 /*
 			; TODO: if the pos_xy data layout is like below
 			; this procedure can be faster
@@ -145,8 +146,14 @@ actor_move_check_tile_collision:
 			lxi b, TEMP_ADDR
 			; de - new_pos_xy
 			; bc - width, height
+.if V6_ROOMS
 			call room_get_collision_tiledata ; ~253 cc
 			ani TILEDATA_COLLIDABLE ; set CY=0, didn't collide
+.endif
+.if V6_ROOMS != 1
+			; NULL is the empty (no collision) tile data
+			A_TO_ZERO(NULL)
+.endif
 			pop h
 			rz ; no_collision, hl points to pos_y + 1
 			jmp @skip_pop_h

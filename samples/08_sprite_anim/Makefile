@@ -59,7 +59,13 @@ STACK_MAIN_PROGRAM_ADDR ?= 0x100
 V6_INTERRUPTIONS        ?= 1
 V6_CONTROLS             ?= 1
 V6_CHARS                ?= 1
-V6_ROOMS				?= 0
+# Rooms and hero are engine subsystems this sample does not use. They still have
+# to be given a value: main.asm and the engine consts/macros it .includes test
+# them with `.if V6_ROOMS` / `.if V6_HERO`, and v6asm errors on an undefined
+# symbol inside `.if` (and rejects an empty `-D NAME=`). The engine's own
+# Makefile defaults them to 0 as well.
+V6_ROOMS                ?= 0
+V6_HERO                 ?= 0
 
 TARGET := -target i8080-unknown-v6clang
 
@@ -79,7 +85,19 @@ V6_DIR       := $(OUT_DIR)/v6
 V6_OBJ       := $(V6_DIR)/v6.o
 V6_SYMTAB    := $(V6_OBJ).symtab
 ENGINE_DIR   := $(ROOT_DIR)/engine
-ENGINE_SRCS  := $(wildcard $(ENGINE_DIR)/*.asm) $(wildcard $(ENGINE_DIR)/*/*.asm)
+# Every engine source, nested dirs included (e.g. engine/char/hero/), so the
+# engine object is rebuilt when any of them changes.
+ENGINE_SRCS  := $(wildcard $(ENGINE_DIR)/*.asm) $(wildcard $(ENGINE_DIR)/*/*.asm) $(wildcard $(ENGINE_DIR)/*/*/*.asm)
+
+# Every assembler source the main file .includes: main.asm itself, this sample's
+# game_consts.asm and chars/**.asm, plus the engine consts & macros. All of them
+# are prerequisites of MAIN_OBJ (see the MAIN_OBJ rule) because an .include can
+# add or drop symbols in the object - e.g. the KNIGHT_VERT_ID reference that is
+# guarded by `.if V6_ROOMS`. Without that dependency make keeps linking a stale
+# main.o that still references a symbol the current sources no longer define.
+SAMPLE_SRCS  := $(wildcard $(SAMPLE_DIR)/*.asm) \
+                $(wildcard $(SAMPLE_DIR)/*/*.asm) \
+                $(wildcard $(SAMPLE_DIR)/*/*/*.asm)
 
 # Feature flags forwarded to engine/Makefile.
 V6_DEFS := \
@@ -87,6 +105,7 @@ V6_DEFS := \
     V6_INTERRUPTIONS=$(V6_INTERRUPTIONS) \
     V6_CHARS=$(V6_CHARS) \
     V6_ROOMS=$(V6_ROOMS) \
+    V6_HERO=$(V6_HERO) \
     STACK_MAIN_PROGRAM_ADDR=$(STACK_MAIN_PROGRAM_ADDR)
 
 # --- assets -------------------------------------------------------------------
@@ -144,13 +163,17 @@ $(V6_OBJ): $(ENGINE_SRCS)
 ## rom: assemble main.asm and link it with the engine and assets into the ROM.
 rom: $(OUT_ROM)
 
-# main.asm .includes the generated *_meta.asm files, so export the assets first.
-$(MAIN_OBJ): $(SAMPLE_DIR)/main.asm $(ASSET_OBJS)
+# main.asm .includes its local sources (game_consts.asm, chars/**.asm), the
+# engine consts/macros and the generated *_meta.asm files (exported together with
+# the asset objects), so depend on all of them: a changed .include has to
+# re-assemble main.o.
+$(MAIN_OBJ): $(SAMPLE_SRCS) $(ENGINE_SRCS) $(ASSET_OBJS)
 	$(call mkdir,$(dir $(MAIN_OBJ)))
 	@echo === samples/08_sprite_anim: Assemble the main file ===
 	cd "$(ROOT_DIR)" && "$(V6ASM)" "$(SAMPLE_DIR)/main.asm" \
 	    -D STACK_MAIN_PROGRAM_ADDR=$(STACK_MAIN_PROGRAM_ADDR) \
 	    -D V6_ROOMS=$(V6_ROOMS) \
+	    -D V6_HERO=$(V6_HERO) \
 	    -o "$(MAIN_OBJ)" -f obj
 
 $(OUT_ROM): $(MAIN_OBJ) $(V6_OBJ) $(ASSET_OBJS)

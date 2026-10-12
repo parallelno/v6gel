@@ -330,7 +330,9 @@ goose_update_dash:
 ; a - anim speed
 goose_update_anim_check_collision_hero:
 			call actor_anim_update
+.if V6_HERO
 			CHAR_CHECK_COLLISION_HERO(GOOSE_COLLISION_WIDTH, GOOSE_COLLISION_HEIGHT, GOOSE_DAMAGE)
+.endif
 
 ; draw a sprite into a backbuffer
 ; in:

@@ -251,14 +251,16 @@ actor_erase:
 			; hl - actor_erase_wh
 			; de - actor_erase_scr_addr
 
+.if V6_ROOMS
 			; check if it needs to restore the background
 			push h
 			push d
 			call room_check_tiledata_restorable
 			pop d
 			pop h
-
 			jnz sprite_copy_to_back_buff_v ; restore a background
+.endif
+			; if the back does not need to be restored, erase the sprite
 			CALL_RAM_DISK_FUNC(sprite_erase, RAM_DISK_S_BACKBUFF | RAM_DISK_M_8F)
 			ret
 @set_empty:

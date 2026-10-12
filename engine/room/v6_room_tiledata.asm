@@ -73,7 +73,7 @@ room_handle_room_tiledata_check = @check
 ; l - height
 ; out:
 ; Z flag == 0 if this area needs to be restored
-; v2. 124 - 280
+; v2. 124 - 280 cc
 room_check_tiledata_restorable:
 			; convert scr addr to room_tiles_gfx_ptrs offset
 			mvi a, %00011110

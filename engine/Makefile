@@ -53,6 +53,7 @@ V6_MUSIC                ?= 0
 V6_INTERRUPTIONS        ?= 0
 V6_CHARS                ?= 0
 V6_ROOMS                ?= 0
+V6_HERO                 ?= 0
 
 STACK_MAIN_PROGRAM_ADDR ?= 0x100
 
@@ -62,8 +63,9 @@ STACK_MAIN_PROGRAM_ADDR ?= 0x100
 V6_OBJ    ?= $(ROOT_DIR)/build/v6/v6.o
 V6_SYMTAB := $(V6_OBJ).symtab
 
-# v6.asm plus every assembler source it can pull in.
-ENGINE_SRCS := $(wildcard $(ENGINE_DIR)/*.asm) $(wildcard $(ENGINE_DIR)/*/*.asm)
+# v6.asm plus every assembler source it can pull in (nested dirs, e.g.
+# engine/char/hero/, included) so the object is rebuilt when any of them changes.
+ENGINE_SRCS := $(wildcard $(ENGINE_DIR)/*.asm) $(wildcard $(ENGINE_DIR)/*/*.asm) $(wildcard $(ENGINE_DIR)/*/*/*.asm)
 
 # ------------------------------------------------------------------------------
 all: engine ## Assemble the v6 engine library (default).
@@ -79,6 +81,7 @@ $(V6_OBJ): $(ENGINE_SRCS)
 	    -D V6_MUSIC=$(V6_MUSIC) \
 	    -D V6_INTERRUPTIONS=$(V6_INTERRUPTIONS) \
 	    -D V6_CHARS=$(V6_CHARS) \
+	    -D V6_HERO=$(V6_HERO) \
 	    -D V6_ROOMS=$(V6_ROOMS) \
 	    -D STACK_MAIN_PROGRAM_ADDR=$(STACK_MAIN_PROGRAM_ADDR) \
 	    -o "$(V6_OBJ)" -f obj
