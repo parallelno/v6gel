@@ -20,6 +20,7 @@
 .include "../../engine/common/v6_macros.asm"
 .include "../../engine/actor/v6_actor_macros.asm"
 .include "../../engine/char/v6_char_macros.asm"
+.include "../../engine/char/v6_char_post_macros.asm"
 
 ; Include generated metadata for the palette and sprite assets.
 ; Each asset is exported into two files:
@@ -31,7 +32,7 @@
 .include "build/08_sprite_anim/sprites/asm/knight_meta.asm"
 
 .include "game_consts.asm"
-
+.include "chars/entities/knight.asm"
 ; ------------------------------------------------------------------------------
 ; Configuration
 ; ------------------------------------------------------------------------------
@@ -85,6 +86,14 @@ main:
             ; `_pal_lv1_palette_fade_to_black_relative`.
             lxi d, _pal_lv1 + _pal_lv1_palette_fade_to_black_relative
             call palette_fade_reverse
+
+            mvi c, 16/2 + 16 * 15/2
+            A_TO_ZERO(NULL) ; char_id is NA for now.
+            ; c - tile_idx in the room_tiledata array.
+            ; a - char_id * 4
+            call knight_init
+@loop:
+            jmp @loop
 
             ; Start playing the idle animation.
             mvi a, ANIM_IDLE

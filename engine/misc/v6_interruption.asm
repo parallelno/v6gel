@@ -98,7 +98,7 @@ interruption_fps: ; output this value to the screen via Devector scripts
 interruption_no_fps_update:
 
 
-		.if V6_MUSIC == 1
+		.if V6_MUSIC
 			;================================================================
 			; music update
 			;================================================================

@@ -57,6 +57,7 @@
 
 .if V6_CHARS
     .include "char/v6_char.asm"
+    .include "char/v6_char_post_macros.asm"
 .endif
 .if V6_ROOMS
     .include "room/v6_room.asm"

@@ -275,3 +275,47 @@ ROOMS_SPAWN_RATE_LEN = ROOMS_MAX
 .storage ROOMS_SPAWN_RATE_LEN
 .endpack
 .endif
+
+
+.pack
+;===============================================================================
+; Hero Runtime Data
+;===============================================================================
+; Contains all runtime state for the hero actor.
+; NOTE:
+; - Accessed by the custom update and actor draw routines.
+; - The structure from hero_update_ptr to hero_data_next_ptr must match the
+;     char's runtime data structure for compatibility with shared functions.
+; - The hero_update_ptr + 1 also serves as an Actor Runtime Status Code
+;     (see actor_consts.asm).
+
+; Base address for hero runtime data
+hero_runtime_data:
+; A struct of the hero runtime data.
+hero_update_ptr:			   .storage ADDR_LEN ; = hero_runtime_data + actor_update_ptr
+hero_draw_ptr:				   .storage ADDR_LEN ; = hero_runtime_data + actor_draw_ptr
+hero_status:				     .storage BYTE_LEN ; = hero_runtime_data + actor_status
+hero_status_timer:			 .storage BYTE_LEN ; = hero_runtime_data + actor_status_timer
+hero_anim_timer:			   .storage BYTE_LEN ; = hero_runtime_data + actor_anim_timer
+hero_anim_ptr:				   .storage ADDR_LEN ; = hero_runtime_data + actor_anim_ptr
+hero_erase_scr_addr:		 .storage ADDR_LEN ; = hero_runtime_data + actor_erase_scr_addr
+hero_erase_scr_addr_old: .storage ADDR_LEN ; = hero_runtime_data + actor_erase_scr_addr_old
+hero_erase_wh:				   .storage WORD_LEN ; = hero_runtime_data + actor_erase_wh
+hero_erase_wh_old:			 .storage WORD_LEN ; = hero_runtime_data + actor_erase_wh_old
+hero_pos_x:					     .storage WORD_LEN ; = hero_runtime_data + actor_pos_x
+hero_pos_y:					     .storage WORD_LEN ; = hero_runtime_data + actor_pos_y
+hero_speed_x:				     .storage WORD_LEN ; = hero_runtime_data + actor_speed_x
+hero_speed_y:				     .storage WORD_LEN ; = hero_runtime_data + actor_speed_y
+hero_data_next_ptr:			 .storage ADDR_LEN ; = hero_runtime_data + 25 ; .word ; points to the next actor in the actor_data_head_ptr list for sorting
+hero_impacted_ptr:			 .storage ADDR_LEN ; = hero_runtime_data + 27 ; .word ; called by a char, npc, overlay, etc. to affect the hero
+hero_dir:					       .storage BYTE_LEN ; = hero_runtime_data + 29 ; .byte ; direction flag:
+; format: %0000_0VDHD,
+;	V - vertical movement (0 - disabled, 1 - enabled)
+;	H - horizontal movement (0 - disabled, 1 - enabled)
+;	D - direction (0 - left/down, 1 - right/up)
+hero_type:					      .storage BYTE_LEN ; = hero_runtime_data + 30 ; .byte ; actor type (e.g. CHAR_TYPE_ALLY)
+hero_runtime_data_end:
+
+HERO_RUNTIME_DATA_LEN = hero_runtime_data_end - hero_runtime_data
+
+.endpack

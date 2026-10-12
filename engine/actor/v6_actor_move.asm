@@ -6,7 +6,7 @@
 ; out:
 ; hl - ptr to actor_pos_x + 1
 ; rev 1 268cc
-; rev 2 212cc (26.4% faster!)
+; rev 2 212cc (20.9% faster!)
 ; 27 bytes
 actor_move:
 			HL_ADVANCE(actor_status_timer, actor_speed_y + 1, BY_BC)
@@ -47,24 +47,25 @@ actor_move:
 /*
 			; TODO: if the pos_xy data layout is like below
 			; this procedure can be faster
-			actor_speed_x_l:
-			.byte speed_x_l
-			.byte pos_x_l
-			.byte speed_x_h
-			.byte pos_x_h
+		; actor_speed_x_l:
+			; .byte speed_x_l
+			; .byte pos_x_l
+			; .byte speed_x_h
+			; .byte pos_x_h
 
-			.byte pos_y_h
-			.byte speed_y_h
-			.byte pos_y_l
-			actor_speed_y_l:
-			.byte speed_y_l
+			; .byte pos_y_h
+			; .byte speed_y_h
+			; .byte pos_y_l
+		; actor_speed_y_l:
+			; .byte speed_y_l
 
-			HL_ADVANCE(pos_??, actor_speed_x_l, BY_BC)
+			HL_ADVANCE(actor_status_timer, actor_speed_x_l, BY_BC) ; 24 cc
 			; new_pos_x = pos_x + speed_x
 			mov a, m
 			inx h
 			add m
 			mov m, a ; store pos_x_l
+
 			inx h
 			; cy flag
 			mov a, m
@@ -73,12 +74,13 @@ actor_move:
 			; a - new pos_x_h
 			mov m, a ; store new pos_x_h
 
-			HL_ADVANCE(actor_pos_x_h, actor_speed_y_l, BY_BC)
+			HL_ADVANCE(actor_pos_x_h, actor_speed_y_l, BY_BC) ; 24 cc
 			; new_pos_y = pos_y + speed_y
 			mov a, m
 			dcx h
 			add m
 			mov m, a ; store pos_y_l
+
 			dcx h
 			; cy flag
 			mov a, m
@@ -86,9 +88,181 @@ actor_move:
 			adc m
 			; a - new pos_y_h
 			mov m, a ; store new pos_y_h
-			; cc = 192
-			; 39.6% faster!
+			; cc = 48*4=192
+			; 28.4% faster!
 */
+
+/*
+			; slightly new layout, much faster!
+			; hero_speed_x:	.storage WORD_LEN ; = hero_runtime_data + actor_speed_x
+			; hero_speed_y:	.storage WORD_LEN ; = hero_runtime_data + actor_speed_y
+			; hero_pos_x:	.storage WORD_LEN ; = hero_runtime_data + actor_pos_x
+			; hero_pos_y:	.storage WORD_LEN ; = hero_runtime_data + actor_pos_y
+
+			HL_ADVANCE(actor_status_timer, hero_speed_y, BY_BC) ; 6*4=24cc
+			; read speed x
+			mov a, m
+			inx h
+			mov b, m
+			; read speed y
+			inx h
+			mov e, m
+			inx h
+			mov d, m
+			; pos x += speed_x
+			inx h
+			add m
+			mov m, a
+			inx h
+			mov a, m
+			adc b
+			mov m, a
+			; pos y += speed_y
+			inx h
+			mov a, m
+			add e
+			mov m, a
+			inx h
+			mov a, m
+			adc d
+			mov m, a
+			; (41+6)*4=188 cc
+			; 29.9% faster!
+*/
+
+/*
+			; TODO: same layout, slightly faster!
+			; read speed_y
+			HL_ADVANCE(actor_status_timer, hero_speed_y+1, BY_BC) ; 6*4=24cc
+			mov d, m
+			dcx h
+			mov e, m
+			dcx h
+			; de - speed_x
+			mov b, m
+			dcx h
+			mov a, m
+			; pos_x += speed_x
+			HL_ADVANCE(actor_speed_x, hero_pos_x, BY_BC) ; 6*4=24cc
+			add m
+			mov m, a ; store pos_x_l
+			inx h
+			mov a, m
+			adc b
+			mov m, a ; store pos_x_h
+			; pos_y += speed_y
+			inx h
+			mov a, m
+			add e
+			mov m, a
+			inx h
+			mov a, m
+			adc d
+			mov m, a
+			; 51*4=204cc
+			; 23.9% faster!
+*/
+
+/*
+			; slightly new layout, faster!
+			; hero_pos_x_h and hero_pos_y_h are placed next to each other for faster access.
+			; hero_speed_x:	.storage WORD_LEN ; = hero_runtime_data + actor_speed_x
+			; hero_speed_y:	.storage WORD_LEN ; = hero_runtime_data + actor_speed_y
+			; hero_pos_x:   .storage WORD_LEN ;
+			; hero_pos_y_h: .storage BYTE_LEN ;
+			; hero_pos_y_l: .storage BYTE_LEN ;
+
+			HL_ADVANCE(actor_status_timer, hero_speed_y, BY_BC) ; 6*4=24cc
+			; read speed x
+			mov a, m
+			inx h
+			mov b, m
+			; read speed y
+			inx h
+			mov e, m
+			inx h
+			mov d, m
+			; pos x += speed_x
+			inx h
+			add m
+			mov m, a
+			inx h
+			mov a, m
+			adc b
+			mov m, a
+			; pos y += speed_y
+			inx h
+			inx h
+			mov a, m
+			add e
+			mov m, a
+			dcx h
+			adc d
+			mov m, a
+			; (42+6)*4=192 cc
+			; 28.4% faster!
+*/
+
+/*
+			HL_ADVANCE(actor_status_timer, hero_speed_y, BY_BC) ; 6*4=24cc
+			lhld speed_x
+			xchg
+			lhld pos_x
+			dad d
+			shld pos_x
+			lhld speed_y
+			xchg
+			lhld pos_y
+			dad d
+			shld pos_y
+			; (38+6)*4=176cc
+*/
+/*
+			; STACK OPs
+			; new layout. low and hi of the pos are swapped
+			hero_pos_x_h:
+			hero_pos_x_l:
+			hero_pos_y_h:
+			hero_pos_y_l:
+			hero_speed_y:				     .storage WORD_LEN ; = hero_runtime_data + actor_speed_y
+			hero_speed_x:				     .storage WORD_LEN ; = hero_runtime_data + actor_speed_x
+
+			; store SP
+			xchg
+			lxi h, 0
+			dad sp
+			shls @restore_sp + 1
+
+			HL_ADVANCE(actor_status_timer, hero_speed_y, BY_HL_FROM_DE) ; 6*4=24cc
+			; set SP to hero_speed_y
+			sphl
+			; advance SP to hero_y_l
+			dcx h
+
+			; read speed_x
+			pop b
+			mov a, m
+			add c
+			mov m, a
+			dcx h
+			mov a, m
+			adc b
+			mov m, a
+			; pos_y += speed_y
+			dcx h
+			pop b
+			mov a, m
+			add c
+			mov m, a
+			dcx h
+			mov a, m
+			adc b
+			mov m, a
+@restore_sp:
+			lxi sp, TEMP_ADDR
+			; 57+6=252cc
+*/
+
 			ret
 
 ; checks the actor's position aginst the room boundary and the collidable tiles.
@@ -98,6 +272,9 @@ actor_move:
 ; c - ROOM_HEIGHT * TILE_HEIGHT - TILE_HEIGHT - actor_collision_h
 ; de - (actor_collision_w-1)<<8 | actor_collision_h-1
 ; hl - ptr to actor_status_timer
+; out:
+; no_collision: Z=1, hl points to pos_y + 1
+; collided: CY=1, hl points to pos_x
 actor_check_tile_collision:
 			sta @room_collision_width + 1
 			mov a, c
@@ -150,68 +327,7 @@ actor_check_tile_collision:
 			; 17.3% faster!
 
 /*
-			; TODO: if the pos_xy data layout is like below
-			; this procedure can be faster
-			; and the access of reading/storing pos_xy is faster as well
-			; to make it 100%, the @collided branch should restore the old pos,
-			; the @no_collision branch should do only little, like pop h
-			actor_speed_x_l:
-			.byte speed_x_l
-			.byte pos_x_l
-			.byte speed_x_h
-			.byte pos_x_h
-
-			.byte pos_y_h
-			.byte speed_y_h
-			.byte pos_y_l
-			actor_speed_y_l:
-			.byte speed_y_l
-
-			HL_ADVANCE(actor_???, actor_speed_y_l, BY_BC)
-			; new_pos_y = pos_y + speed_y
-			mov a, m
-			dcx h
-			add m
-			sta @new_pos_y_l + 1
-			dcx h
-			; cy flag
-			mov a, m
-			dcx h
-			adc m
-			sta @new_pos_y_h + 1
-			mov e, a ; new_pos_y_h
-
-			HL_ADVANCE(actor_speed_y_h, actor_speed_x_l, BY_BC)
-			; new_pos_x = pos_x + speed_x
-			mov a, m
-			inx h
-			add m
-			sta @new_pos_x_l + 1
-			inx h
-			; cy flag
-			mov a, m
-			inx h
-			adc m
-			sta @new_pos_x_h + 1
-			mov d, a
-			push h
-			; de - new pos_xy
-			; a - new pos_x_h
-			; hl - ptr to actor_pos_x_h
-			; cc = 256
-
-			; store a new pos_x
-			pop h
-			mvi m, TEMP_BYTE
-			inx h
-			mvi m, TEMP_BYTE
-			inx h
-			; store a new pos_y
-			mvi m, TEMP_BYTE
-			inx h
-			mvi m, TEMP_BYTE
-			; cc = 256+84=340
-			; 11.8% faster!
+			; TODO: apply optimizations from actor_move here
 */
 
 			; check the collision against a border of the screen
@@ -241,6 +357,7 @@ actor_check_tile_collision:
 			pop h
 			rz ; no_collision, hl points to pos_y + 1
 			jmp @skip_pop_h
+
 
 @collided:
 			pop h

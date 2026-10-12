@@ -59,6 +59,7 @@ STACK_MAIN_PROGRAM_ADDR ?= 0x100
 V6_INTERRUPTIONS        ?= 1
 V6_CONTROLS             ?= 1
 V6_CHARS                ?= 1
+V6_ROOMS				?= 0
 
 TARGET := -target i8080-unknown-v6clang
 
@@ -83,9 +84,9 @@ ENGINE_SRCS  := $(wildcard $(ENGINE_DIR)/*.asm) $(wildcard $(ENGINE_DIR)/*/*.asm
 # Feature flags forwarded to engine/Makefile.
 V6_DEFS := \
     V6_CONTROLS=$(V6_CONTROLS) \
-    V6_MUSIC=$(V6_MUSIC) \
     V6_INTERRUPTIONS=$(V6_INTERRUPTIONS) \
     V6_CHARS=$(V6_CHARS) \
+    V6_ROOMS=$(V6_ROOMS) \
     STACK_MAIN_PROGRAM_ADDR=$(STACK_MAIN_PROGRAM_ADDR)
 
 # --- assets -------------------------------------------------------------------
@@ -149,6 +150,7 @@ $(MAIN_OBJ): $(SAMPLE_DIR)/main.asm $(ASSET_OBJS)
 	@echo === samples/08_sprite_anim: Assemble the main file ===
 	cd "$(ROOT_DIR)" && "$(V6ASM)" "$(SAMPLE_DIR)/main.asm" \
 	    -D STACK_MAIN_PROGRAM_ADDR=$(STACK_MAIN_PROGRAM_ADDR) \
+	    -D V6_ROOMS=$(V6_ROOMS) \
 	    -o "$(MAIN_OBJ)" -f obj
 
 $(OUT_ROM): $(MAIN_OBJ) $(V6_OBJ) $(ASSET_OBJS)

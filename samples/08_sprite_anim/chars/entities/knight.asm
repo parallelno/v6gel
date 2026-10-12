@@ -228,7 +228,9 @@ knight_update_speedup:
 			ret
 
 @update_movement:
+.if V6_ROOMS
 			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, @collided_with_tiles)
+.endif
 
 			; hl points to char_pos_y + 1
 			; advance hl to char_anim_timer
@@ -336,6 +338,7 @@ knight_update_move:
 			dcr m
 			jz @set_detect_hero_init
 @update_movement:
+.if V6_ROOMS
 			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, @set_move_init)
 
 			; hl points to char_pos_y + 1
@@ -343,6 +346,7 @@ knight_update_move:
 			HL_ADVANCE(char_pos_y + 1, char_anim_timer, BY_BC)
 			mvi a, KNIGHT_ANIM_SPEED_MOVE
 			jmp knight_update_anim_check_collision_hero
+.endif
 
 @set_move_init:
 			; hl points to char_pos_x
