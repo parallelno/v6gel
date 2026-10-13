@@ -110,18 +110,28 @@ define export_asset
 	    $(3)
 endef
 
-# Palette and knight sprite (image + animation sequences).
-pal_lv1_JSON  := $(SAMPLE_DIR)/assets/palettes/pal_lv1.json
-pal_lv1_REL   := $(OUT_REL)/palettes
-pal_lv1_DIR   := $(ROOT_DIR)/$(pal_lv1_REL)
-pal_lv1_OBJ   := $(pal_lv1_DIR)/bin/pal_lv1.o
+# Palette, level data and level graphics.
+pal_lv0_JSON  := $(SAMPLE_DIR)/assets/palettes/pal_lv0.json
+pal_lv0_REL   := $(OUT_REL)/palettes
+pal_lv0_DIR   := $(ROOT_DIR)/$(pal_lv0_REL)
+pal_lv0_OBJ   := $(pal_lv0_DIR)/bin/pal_lv0.o
 
 knight_JSON   := $(SAMPLE_DIR)/assets/sprites/knight.json
 knight_REL    := $(OUT_REL)/sprites
 knight_DIR    := $(ROOT_DIR)/$(knight_REL)
 knight_OBJ    := $(knight_DIR)/bin/knight.o
 
-ASSET_OBJS := $(knight_OBJ) $(pal_lv1_OBJ)
+lv0_data_JSON := $(SAMPLE_DIR)/assets/levels/lv0_data.json
+lv0_data_REL  := $(OUT_REL)/levels
+lv0_data_DIR  := $(ROOT_DIR)/$(lv0_data_REL)
+lv0_data_OBJ  := $(lv0_data_DIR)/bin/lv0_data.o
+
+lv0_gfx_JSON  := $(SAMPLE_DIR)/assets/levels/lv0_gfx.json
+lv0_gfx_REL   := $(OUT_REL)/levels
+lv0_gfx_DIR   := $(ROOT_DIR)/$(lv0_gfx_REL)
+lv0_gfx_OBJ   := $(lv0_gfx_DIR)/bin/lv0_gfx.o
+
+ASSET_OBJS := $(knight_OBJ) $(pal_lv0_OBJ) $(lv0_data_OBJ) $(lv0_gfx_OBJ)
 
 # ------------------------------------------------------------------------------
 all: $(OUT_ROM) ## Export assets, assemble + link the sample ROM.
@@ -129,11 +139,17 @@ all: $(OUT_ROM) ## Export assets, assemble + link the sample ROM.
 ## assets: (re)export this sample's assets via v6export.
 assets: $(ASSET_OBJS)
 
-$(pal_lv1_OBJ): $(pal_lv1_JSON)
-	$(call export_asset,$(pal_lv1_JSON),$(pal_lv1_REL))
+$(pal_lv0_OBJ): $(pal_lv0_JSON)
+	$(call export_asset,$(pal_lv0_JSON),$(pal_lv0_REL))
 
 $(knight_OBJ): $(knight_JSON)
 	$(call export_asset,$(knight_JSON),$(knight_REL))
+
+$(lv0_data_OBJ): $(lv0_data_JSON)
+	$(call export_asset,$(lv0_data_JSON),$(lv0_data_REL))
+
+$(lv0_gfx_OBJ): $(lv0_gfx_JSON)
+	$(call export_asset,$(lv0_gfx_JSON),$(lv0_gfx_REL))
 
 ## engine: assemble the v6 engine library via engine/Makefile (isolated output).
 engine: $(V6_OBJ)

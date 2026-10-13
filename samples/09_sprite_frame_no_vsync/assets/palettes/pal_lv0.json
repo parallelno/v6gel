@@ -1,5 +1,5 @@
 {
-	"path_png" : "art/pal_lv1.png",
+	"path_png" : "art/pal_lv0.png",
 	"colors_pos" :
 	[ 
 		{"x": 0,	"y" : 0},
@@ -26,6 +26,6 @@
 			"color" : {"r": 0, "g": 0, "b": 0},
 			"iterations" : 7,
 			"comment" : "r and g: 3 bit values, B: 2 bits"
-		}
+		}		
 	]
 }

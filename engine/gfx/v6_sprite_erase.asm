@@ -59,14 +59,14 @@ sprite_erase:
 @restore_sp:
 			lxi sp, TEMP_ADDR
 			ret
-erase_sprite_end:
+
 
 .macro ERASE_SPRITE_SP_COL(next_column = true)
 
 	; TODO: issue. there is a problem with this macro
 	; when it erases the last two bytes with PUSH B
 	; an interruption call erases two more bytes below it.
-	; there is one solution below, but it costly
+	; there is a commented solution below, but it expensive.
 	; think of a better solution.
 	col .var 0
 	.loop 3
@@ -128,7 +128,5 @@ erase_sprite_end:
 		.endif
 */
 
-
 .endmacro
-
 .endopt

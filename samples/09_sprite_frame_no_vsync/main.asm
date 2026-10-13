@@ -22,8 +22,10 @@
 ;    It is usually included in the program.
 ; 2. *_data.asm: contains the actual bytes to be loaded into the RAM disk. It
 ;    can be included, linked or loaded from FDD at runtime.
-.include "build/07_sprite_frame/palettes/asm/pal_lv1_meta.asm"
-.include "build/07_sprite_frame/sprites/asm/knight_meta.asm"
+.include "build/09_sprite_frame_no_vsync/palettes/asm/pal_lv0_meta.asm"
+.include "build/09_sprite_frame_no_vsync/sprites/asm/knight_meta.asm"
+.include "build/09_sprite_frame_no_vsync/levels/asm/lv0_data_meta.asm"
+.include "build/09_sprite_frame_no_vsync/levels/asm/lv0_gfx_meta.asm"
 
 
 SPR_MAX = 10
@@ -36,7 +38,7 @@ SPR_MAX = 10
 SPRITE_INIT_POS_X = 10 ; in bytes (8 pixels per byte)
 SPRITE_INIT_POS_Y = 128
 
-FRAME_SAFE_SCR_INES = 40
+FRAME_SAFE_SCR_INES = 50
 BEAM_OUT_OF_SCR = 0
 
 FRAME_BORDER_TOP    = 40
@@ -60,6 +62,8 @@ main:
             call set_timer
 
             call init_sprite_scr_addrs
+            call room_init
+            call room_copy_scr_to_backbuffs
 
             ; By default the engine uses a black palette.
             ; Request the engine to refresh hardware palette from `v6_palette`.
@@ -73,7 +77,7 @@ main:
             ; label `_pal_lv1_palette_fade_to_black_relative`.
             ; The object file contains the actual data and the label that points
             ; to it in a format `_<asset_json_file_name>`.
-            lxi d, _pal_lv1 + _pal_lv1_palette_fade_to_black_relative
+            lxi d, _pal_lv0 + _pal_lv0_palette_fade_to_black_relative
             call palette_fade_reverse
 
 
@@ -151,10 +155,9 @@ render:
             lhld knight_scr_addr
             shld knight_scr_addr_old
 
+            ; draw sprites
             call erase_draw_sprites
             jmp main_loop
-            ret
-
 
 
 ; delay loop for pausing the game
@@ -225,38 +228,43 @@ init_sprite_scr_addrs:
 ; erase, then draw a sprite
 ; in:
 ; a - sprite idx in (0..SPR_MAX-1)
-; hl - timer counter in (0 .. FRAME_TIME)
 erase_draw_sprite:
-            HL_TO_AX2_PLUS_INT16(sprite_scr_addrs_old)
-            push h
+            ; HL_TO_AX2_PLUS_INT16(sprite_scr_addrs_old)
+            ; push h
 
-            ; read the scr addr
-            mov e, m
-            inx h
-            mov d, m
-            inx h
+            ; ; read the scr addr
+            ; mov e, m
+            ; inx h
+            ; mov d, m
+            ; inx h
 
-            ; The sprite frame header: first two bytes are frame x/y offset,
-            ; next two bytes are width/height (width is stored as width-1 in
-            ; exporter for performance reasons).
-            ; Load a frame width/height.
-            lhld _knight + _knight_idle_0_0_relative + 2
-            ; DE = screen addr to clear, HL = width,height pair expected by routine
-            call sprite_erase
+            ; ; The sprite frame header: first two bytes are frame x/y offset,
+            ; ; next two bytes are width/height (width is stored as width-1 in
+            ; ; exporter for performance reasons).
+            ; ; Load a frame width/height.
+            ; lhld _knight + _knight_idle_0_0_relative + 2
+            ; lxi h, ((1)<<8) + 16
+            ; ;lxi d, ((SPRITE_X_SCR_ADDR)<<8) +  0
+            ; ; de - scr addr
+            ; ; hl - width, height
+            ; call sprite_erase
 
-            pop h
+            ; pop h
 
             ; draw a sprite
             ; advance hl to the sprite_scr_addrs
-            HL_ADVANCE(sprite_scr_addrs_old, sprite_scr_addrs, BY_BC)
+            ;HL_ADVANCE(sprite_scr_addrs_old, sprite_scr_addrs, BY_BC)
+
+            HL_TO_AX2_PLUS_INT16(sprite_scr_addrs)
+
             ; read the scr addr
             mov e, m
             inx h
             mov d, m
             inx h
 
-            ; BC = Sprite data, DE = Screen addr
             lxi b, _knight + _knight_idle_0_0_relative
+            ; BC = Sprite data, DE = Screen addr
             call sprite_draw_vm
             ret
 
@@ -306,8 +314,14 @@ erase_draw_sprites:
             call erase_draw_sprite
 
             ; set the sprite rendered
+            lda @current_sprite_idx
             HL_TO_A_PLUS_INT16(sprite_render_state)
             mvi m, 1
+
+            ; check if there are any sprites left to render
+            lxi h, @remaining_sprites
+            dcr m
+            rz
 
 @next_spr:
             ; select the next sprite
@@ -319,12 +333,7 @@ erase_draw_sprites:
 @wrap_spr_idx:
             mvi m, 0
 @no_wrap_spr_idx:
-
-            ; check if there are any sprites left to render
-            lxi h, @remaining_sprites
-            dcr m
-            jnz @loop
-            ret
+            jmp @loop
 
 @remaining_sprites:
             .db 0
@@ -396,6 +405,38 @@ get_scr_rast_line:
 @out_of_scr:
             A_TO_ZERO(BEAM_OUT_OF_SCR)
             ret
+
+
+room_init:
+            lxi b, _lv0_data
+            lxi h, RAM_DISK_OFF_CMD<<8 | RAM_DISK_OFF_CMD
+            ; bc - LV0_DATA_ADDR
+            ; l - RAM_DISK_S
+            ; h - RAM_DISK_M
+            ; ex. hl = RAM_DISK_M_LV0_GFX<<8 | RAM_DISK_S_LV0_GFX
+            call lv0_data_init
+
+            lxi b, _lv0_gfx
+            lxi h, RAM_DISK_OFF_CMD<<8 | RAM_DISK_OFF_CMD
+            ; bc - LV0_DATA_ADDR
+            ; l - RAM_DISK_S
+            ; h - RAM_DISK_M
+            ; ex. hl = RAM_DISK_M_LV0_GFX<<8 | RAM_DISK_S_LV0_GFX
+            call lv0_gfx_init
+
+			call room_unpack
+			call room_init_tiles_gfx
+			call room_draw_tiles
+            ret
+
+room_copy_scr_to_backbuffs:
+			; copy $a000-$ffff scr buffs to the RAM Disk back buffer
+			lxi d, SCR_BUFF1_ADDR
+			lxi h, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
+			lxi b, SCR_BUFF_LEN * 3
+			mvi a, RAM_DISK_S_BACKBUFF
+			call mem_copy_to_ram_disk
+			ret
 
 ; temp\scripts\generate_remap_192_to_256.py
 remap_192_to_256:

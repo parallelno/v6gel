@@ -84,14 +84,12 @@ V6_SYMTAB    := $(V6_OBJ).symtab
 ENGINE_DIR   := $(ROOT_DIR)/engine
 ENGINE_SRCS  := $(wildcard $(ENGINE_DIR)/*.asm) $(wildcard $(ENGINE_DIR)/*/*.asm)
 
-# Feature flags forwarded to engine/Makefile. V6_CHARS is forwarded only when a
-# sample defines it (only 08_sprite_anim needs the character subsystem).
+# Feature flags forwarded to engine/Makefile.
 V6_DEFS := \
     V6_CONTROLS=$(V6_CONTROLS) \
     V6_MUSIC=$(V6_MUSIC) \
     V6_INTERRUPTIONS=$(V6_INTERRUPTIONS) \
-    STACK_MAIN_PROGRAM_ADDR=$(STACK_MAIN_PROGRAM_ADDR) \
-    $(if $(V6_CHARS),V6_CHARS=$(V6_CHARS))
+    STACK_MAIN_PROGRAM_ADDR=$(STACK_MAIN_PROGRAM_ADDR)
 
 # --- assets -------------------------------------------------------------------
 # export_asset <meta.json> <asset-out-dir-relative-to-root> [extra flags]
