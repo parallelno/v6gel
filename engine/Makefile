@@ -87,7 +87,7 @@ $(V6_OBJ): $(ENGINE_SRCS)
 	    -D V6_ROOMS=$(V6_ROOMS) \
 	    -D V6_VFX=$(V6_VFX) \
 	    -D STACK_MAIN_PROGRAM_ADDR=$(STACK_MAIN_PROGRAM_ADDR) \
-	    -o "$(V6_OBJ)" -f obj
+	    -o "$(V6_OBJ)" -f obj -g
 
 ## symbols: emit a symbol table for the engine object.
 symbols: $(V6_SYMTAB)

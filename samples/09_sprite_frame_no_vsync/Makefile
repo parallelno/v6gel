@@ -170,7 +170,7 @@ $(MAIN_OBJ): $(SAMPLE_DIR)/main.asm $(ASSET_OBJS)
 	@echo === samples/09_sprite_frame_no_vsync: Assemble the main file ===
 	cd "$(ROOT_DIR)" && "$(V6ASM)" "$(SAMPLE_DIR)/main.asm" \
 	    -D STACK_MAIN_PROGRAM_ADDR=$(STACK_MAIN_PROGRAM_ADDR) \
-	    -o "$(MAIN_OBJ)" -f obj
+	    -o "$(MAIN_OBJ)" -f obj -g
 
 $(OUT_ROM): $(MAIN_OBJ) $(V6_OBJ) $(ASSET_OBJS)
 	$(call mkdir,$(OUT_DIR))
@@ -181,7 +181,7 @@ $(OUT_ROM): $(MAIN_OBJ) $(V6_OBJ) $(ASSET_OBJS)
 	    $(foreach o,$(ASSET_OBJS),"$(o)") \
 	    -Wl,-Map,"$(OUT_DIR)/$(PROJECT_NAME).map" \
 	    -Wl,--v6clang-constants-map,"$(OUT_DIR)/$(PROJECT_NAME).constants.map" \
-	    -o "$(OUT_ROM)"
+	    -o "$(OUT_ROM)" -g
 	@echo Linking output to: $(OUT_ROM)
 
 ## run: build the ROM and launch it in the emulator.
