@@ -12,6 +12,14 @@ Two stage rendering:
 - Blittering from the backbuffer onto the screen.
 
 The blittering onto the screen takes significant time.
+For example, the **backbuf_renderer** func below takes 117488 cc for 10 sprites.
+Without the **copy_backbuf_to_scr** it takes 83128 cc, which is ~30% faster.
+
+backbuf_renderer:
+            call restore_backbuf
+            call render_sprites_to_backbuf
+            ;call copy_backbuf_to_scr
+            ret
 
 ## Idea
 
@@ -23,10 +31,10 @@ Gain:
 
 | Problems | Solutions |
 |----------|-----------|
-| Bean detection | Use hardware Timer sunced with frame rendering to get the beam position at the sprite rendering time |
+| Bean detection | Use a hardware Timer synced with frame rendering to get the beam position at the sprite rendering time |
 | Beam avoidance | Draw only sprites that far enough from the beam. Carefully measure the sprite workload (background rendering, sprite rendering, algo overhead) |
-| Sprites can overlap | Find overlaping sprites and render then together, background, then all overlapping |
-| No guaranty that all sprites overlap. Rendering all sprites all at once is impossiblwe with beam avoidance | Split overlaping clusters into smaller fixed length groups. Not 100% solution |
+| Sprites can overlap | Find overlaping sprites and render them together with background |
+| Too many overlapping sprites make beam avoidance impossible | Render limited amount of sprites. |
 
 ## 1. Input and Data Structures
 

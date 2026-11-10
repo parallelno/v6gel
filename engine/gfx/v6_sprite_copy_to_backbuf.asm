@@ -1,3 +1,4 @@
+.opt
 ; copy a sprite from backbuff1 to backbuff2
 ; in:
 ; de - scr addr
@@ -10,7 +11,7 @@
 
 ; TODO: this func is giant. the size of this func is 1219 bytes. think of a better solution
 sprite_copy_to_back_buff_v:
-			; Y -= 1 because we start copying bytes with dec Y
+			; Y++ because we start copying bytes with dec Y
 			inr e
 
 			; h=min(h, SPRITE_COPY_TO_SCR_H_MAX)
@@ -142,3 +143,4 @@ sprite_copy_to_back_buff_v:
 			jp @next_column
 			jmp restore_sp
 .endmacro
+.endopt

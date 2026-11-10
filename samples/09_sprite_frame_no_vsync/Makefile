@@ -1,23 +1,6 @@
 # v6gel — samples/09_sprite_frame_no_vsync Makefile
 #
-#   Demonstrates sprite frames.
-#
-# It exports this sample's assets (via v6export), assembles the v6 engine
-# library (with this sample's subsystem flags) and main.asm, links everything
-# into a .rom with clang, and can launch it in an emulator.
-
-# Run it from the repository root or from this folder:
-#
-#   make                 # export assets + assemble + link -> build/09_sprite_frame_no_vsync/09_sprite_frame_no_vsync.rom
-#   make assets          # only (re)export this sample's assets
-#   make run             # build and launch the ROM in the emulator
-#   make engine          # only rebuild the engine library
-#   make clean           # remove this sample's build output
-#
-# Override any tool path or define on the command line or via the environment:
-#
-#   make V6ASM=/custom/v6asm DEVECTOR=/custom/emulator
-#   make V6_CONTROLS=0
+#   TODO: update this header to reflect the sample's purpose and features.
 #
 # ------------------------------------------------------------------------------
 

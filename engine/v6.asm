@@ -56,6 +56,7 @@
 .include "gfx/v6_sprite_erase.asm"
 .include "gfx/v6_sprite_copy_to_scr.asm"
 .include "gfx/v6_sprite_draw_invis.asm"
+.include "gfx/v6_sprite_copy_to_backbuf.asm"
 .include "gfx/v6_tiled_img_draw.asm"
 .include "gfx/v6_text_ex_draw.asm"
 .include "gfx/v6_tile_draw.asm"
@@ -63,6 +64,7 @@
 
 .include "actor/v6_actor.asm"
 .include "actor/v6_actor_draw.asm"
+
 
 .if V6_CHARS
     .include "char/v6_char.asm"

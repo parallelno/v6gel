@@ -1,4 +1,3 @@
-@memusage_room_draw:
 ;=========================================================
 ; redraws the room after dialog shown
 ; it uses data inited in the room_draw
@@ -19,6 +18,7 @@ room_redraw:
 			mvi a, ROOM_TILEDATA_HANDLING_ALL
 			sta room_handle_room_tiledata_check
 			ret
+
 
 room_copy_scr_to_backbuffs:
 			; copy $a000-$ffff scr buffs to the RAM Disk back buffer
