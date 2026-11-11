@@ -41,15 +41,31 @@ update_spatial_grid:
             mov b, m
             HL_ADVANCE(sprites_onscr.width, sprites_onscr.spg_sprite_mask)
             mov a, m
+            sta @spg_sprite_mask + 1
             HL_ADVANCE(sprites_onscr.width, sprites_onscr + sprites_onscr.size)
             push h
 
             mov h, b
             mov l, c
-
             call update_occupied_spg_cells
-            call
+            ; check if previously processed sprites occupy the same grid cells.
+@spg_sprite_mask:
+            cpi TEMP_BYTE
+            jz @create_cluster
+@merge_clusters:
+            ; At least one previously processed sprite occupies one or more of
+            ; the same grid cells.
+            ; Scan the cluster array to find all clusters that intersect the
+            ; cumulative mask.
 
+            jmp @counter
+@create_cluster:
+            ; No previously processed sprites occupy the same grid cells.
+            ; Create a new cluster by storing `cumulative_cell_sprite_mask` in
+            ; an empty cluster array entry.
+
+
+@counter:
             pop h
 @sprite_counter:
             mvi a, TEMP_BYTE
