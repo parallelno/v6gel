@@ -22,10 +22,10 @@
 ;    It is usually included in the program.
 ; 2. *_data.asm: contains the actual bytes to be loaded into the RAM disk. It
 ;    can be included, linked or loaded from FDD at runtime.
-.include "build/09_sprite_frame_no_vsync/palettes/asm/pal_lv0_meta.asm"
-.include "build/09_sprite_frame_no_vsync/sprites/asm/knight_meta.asm"
-.include "build/09_sprite_frame_no_vsync/levels/asm/lv0_data_meta.asm"
-.include "build/09_sprite_frame_no_vsync/levels/asm/lv0_gfx_meta.asm"
+.include "build/09_sprite_frame_onscr/palettes/asm/pal_lv0_meta.asm"
+.include "build/09_sprite_frame_onscr/sprites/asm/knight_meta.asm"
+.include "build/09_sprite_frame_onscr/levels/asm/lv0_data_meta.asm"
+.include "build/09_sprite_frame_onscr/levels/asm/lv0_gfx_meta.asm"
 
 
 SPR_MAX = 10

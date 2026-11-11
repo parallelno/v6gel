@@ -1,4 +1,4 @@
-# v6gel — samples/09_sprite_frame_no_vsync Makefile
+# v6gel — samples/09_sprite_frame_onscr Makefile
 #
 #   TODO: update this header to reflect the sample's purpose and features.
 #
@@ -52,7 +52,7 @@ OUT_ROM      := $(OUT_DIR)/$(PROJECT_NAME).rom
 MAIN_OBJ     := $(OUT_DIR)/main/main.o
 
 # main.asm includes its generated assets and the engine via paths relative to
-# the repository root (e.g. "build/09_sprite_frame_no_vsync/sprites/asm/knight_meta.asm"),
+# the repository root (e.g. "build/09_sprite_frame_onscr/sprites/asm/knight_meta.asm"),
 # so the asset export and the main assembly both run from ROOT_DIR. OUT_REL is
 # OUT_DIR expressed relative to ROOT_DIR for those recipes.
 OUT_REL      := build/$(PROJECT_NAME)
@@ -81,7 +81,7 @@ V6_DEFS := \
 # Runs from ROOT_DIR (so generated ASM uses root-relative paths) and emits
 # <dir>/asm, <dir>/manifests and <dir>/bin, assembling <name>.o into bin.
 define export_asset
-	@echo === samples/09_sprite_frame_no_vsync: Export $(notdir $(1)) ===
+	@echo === samples/09_sprite_frame_onscr: Export $(notdir $(1)) ===
 	cd "$(ROOT_DIR)" && $(PYTHON) -m v6gel.cli.v6export "$(1)" \
 	    -o "$(2)/asm" \
 	    --manifest-dir "$(2)/manifests" \
@@ -138,7 +138,7 @@ $(lv0_gfx_OBJ): $(lv0_gfx_JSON)
 engine: $(V6_OBJ)
 
 $(V6_OBJ): $(ENGINE_SRCS)
-	@echo === samples/09_sprite_frame_no_vsync: Build the v6 library ===
+	@echo === samples/09_sprite_frame_onscr: Build the v6 library ===
 	cd "$(ENGINE_DIR)" && $(MAKE) engine symbols \
 	    V6ASM=$(V6ASM) READELF=$(READELF) \
 	    V6_OBJ=$(V6_OBJ) \
@@ -150,14 +150,14 @@ rom: $(OUT_ROM)
 # main.asm .includes the generated *_meta.asm files, so export the assets first.
 $(MAIN_OBJ): $(SAMPLE_DIR)/main.asm $(ASSET_OBJS)
 	$(call mkdir,$(dir $(MAIN_OBJ)))
-	@echo === samples/09_sprite_frame_no_vsync: Assemble the main file ===
+	@echo === samples/09_sprite_frame_onscr: Assemble the main file ===
 	cd "$(ROOT_DIR)" && "$(V6ASM)" "$(SAMPLE_DIR)/main.asm" \
 	    -D STACK_MAIN_PROGRAM_ADDR=$(STACK_MAIN_PROGRAM_ADDR) \
 	    -o "$(MAIN_OBJ)" -f obj -g
 
 $(OUT_ROM): $(MAIN_OBJ) $(V6_OBJ) $(ASSET_OBJS)
 	$(call mkdir,$(OUT_DIR))
-	@echo === samples/09_sprite_frame_no_vsync: Linking ===
+	@echo === samples/09_sprite_frame_onscr: Linking ===
 	"$(V6CLANG)" $(TARGET) -nostdlib -O2 \
 	    "$(MAIN_OBJ)" \
 	    "$(V6_OBJ)" \
@@ -169,7 +169,7 @@ $(OUT_ROM): $(MAIN_OBJ) $(V6_OBJ) $(ASSET_OBJS)
 
 ## run: build the ROM and launch it in the emulator.
 run: $(OUT_ROM)
-	@echo === samples/09_sprite_frame_no_vsync: Run the ROM in the emulator ===
+	@echo === samples/09_sprite_frame_onscr: Run the ROM in the emulator ===
 	@echo Running: $(DEVECTOR) $(OUT_ROM)
 	"$(DEVECTOR)" "$(OUT_ROM)"
 
@@ -179,7 +179,7 @@ clean:
 
 ## help: list the available targets.
 help:
-	@echo samples/09_sprite_frame_no_vsync make targets:
+	@echo samples/09_sprite_frame_onscr make targets:
 	@echo.
 	@echo   all      Export assets, assemble + link the sample ROM (default)
 	@echo   assets   (Re)export this sample's assets via v6export

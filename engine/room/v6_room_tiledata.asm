@@ -84,7 +84,7 @@ room_check_tiledata_restorable:
 			ana e
 			mov c, a
 			; b = x in tiles
-			; c, a = y in tiles * 32
+			; c, a = y in tiles * 16
 
 			dad d
 			; hl - top-right corner scr addr

@@ -1,8 +1,8 @@
 {
   "name": "sample",
   "run": {
-    "executable": "build\\09_sprite_frame_no_vsync\\09_sprite_frame_no_vsync.rom",
-    "debugArtifact": "build\\09_sprite_frame_no_vsync\\09_sprite_frame_no_vsync.elf",
+    "executable": "build\\09_sprite_frame_onscr\\09_sprite_frame_onscr.rom",
+    "debugArtifact": "build\\09_sprite_frame_onscr\\09_sprite_frame_onscr.elf",
     "loadAddr": "0x100",
     "fddReadOnly": false,
     "speed": "100%",

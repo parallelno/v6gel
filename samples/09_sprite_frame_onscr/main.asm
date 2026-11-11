@@ -16,16 +16,16 @@
 ;    It is usually included in the program.
 ; 2. *_data.asm: contains the actual bytes to be loaded into the RAM disk. It
 ;    can be included, linked or loaded from FDD at runtime.
-.include "build/09_sprite_frame_no_vsync/palettes/asm/pal_lv0_meta.asm"
-.include "build/09_sprite_frame_no_vsync/sprites/asm/knight_meta.asm"
-.include "build/09_sprite_frame_no_vsync/levels/asm/lv0_data_meta.asm"
-.include "build/09_sprite_frame_no_vsync/levels/asm/lv0_gfx_meta.asm"
+.include "build/09_sprite_frame_onscr/palettes/asm/pal_lv0_meta.asm"
+.include "build/09_sprite_frame_onscr/sprites/asm/knight_meta.asm"
+.include "build/09_sprite_frame_onscr/levels/asm/lv0_data_meta.asm"
+.include "build/09_sprite_frame_onscr/levels/asm/lv0_gfx_meta.asm"
 
 .include "sprites.asm"
 
 .include "frame_sync.asm"
-.include "backbuf_renderer.asm"
-.include "direct_renderer.asm"
+.include "renderer_offscr.asm"
+.include "renderer_onscr.asm"
 .include "misc.asm"
 
 
@@ -43,9 +43,9 @@ main_loop:
             ; lda v6_action_code
             ; ani CONTROL_CODE_UP
             ; jnz @render_to_scr
-            ;call backbuf_renderer
+            ;call renderer_offscr
             ;jmp @cont
 @render_to_scr:
-            call direct_renderer
+            call renderer_onscr
 @cont:
             jmp main_loop

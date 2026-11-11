@@ -1,7 +1,7 @@
 ; renders sprites to the back buffer, then copies them to the screen
 ; 117488 cc
 ; without blittering to the screen: 83128 cc
-backbuf_renderer:
+renderer_offscr:
             call restore_backbuf
             call render_sprites_to_backbuf
             call copy_backbuf_to_scr
@@ -9,22 +9,22 @@ backbuf_renderer:
 
 
 restore_backbuf:
-            lxi h, sprites
+            lxi h, sprites_offscr
             mvi a, SPR_MAX
             sta @loop_counter + 1
             ; SCR_BUFF1_ADDR
 @loop:
             ; read scr addr
             mov e, m
-            HL_ADVANCE(sprite.scr_y, sprite.scr_x)
+            HL_ADVANCE(sprite_offscr.scr_y, sprite_offscr.scr_x)
             mov d, m
-            HL_ADVANCE(sprite.scr_x, sprite.height)
+            HL_ADVANCE(sprite_offscr.scr_x, sprite_offscr.height)
             ; read height
             mov c, m
-            HL_ADVANCE(sprite.height, sprite.width)
+            HL_ADVANCE(sprite_offscr.height, sprite_offscr.width)
             ; read width
             mov b, m
-            HL_ADVANCE(sprite.width, sprite.width+1)
+            HL_ADVANCE(sprite_offscr.width, sprite_offscr.width+1)
             push h
             mov h, b
             mov l, c
@@ -42,16 +42,16 @@ restore_backbuf:
 
 
 render_sprites_to_backbuf:
-            lxi h, sprites
+            lxi h, sprites_offscr
             mvi a, SPR_MAX
             sta @loop_counter + 1
             ; SCR_BUFF2_ADDR
 @loop:
             ; read scr addr
             mov e, m
-            HL_ADVANCE(sprite.scr_y, sprite.scr_x)
+            HL_ADVANCE(sprite_offscr.scr_y, sprite_offscr.scr_x)
             mov d, m
-            HL_ADVANCE(sprite.scr_x, sprite.width+1)
+            HL_ADVANCE(sprite_offscr.scr_x, sprite_offscr.width+1)
             push h
 
             lxi b, _knight + _knight_idle_0_0_relative
@@ -67,22 +67,22 @@ render_sprites_to_backbuf:
 
 
 copy_backbuf_to_scr:
-            lxi h, sprites
+            lxi h, sprites_offscr
             mvi a, SPR_MAX
             sta @loop_counter + 1
             ; SCR_BUFF2_ADDR
 @loop:
             ; read scr addr
             mov e, m
-            HL_ADVANCE(sprite.scr_y, sprite.scr_x)
+            HL_ADVANCE(sprite_offscr.scr_y, sprite_offscr.scr_x)
             mov d, m
-            HL_ADVANCE(sprite.scr_x, sprite.height)
+            HL_ADVANCE(sprite_offscr.scr_x, sprite_offscr.height)
             ; read height
             mov c, m
-            HL_ADVANCE(sprite.height, sprite.width)
+            HL_ADVANCE(sprite_offscr.height, sprite_offscr.width)
             ; read width
             mov b, m
-            HL_ADVANCE(sprite.width, sprite.width+1)
+            HL_ADVANCE(sprite_offscr.width, sprite_offscr.width+1)
             push h
             ; de - screen addr
             ; b - width
