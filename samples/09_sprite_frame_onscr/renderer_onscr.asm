@@ -1,6 +1,7 @@
 ; renders sprites to the back buffer, then copies them to the screen
 renderer_onscr:
             call init_spg_sprite_masks
+            call init_spg_clusters
             call update_spatial_grid
             ret
 
@@ -26,9 +27,18 @@ init_spg_sprite_masks:
             ret
 
 
+init_spg_clusters:
+            lxi h, spg_clusters
+            lxi b, spg_clusters + SPG_CLUSTERS_LEN
+            ; hl - source
+            ; bc - source + len
+            call mem_erase
+            ret
+
+
 update_spatial_grid:
             lxi h, sprites_onscr.scr_y
-            mvi a, SPR_MAX
+            A_TO_ZERO(0)
             sta @sprite_counter + 1
 @loop:
             ; read sprite scr addr
@@ -39,38 +49,123 @@ update_spatial_grid:
             mov c, m
             HL_ADVANCE(sprites_onscr.height, sprites_onscr.width)
             mov b, m
+            push b
             HL_ADVANCE(sprites_onscr.width, sprites_onscr.spg_sprite_mask)
-            mov a, m
-            sta @spg_sprite_mask + 1
-            HL_ADVANCE(sprites_onscr.width, sprites_onscr + sprites_onscr.size)
-            push h
-
-            mov h, b
-            mov l, c
+            mov c, m
+            HL_ADVANCE(sprites_onscr.spg_sprite_mask, sprites_onscr.spg_sprite_mask + 1)
+            mov b, m
+            HL_ADVANCE(sprites_onscr.spg_sprite_mask + 1, sprites_onscr + sprites_onscr.size)
+            xthl
+            ; sprites_onscr ptr in stack
+            ; hl - height, width
+            ; bc - spg_sprite_mask
+            ; de - scr_xy
+            push b
             call update_occupied_spg_cells
+            pop d
+            ; de - spg_sprite_mask
+            ; bc - cumulative_cell_sprite_mask
+
             ; check if previously processed sprites occupy the same grid cells.
-@spg_sprite_mask:
-            cpi TEMP_BYTE
+            mov a, e
+            cmp c
+            jnz @merge_clusters
+            mov a, d
+            cmp b
             jz @create_cluster
+
 @merge_clusters:
             ; At least one previously processed sprite occupies one or more of
             ; the same grid cells.
-            ; Scan the cluster array to find all clusters that intersect the
-            ; cumulative mask.
 
-            jmp @counter
+            ; find all clusters that intersect the cumulative mask, merge them
+            ; into the cummulative mask, those cluster array entry.
+            lda @sprite_counter + 1
+            mov d, a
+            call merge_clusters
+
 @create_cluster:
-            ; No previously processed sprites occupy the same grid cells.
             ; Create a new cluster by storing `cumulative_cell_sprite_mask` in
             ; an empty cluster array entry.
+            lda @sprite_counter + 1
+            mov d, a
+            call find_empty_cluster
+            ; bc - merged cumulative_cell_sprite_mask
+            ; hl points to the hi byte of the cluster
+            ; store the merged cluster into the spg_clusters
+            mov m, b
+            dcx h
+            mov m, c
 
-
-@counter:
             pop h
 @sprite_counter:
             mvi a, TEMP_BYTE
-            dcr a
+            inr a
             sta @sprite_counter + 1
+            cpi SPR_MAX
+            jnz @loop
+            ret
+
+
+; merge all clusters that intersect the cumulative mask into the cumulative mask,
+; then empty those cluster array entry.
+; in:
+; d - sprite_counter. used as a search depth
+; bc - cumulative_cell_sprite_mask
+; out:
+; bc - merged cumulative_cell_sprite_mask
+merge_clusters:
+            lxi h, spg_clusters - 1 ; because the loop starts with increment
+
+@merge_cluster_loop:
+            ; d - strite id
+            ; hl - spg_clusters
+            ; bc - cumulative_cell_sprite_mask
+            ; res = cluster_sprite_mask AND cumulative_cell_sprite_mask
+            inx h
+            mov a, m
+            ana c
+            mov e, a
+            inx h
+            mov a, m
+            ana b
+            ora e
+            ; res  = 0 : cumulative_cell_sprite_mask has no intersections with
+            ;            the current cluster. Continue to the next cluster.
+            jz @merge_cluster_counter
+            ; res != 0: Merge the cluster into the cumulative mask:
+            ; cumulative_cell_sprite_mask |= cluster_sprite_mask
+            mov a, m
+            ora b
+            mov b, a
+            dcx h
+            mov a, m
+            ora c
+            mov c, a
+            ; clear the original cluster entry by setting it to zero.
+            mvi m, 0
+            inx h
+            mvi m, 0
+@merge_cluster_counter:
+            dcr d
+            jnz @merge_cluster_loop
+            ret
+
+
+; find an empty cluster array entry
+; in:
+; d - sprite_counter. used as a search depth
+; out:
+; hl points to the hi byte of the cluster
+find_empty_cluster:
+            lxi h, spg_clusters - 1 ; because the loop starts with increment
+@loop:
+            inx h
+            mov a, m
+            inx h
+            ora m
+            rz
+            dcr d
             jnz @loop
             ret
 
@@ -83,13 +178,16 @@ update_spatial_grid:
 ;		01 - 16pxs,
 ;		10 - 24pxs,
 ; l - height
-; a - sprite mask (1 bit per sprite)
+; bc - spg_sprite_mask
 ; out:
-; a - cumulative_cell_sprite_mask
+; bc - cumulative_cell_sprite_mask
 update_occupied_spg_cells:
+            mov a, c
             sta @sprite_mask + 1
+            mov a, b
+            sta @sprite_mask + 2
 
-			; convert scr addr to room_tiles_gfx_ptrs offset
+			; convert scr addr to 16x16 tile index
 			mvi a, %00011110
 			ana d
 			rrc
@@ -132,47 +230,92 @@ update_occupied_spg_cells:
 			; check top-left corner
 			mov a, b
 			ora l
-			; a - top-left corner tile idx
+
+            ; a - top-left corner tile idx
             ; c - top-right corner tile idx
             ; d - bottom-right corner tile idx
             ; e - bottom-left corner tile idx
 
-            ; update the cell occupied by a top-left sprite corner
-            HL_TO_AX2_PLUS_INT16(spatial_grid)
-            mov a, m
-@sprite_mask:
-            ori TEMP_BYTE
-            mov m, a
-
-            ; update the cell occupied by the top-right sprite corner
+            ; store the cell addr occupied by a top-right sprite corner
             mov l, c
             mvi h, 0
             lxi b, spatial_grid
             dad h ; double the offset because a cell size is 2 bytes
             dad b
-            ; hl - spatial_grid cell addr occupied by the top-right corner of a sprite
-            ; bc - spatial_grid
-            ora m
-            mov m, a
+            push h
 
-            ; update the cell occupied by the bottom-left sprite corner
+            ; store the cell addr occupied by a top-left sprite corner
+            mov l, a
+            mvi h, 0
+            dad h ; double the offset because a cell size is 2 bytes
+            dad b
+            push h
+
+            ; store the cell addr occupied by the bottom-left sprite corner
             mov l, e
             mvi h, 0
             dad h ; double the offset because a cell size is 2 bytes
             dad b
-            ; hl - spatial_grid cell addr occupied by the bottom-left corner of a sprite
-            ; bc - spatial_grid
-            ora m
-            mov m, a
+            push h
 
-            ; update the cell occupied by the bottom-right sprite corner
+            ; store the cell addr occupied by the bottom-right sprite corner
             mov l, d
             mvi h, 0
             dad h ; double the offset because a cell size is 2 bytes
             dad b
-            ; hl - spatial_grid cell addr occupied by the bottom-right corner of a sprite
-            ; bc - spatial_grid
-            ora m
+
+@sprite_mask:
+            lxi b, TEMP_WORD
+            ; update the cell addr occupied by a bottom-right sprite corner
+            ; hl - cell addr
+            ; bc - sprite_mask, it will accmulate cell_sprite_masks
+            mov a, m
+            ora c
+            mov c, a
             mov m, a
-            ; a - cumulative_cell_sprite_mask
+            inx h
+            mov a, m
+            ora b
+            mov b, a
+            mov m, a
+
+            ; update the cell addr occupied by a bottom-left sprite corner
+            pop h
+            ; hl - cell addr
+            mov a, m
+            ora c
+            mov c, a
+            mov m, a
+            inx h
+            mov a, m
+            ora b
+            mov b, a
+            mov m, a
+
+            ; update the cell addr occupied by a top-left sprite corner
+            pop h
+            ; hl - cell addr
+            mov a, m
+            ora c
+            mov c, a
+            mov m, a
+            inx h
+            mov a, m
+            ora b
+            mov b, a
+            mov m, a
+
+            ; update the cell addr occupied by a top-right sprite corner
+            pop h
+            ; hl - cell addr
+            mov a, m
+            ora c
+            mov c, a
+            mov m, a
+            inx h
+            mov a, m
+            ora b
+            mov b, a
+            mov m, a
+            ; bc - cumulative_cell_sprite_mask
 			ret

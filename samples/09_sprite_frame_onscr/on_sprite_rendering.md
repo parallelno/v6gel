@@ -68,11 +68,7 @@ For each sprite in ascending `sprite_ID` order:
 2. Read the `cell_sprite_mask` of every grid cell occupied by the sprite.
 3. `cumulative_cell_sprite_mask = cumulative_cell_sprite_mask OR cell_sprite_mask`.
 4. Store `cumulative_cell_sprite_mask` into every grid cell occupied by the sprite.
-5. Create or Merge Clusters:
-6. **Create Case: `cumulative_cell_sprite_mask == sprite_mask`**
-  - No previously processed sprites occupy the same grid cells.
-  - Create a new cluster by storing `cumulative_cell_sprite_mask` in an empty cluster array entry.
-7. **Merge Case: `cumulative_cell_sprite_mask != sprite_mask`**
+7. **Merge Cluster Case: `cumulative_cell_sprite_mask != sprite_mask`**
   - At least one previously processed sprite occupies one or more of the same grid cells.
   - Scan the cluster array to find all clusters that intersect the cumulative mask.
   - For each cluster, evaluate: `cluster_sprite_mask AND cumulative_cell_sprite_mask != 0`
@@ -80,8 +76,8 @@ For each sprite in ascending `sprite_ID` order:
     - **True:** Merge the cluster into the cumulative mask:
       - `cumulative_cell_sprite_mask = cumulative_cell_sprite_mask OR cluster_sprite_mask`
       - Then clear the original cluster entry by setting it to zero.
-
-  - After the scan is complete, store the resulting cumulative mask in an available cluster array entry.
+8. **Create Cluster:**
+    - Create a new cluster by storing `cumulative_cell_sprite_mask` in an empty cluster array entry.
 
 Because each sprite belongs to exactly one cluster, the masks of distinct existing clusters are disjoint. Therefore, merging a cluster into the cumulative mask cannot introduce an intersection with a previously scanned, disjoint cluster. A single pass is sufficient.
 

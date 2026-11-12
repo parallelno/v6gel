@@ -49,16 +49,22 @@ SPG13:       sprite_onscr (scr_y=187, scr_x=SPRITE_X_SCR_ADDR +  9, width=1, hei
 SPG14:       sprite_onscr (scr_y= 71, scr_x=SPRITE_X_SCR_ADDR + 27, width=1, height=16)
 
 
-.pack align
-; spatial grid (SPG) data
+
 SPG_SPRITE_MASK_SIZE = 2 ; 16 bits = 2 bytes
 SPG_WIDTH = 16
 SPG_HEIGHT = 16
 SPG_CLUSTER_MAX = 16
 
+.pack align
+; spatial grid (SPG) data
 spatial_grid:
             .storage SPG_WIDTH * SPG_HEIGHT * SPG_SPRITE_MASK_SIZE
+.endpack
 
+
+SPG_CLUSTERS_LEN = SPG_CLUSTER_MAX * SPG_SPRITE_MASK_SIZE
+.pack
+; cluster array
 spg_clusters:
-            .storage SPG_CLUSTER_MAX * SPG_SPRITE_MASK_SIZE
+            .storage SPG_CLUSTERS_LEN
 .endpack
