@@ -49,6 +49,7 @@ mem_fill:
 ; clears a memory buffer using stack operations
 ; can be used to clear the RAM Disk as well
 ;		IT CORRUPTS TWO BYTES BEFORE THE BUFFER if disable_int = false!
+; length must be devisible by 32
 .macro MEM_ERASE_SP(buf_start, buff_len, command = RAM_DISK_OFF_CMD, disable_int = false)
 		.if disable_int
 			di
@@ -63,6 +64,7 @@ mem_fill:
 .endmacro
 
 .opt
+; length must be devisible by 32.
 ; input:
 ; bc - source + len
 ; de - length // 32 - 1

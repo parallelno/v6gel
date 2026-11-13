@@ -1,6 +1,7 @@
 ; renders sprites to the back buffer, then copies them to the screen
 ; 117488 cc
 ; without blittering to the screen: 83128 cc
+; blitting takes: 34360 cc
 renderer_offscr:
             call restore_backbuf
             call render_sprites_to_backbuf

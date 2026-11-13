@@ -65,7 +65,19 @@ V6_DIR       := $(OUT_DIR)/v6
 V6_OBJ       := $(V6_DIR)/v6.o
 V6_SYMTAB    := $(V6_OBJ).symtab
 ENGINE_DIR   := $(ROOT_DIR)/engine
-ENGINE_SRCS  := $(wildcard $(ENGINE_DIR)/*.asm) $(wildcard $(ENGINE_DIR)/*/*.asm)
+# Every engine source, nested dirs included (e.g. engine/char/hero/), so the
+# engine object is rebuilt when any of them changes.
+ENGINE_SRCS  := $(wildcard $(ENGINE_DIR)/*.asm) $(wildcard $(ENGINE_DIR)/*/*.asm) $(wildcard $(ENGINE_DIR)/*/*/*.asm)
+
+# Every assembler source the main file .includes: main.asm itself, this sample's
+# sprites.asm, frame_sync.asm, renderer_offscr.asm, renderer_onscr.asm and
+# misc.asm, plus the engine consts & macros. All of them are prerequisites of
+# MAIN_OBJ (see the MAIN_OBJ rule) because make does not parse `.include` - a
+# local include is not a dependency unless it is listed here, and without it
+# editing sprites.asm leaves make thinking main.o is up to date.
+SAMPLE_SRCS  := $(wildcard $(SAMPLE_DIR)/*.asm) \
+                $(wildcard $(SAMPLE_DIR)/*/*.asm) \
+                $(wildcard $(SAMPLE_DIR)/*/*/*.asm)
 
 # Feature flags forwarded to engine/Makefile. V6_CHARS is forwarded only when a
 # sample defines it (only 08_sprite_anim needs the character subsystem).
@@ -148,7 +160,7 @@ $(V6_OBJ): $(ENGINE_SRCS)
 rom: $(OUT_ROM)
 
 # main.asm .includes the generated *_meta.asm files, so export the assets first.
-$(MAIN_OBJ): $(SAMPLE_DIR)/main.asm $(ASSET_OBJS)
+$(MAIN_OBJ): $(SAMPLE_SRCS) $(ENGINE_SRCS) $(ASSET_OBJS)
 	$(call mkdir,$(dir $(MAIN_OBJ)))
 	@echo === samples/09_sprite_frame_onscr: Assemble the main file ===
 	cd "$(ROOT_DIR)" && "$(V6ASM)" "$(SAMPLE_DIR)/main.asm" \

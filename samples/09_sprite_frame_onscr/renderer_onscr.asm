@@ -1,11 +1,14 @@
 ; renders sprites to the back buffer, then copies them to the screen
 renderer_onscr:
-            call init_spg_sprite_masks
-            call init_spg_clusters
-            call update_spatial_grid
+                                       ; for 10 16x16 sprites:
+            call init_spg_sprite_masks ;          962 cc 0x06EE
+            call init_spg_clusters     ;         5108 cc 0x06F1
+            call update_spatial_grid   ;        15837 cc 0x06F4
+                                       ; total: 21907 cc 0x06F7
+            call draw_clusters
             ret
 
-
+; defines spg_sprite_mask = 1 << sprite_id for each sprite.
 init_spg_sprite_masks:
             lxi h, sprites_onscr.spg_sprite_mask
             mvi a, SPR_MAX
@@ -28,11 +31,18 @@ init_spg_sprite_masks:
 
 
 init_spg_clusters:
-            lxi h, spg_clusters
-            lxi b, spg_clusters + SPG_CLUSTERS_LEN
-            ; hl - source
-            ; bc - source + len
-            call mem_erase
+            ; erase spatial_grid + clusters
+            ; lxi h, spatial_grid
+            ; lxi b, spg_clusters + SPG_CLUSTERS_LEN
+            ; ; hl - source
+            ; ; bc - source + len
+            ; call mem_erase
+
+            SPG_BUF_LEN = SPG_CLUSTERS_LEN + SPG_LEN + 12
+			lxi b, spg_clusters + SPG_BUF_LEN
+			lxi d, SPG_BUF_LEN / 32 - 1
+			mvi a, 0
+			call mem_erase_sp
             ret
 
 
@@ -148,7 +158,7 @@ merge_clusters:
             mvi m, 0
 @merge_cluster_counter:
             dcr d
-            jnz @merge_cluster_loop
+            jp @merge_cluster_loop
             ret
 
 
@@ -166,7 +176,7 @@ find_empty_cluster:
             ora m
             rz
             dcr d
-            jnz @loop
+            jp @loop
             ret
 
 
@@ -212,7 +222,7 @@ update_occupied_spg_cells:
 			mov h, a
 			; h, a = x+dx in tiles
 
-			; check bottom-right corner
+			; get bottom-right corner
 			ora c
 			mov d, a
 
@@ -223,11 +233,11 @@ update_occupied_spg_cells:
 			mov l, a
 			; l, a = y+dy in tiles
 
-			; check top-right corner
+			; get top-right corner
 			ora h
             mov c, a
 
-			; check top-left corner
+			; get top-left corner
 			mov a, b
 			ora l
 
@@ -319,3 +329,11 @@ update_occupied_spg_cells:
             mov m, a
             ; bc - cumulative_cell_sprite_mask
 			ret
+
+; draw each cluster in two steps avoiding the beam:
+; - restore the back for the area that includes all sprites in the cluster
+; - draw all sprites of the cluster
+draw_clusters:
+            lxi h, spg_clusters
+            mvi a, SPG_CLUSTER_MAX
+            ret

@@ -32,39 +32,44 @@ SP14:       sprite_offscr (scr_y= 71, scr_x=SPRITE_X_SCR_ADDR + 27, width=1, hei
     spg_sprite_mask:  word ; spatial grid cell sprite mask (1 bit per sprite)
 .endstruct
 
-sprites_onscr:    sprite_onscr (scr_y= 17, scr_x=SPRITE_X_SCR_ADDR +  2, width=1, height=16)
-SPG01:       sprite_onscr (scr_y=203, scr_x=SPRITE_X_SCR_ADDR + 29, width=1, height=16)
-SPG02:       sprite_onscr (scr_y= 88, scr_x=SPRITE_X_SCR_ADDR + 11, width=1, height=16)
-SPG03:       sprite_onscr (scr_y=156, scr_x=SPRITE_X_SCR_ADDR + 24, width=1, height=16)
-SPG04:       sprite_onscr (scr_y=234, scr_x=SPRITE_X_SCR_ADDR +  7, width=1, height=16)
-SPG05:       sprite_onscr (scr_y= 42, scr_x=SPRITE_X_SCR_ADDR + 15, width=1, height=16)
-SPG06:       sprite_onscr (scr_y=119, scr_x=SPRITE_X_SCR_ADDR + 30, width=1, height=16)
-SPG07:       sprite_onscr (scr_y=175, scr_x=SPRITE_X_SCR_ADDR +  0, width=1, height=16)
-SPG08:       sprite_onscr (scr_y= 63, scr_x=SPRITE_X_SCR_ADDR + 18, width=1, height=16)
-SPG09:       sprite_onscr (scr_y=221, scr_x=SPRITE_X_SCR_ADDR + 26, width=1, height=16)
-SPG10:       sprite_onscr (scr_y=140, scr_x=SPRITE_X_SCR_ADDR +  5, width=1, height=16)
-SPG11:       sprite_onscr (scr_y= 95, scr_x=SPRITE_X_SCR_ADDR + 13, width=1, height=16)
-SPG12:       sprite_onscr (scr_y= 28, scr_x=SPRITE_X_SCR_ADDR + 22, width=1, height=16)
-SPG13:       sprite_onscr (scr_y=187, scr_x=SPRITE_X_SCR_ADDR +  9, width=1, height=16)
-SPG14:       sprite_onscr (scr_y= 71, scr_x=SPRITE_X_SCR_ADDR + 27, width=1, height=16)
+sprites_onscr: sprite_onscr (scr_y=190, scr_x=SPRITE_X_SCR_ADDR + 27, width=1, height=16)
+SPG01:         sprite_onscr (scr_y=203, scr_x=SPRITE_X_SCR_ADDR + 30, width=1, height=16)
+SPG02:         sprite_onscr (scr_y= 63, scr_x=SPRITE_X_SCR_ADDR + 18, width=1, height=16)
+SPG03:         sprite_onscr (scr_y=156, scr_x=SPRITE_X_SCR_ADDR + 24, width=1, height=16)
+SPG04:         sprite_onscr (scr_y=234, scr_x=SPRITE_X_SCR_ADDR +  7, width=1, height=16)
+SPG05:         sprite_onscr (scr_y=201, scr_x=SPRITE_X_SCR_ADDR + 26, width=1, height=16)
+SPG06:         sprite_onscr (scr_y=119, scr_x=SPRITE_X_SCR_ADDR + 30, width=1, height=16)
+SPG07:         sprite_onscr (scr_y=175, scr_x=SPRITE_X_SCR_ADDR +  0, width=1, height=16)
+SPG08:         sprite_onscr (scr_y=200, scr_x=SPRITE_X_SCR_ADDR + 29, width=1, height=16)
+SPG09:         sprite_onscr (scr_y=221, scr_x=SPRITE_X_SCR_ADDR + 26, width=1, height=16)
+
+SPG10:         sprite_onscr (scr_y=140, scr_x=SPRITE_X_SCR_ADDR +  5, width=1, height=16)
+SPG11:         sprite_onscr (scr_y= 42, scr_x=SPRITE_X_SCR_ADDR + 15, width=1, height=16)
+SPG12:         sprite_onscr (scr_y= 28, scr_x=SPRITE_X_SCR_ADDR + 22, width=1, height=16)
+SPG13:         sprite_onscr (scr_y=195, scr_x=SPRITE_X_SCR_ADDR + 31, width=1, height=16)
+SPG14:         sprite_onscr (scr_y=171, scr_x=SPRITE_X_SCR_ADDR + 1, width=1, height=16)
 
 
 
 SPG_SPRITE_MASK_SIZE = 2 ; 16 bits = 2 bytes
 SPG_WIDTH = 16
 SPG_HEIGHT = 16
-SPG_CLUSTER_MAX = 16
-
-.pack align
-; spatial grid (SPG) data
-spatial_grid:
-            .storage SPG_WIDTH * SPG_HEIGHT * SPG_SPRITE_MASK_SIZE
-.endpack
-
-
+SPG_LEN = SPG_WIDTH * SPG_HEIGHT * SPG_SPRITE_MASK_SIZE
+SPG_CLUSTER_MAX = SPR_MAX
 SPG_CLUSTERS_LEN = SPG_CLUSTER_MAX * SPG_SPRITE_MASK_SIZE
-.pack
-; cluster array
+
+
+_safe_word:
+            .storage 2
+
+; cluster array.
+; must follow the spatial_grid
 spg_clusters:
             .storage SPG_CLUSTERS_LEN
-.endpack
+
+; spatial grid (SPG) data
+spatial_grid:
+            .storage SPG_LEN
+
+_filler:
+            .storage 12
