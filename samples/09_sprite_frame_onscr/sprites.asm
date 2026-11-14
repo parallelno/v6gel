@@ -61,6 +61,7 @@ SPG_CLUSTERS_LEN = SPG_CLUSTER_MAX * SPG_SPRITE_MASK_SIZE
 
 _safe_word:
             .storage 2
+.align 32
 
 ; cluster array.
 ; must follow the spatial_grid
@@ -71,5 +72,29 @@ spg_clusters:
 spatial_grid:
             .storage SPG_LEN
 
+.struct sprite_batch
+    ptr: word ; ptr to the last addr byte of a last sprite in sprite_ptrs that
+              ; that belongs to this cluster
+    scr_y:  byte ; x scr position
+    scr_x:  byte ; y scr position
+    height: byte ; width (0=8pxs, 1=16pxs, 2=24pxs, 3=32pxs)
+    width:  byte ; height (in pixels)
+    len: byte ; the number of sprites in the batch
+
+.endstruct
+
+render_batches:
+            sprite_batch[SPG_CLUSTER_MAX]
+
+current_render_batch:
+            .storage ADDR_LEN
+
+sprite_ptrs:
+            .storage SPR_MAX * ADDR_LEN
+
+current_sprite_ptr:
+            .storage ADDR_LEN
+
 _filler:
-            .storage 12
+            .align 32
+_filler_end:

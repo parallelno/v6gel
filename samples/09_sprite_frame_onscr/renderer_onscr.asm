@@ -1,19 +1,29 @@
 ; renders sprites to the back buffer, then copies them to the screen
 renderer_onscr:
                                        ; for 10 16x16 sprites:
-            call init_spg_sprite_masks ;          962 cc 0x06EE
-            call init_spg_clusters     ;         5108 cc 0x06F1
-            call update_spatial_grid   ;        15837 cc 0x06F4
-                                       ; total: 21907 cc 0x06F7
-            call draw_clusters
+            call init_sprite_masks_ptrs ;          962, 1696 cc
+            call init_spg_clusters     ;         5108,  5876 cc
+            call update_spatial_grid   ;        15837, 15612 cc
+            call build_render_batches  ;                1708 cc
+                                       ; total: 21907, 24892 cc
             ret
 
 ; defines spg_sprite_mask = 1 << sprite_id for each sprite.
-init_spg_sprite_masks:
+; inits the sprite ptrs contgues array
+init_sprite_masks_ptrs:
             lxi h, sprites_onscr.spg_sprite_mask
             mvi a, SPR_MAX
+            sta @counter + 1
             lxi d, 1 ; initial sprite mask
+            lxi b, sprite_ptrs
 @loop:
+            ; store the sprite ptr
+            mov a, l
+            stax b
+            inx b
+            mov a, h
+            stax b
+            inx b
             ; store the 2-byte mask
             mov m, e
             HL_ADVANCE(sprites_onscr.spg_sprite_mask, sprites_onscr.spg_sprite_mask + 1)
@@ -25,7 +35,9 @@ init_spg_sprite_masks:
             dad h
             xchg
             ; decrement, check the counter
+@counter:   mvi a, TEMP_BYTE
             dcr a
+            sta @counter + 1
             jnz @loop
             ret
 
@@ -38,8 +50,8 @@ init_spg_clusters:
             ; ; bc - source + len
             ; call mem_erase
 
-            SPG_BUF_LEN = SPG_CLUSTERS_LEN + SPG_LEN + 12
-			lxi b, spg_clusters + SPG_BUF_LEN
+            SPG_BUF_LEN = _filler_end - spg_clusters
+			lxi b, _filler_end
 			lxi d, SPG_BUF_LEN / 32 - 1
 			mvi a, 0
 			call mem_erase_sp
@@ -330,10 +342,96 @@ update_occupied_spg_cells:
             ; bc - cumulative_cell_sprite_mask
 			ret
 
-; draw each cluster in two steps avoiding the beam:
-; - restore the back for the area that includes all sprites in the cluster
-; - draw all sprites of the cluster
-draw_clusters:
+; builds a render batch for each cluster that includes a bounding box pos, w, h,
+; sprite ptrs.
+build_render_batches:
+            lxi h, sprite_ptrs
+            shld current_sprite_ptr
+            lxi h, render_batches
+            shld current_render_batch
             lxi h, spg_clusters
-            mvi a, SPG_CLUSTER_MAX
+            mvi c, SPG_CLUSTER_MAX
+@loop:
+            ; get the cluster
+            mov a, m
+            inx h
+            mov b, m
+            inx h
+            ; if empty, move to next
+            cmp b
+            jnz @loop
+            push b
+            ; b - hi sprite mask
+            ; a - low sprite mask
+            call build_render_batch
+            pop b
+            dcr c
+            jnz @loop
+            ret
+
+; builds a render batch that includes a bounding box pos, w, h, sprite ptrs.
+; in:
+; b - hi sprite mask
+; a - low sprite mask
+build_render_batch:
+            mvi c, 8 ; eight bits in one byte of a sprite mask
+@loop:
+            dcr c
+            rm
+            rrc
+            jnc @loop
+
+            ; TODO: store the number of sprites in each cluster avoid scanning
+            ;   mask bits for excluded sprites.
+
+            ; convert the sprite mask to the sprite ptr
+            ; calc the sprite idx
+            push psw
+            mvi a, 7
+            sub c
+            ; get the sprite ptr
+            ; a - sprite idx
+            HL_TO_AX2_PLUS_INT16(sprite_ptrs)
+            mov e, m
+            inx h
+            mov d, m
+            ; de - sprite ptr
+
+            ; store the sprite ptr into a batch
+            lhld current_render_batch
+            mov m, e
+            HL_ADVANCE(render_batches.ptr, render_batches.ptr + 1)
+            mov m, d
+            HL_ADVANCE(render_batches.ptr + 1, render_batches.height)
+
+            ; calc the cluster cummulative bounding box
+            ; if it's a first sprite, copy its aabb
+            mov a, m
+            CPI_ZERO(0)
+            jnz @extend_existing_aabb
+
+            ; copy sprite's aabb to a cluster's
+            HL_ADVANCE(render_batches.height, render_batches.scr_y)
+            ; de - points to sprite.scr_y
+            ; hl - points to cluster.scr_y
+            ldax d
+            mov m, a
+            DE_ADVANCE(sprites_onscr.scr_y, sprites_onscr.ptr.scr_x)
+            HL_ADVANCE(render_batches.scr_y, render_batches.ptr.scr_x)
+            ldax d
+            mov m, a
+            DE_ADVANCE(sprites_onscr.scr_x, sprites_onscr.ptr.height)
+            HL_ADVANCE(render_batches.scr_x, render_batches.ptr.height)
+            ldax d
+            mov m, a
+            DE_ADVANCE(sprites_onscr.height, sprites_onscr.ptr.width)
+            HL_ADVANCE(render_batches.height, render_batches.ptr.width)
+            ldax d
+            mov m, a
+
+
+
+
+            pop psw
+
             ret

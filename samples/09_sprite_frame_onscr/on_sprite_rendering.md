@@ -110,3 +110,13 @@ Only sprites whose positions or dimensions have changed need to have their spati
 This can reduce per-frame processing overhead when many sprites remain stationary or move infrequently.
 
 **Important:** Cluster membership may still need to be recalculated when sprites move, because their spatial relationships can change even if most other sprites remain stationary.
+
+## 5. Possible Optimizations
+
+- Instead of erase the whole cluster grid, store the updated cell idxs of the
+  cluster grid during the clustering. Then erase only them.
+- Store the pointers of the spride data into a contguis array, use it while cluster
+  rendering to map the spg_sprite_mask into the sprite data pointer.
+- if a clustering operates the sprite max_h (16), it can make the sprite
+  clustering less frequest because cluster sprite bounding box will change less
+  often, but that will make the clustering less precise.
