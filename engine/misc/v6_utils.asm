@@ -592,3 +592,50 @@ palette_fade_update_iterations:
 empty_func:
 			ret
 .endopt
+
+.opt
+; Returns a number of set bits in a byte
+; in:
+; a - low byte
+; out:
+; a - bit count
+; uses a, hl
+; v1. 180 cc
+; v2. 172 cc
+count_bits8:
+			CPI_ZERO(0)
+			rz
+			mov h, a
+			A_TO_ZERO(0)
+			mov l, a
+		.loop 8
+			dad h \ adc l \
+		.endloop
+			; a - bit count
+			ret
+.endopt
+
+
+.opt
+; Returns a number of set bits in two bytes
+; in:
+; a - lo cluster sprite mask
+; b - hi cluster sprite mask
+; out:
+; a - bit count
+; b - hi cluster sprite mask
+; uses a, e, hl
+; v1. 308 cc
+count_bits16:
+			ora b
+			rz
+			mov l, a
+			mov h, b
+			A_TO_ZERO(0)
+			mov e, a
+		.loop 16
+			dad h \ adc e \
+		.endloop
+			; a - bit count
+			ret
+.endopt

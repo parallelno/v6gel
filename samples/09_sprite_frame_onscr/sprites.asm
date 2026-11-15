@@ -83,8 +83,7 @@ spatial_grid:
 
 .endstruct
 
-render_batches:
-            sprite_batch[SPG_CLUSTER_MAX]
+render_batches: sprite_batch[SPG_CLUSTER_MAX]
 
 current_render_batch:
             .storage ADDR_LEN
