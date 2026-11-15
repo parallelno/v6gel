@@ -365,6 +365,11 @@ init_render_batches:
             ; a - lo cluster sprite mask
             ; bc - cluster sprite mask
 
+
+instead of counting bytes, build a array of sprite indexes and an array of pointers or indeces
+that points to the last cluster sprite in the first array. so each cluster knows there
+its sprites are. also it needs to store the sprite count of every cluster
+
             push h
             call count_bits16
             pop h
@@ -377,7 +382,8 @@ init_render_batches:
             push h
             ; a - sprites in cluster
             ; bc - cluster sprite mask
-            call init_render_batch
+;            call init_render_batch
+            call render_cluster
             pop h
 
 @check_loop:
@@ -409,6 +415,11 @@ init_render_batch:
 ; to spend time on building cummulative cluster sprites aabb.
 ; but firstly check the perf of this func with just handling a aabb for one sprite
 ; it can be enough slow to give up on this approach.
+
+; actually check the perf with rendering each back individually without calc the
+; cummulative aabb for all sprites in a cluster.
+
+
 
             ; convert the sprite mask to the sprite ptr
             ; calc the sprite idx
@@ -455,9 +466,19 @@ init_render_batch:
             ldax d
             mov m, a
 
-
-
-
             pop psw
-
             ret
+
+
+; in:
+; a - sprites in cluster
+; bc - cluster sprite mask
+init_render_batch:
+            sta @check_loop + 1
+@loop:
+@check_loop:
+            mvi a, TEMP_BYTE
+            dcr a
+            sta @check_loop + 1
+            rm
+render_cluster:

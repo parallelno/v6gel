@@ -120,3 +120,7 @@ This can reduce per-frame processing overhead when many sprites remain stationar
 - if a clustering operates the sprite max_h (16), it can make the sprite
   clustering less frequest because cluster sprite bounding box will change less
   often, but that will make the clustering less precise.
+- update clustoring not for every render frame. it has less frequent data change,
+  so it can be ok.
+- use only 8 bit clustering for sprites, remaning sprites and bullets do not
+  form their own clusters, but join closest ones.
