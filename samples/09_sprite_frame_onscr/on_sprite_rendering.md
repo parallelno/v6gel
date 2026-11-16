@@ -124,3 +124,4 @@ This can reduce per-frame processing overhead when many sprites remain stationar
   so it can be ok.
 - use only 8 bit clustering for sprites, remaning sprites and bullets do not
   form their own clusters, but join closest ones.
+- Do not erase runtime buffers if they normally rewritten.

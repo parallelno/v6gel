@@ -73,14 +73,13 @@ spatial_grid:
             .storage SPG_LEN
 
 .struct sprite_batch
-    ptr: word ; ptr to the last addr byte of a last sprite in sprite_ptrs that
-              ; that belongs to this cluster
     scr_y:  byte ; x scr position
     scr_x:  byte ; y scr position
     height: byte ; width (0=8pxs, 1=16pxs, 2=24pxs, 3=32pxs)
     width:  byte ; height (in pixels)
+    ptr: word ; ptr to the last addr byte of a last sprite in sprite_ptrs that
+              ; that belongs to this cluster
     len: byte ; the number of sprites in the batch
-
 .endstruct
 
 render_batches: sprite_batch[SPG_CLUSTER_MAX]
@@ -88,10 +87,18 @@ render_batches: sprite_batch[SPG_CLUSTER_MAX]
 current_render_batch:
             .storage ADDR_LEN
 
+
+; contigues array of all sprites ptrs
 sprite_ptrs:
             .storage SPR_MAX * ADDR_LEN
 
-current_sprite_ptr:
+; sprites idxs groupped by clusters
+cluster_sprites:
+            .storage SPR_MAX * BYTE_LEN
+
+; temp ptr used in the init_cluster_sprites func. contains a pointer to
+; the next avaiable element in cluster_sprites
+current_cluster_sprite_ptr:
             .storage ADDR_LEN
 
 _filler:

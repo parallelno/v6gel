@@ -43,13 +43,6 @@ init_sprite_masks_ptrs:
 
 
 init_spg_clusters:
-            ; erase spatial_grid + clusters
-            ; lxi h, spatial_grid
-            ; lxi b, spg_clusters + SPG_CLUSTERS_LEN
-            ; ; hl - source
-            ; ; bc - source + len
-            ; call mem_erase
-
             SPG_BUF_LEN = _filler_end - spg_clusters
 			lxi b, _filler_end
 			lxi d, SPG_BUF_LEN / 32 - 1
@@ -346,8 +339,8 @@ update_occupied_spg_cells:
 ; builds a render batch for each cluster that includes a bounding box pos, w, h,
 ; sprite ptrs.
 init_render_batches:
-            lxi h, sprite_ptrs
-            shld current_sprite_ptr
+            lxi h, cluster_sprite_ptrs
+            shld current_cluster_sprite_ptr
             lxi h, render_batches
             shld current_render_batch
 
@@ -356,40 +349,55 @@ init_render_batches:
             sta @check_loop + 1
 @loop:
             ; get a cluster sprite mask
-            mov a, m
+            mov e, m
             inx h
-            mov b, m
+            mov d, m
             inx h
+            ; de - cluster sprite mask
 
-            mov c, a
-            ; a - lo cluster sprite mask
-            ; bc - cluster sprite mask
-
-
-instead of counting bytes, build a array of sprite indexes and an array of pointers or indeces
-that points to the last cluster sprite in the first array. so each cluster knows there
-its sprites are. also it needs to store the sprite count of every cluster
-
-            push h
-            call count_bits16
-            pop h
-            ; a - sprites in cluster
-            ; bc - cluster sprite mask
-
-            ; if empty, move to next
+            ; skip empty clusters
+            mov a, e
+            ora d
             jz @check_loop
 
             push h
-            ; a - sprites in cluster
-            ; bc - cluster sprite mask
-;            call init_render_batch
-            call render_cluster
+            call init_cluster_sprites
+            ; call init_render_batch
             pop h
 
 @check_loop:
             mvi a, TEMP_BYTE
             cmp l
             jnz @loop
+            ret
+
+
+; init the cluster_sprites_ptrs. it uses current_cluster_sprite_ptr as a temp
+; in:
+; de - cluster sprite mask, must be positive
+init_cluster_sprites:
+            lhld current_cluster_sprite_ptr
+			lxi b, sprite_ptrs
+            mvi a, <(sprite_ptrs + SPR_MAX)
+            sta @loop_check + 1
+            xchg
+
+            mvi a, -16
+            mvi c, 0
+@loop:
+            sub c
+            jz @end
+            dad h
+            jnc @loop
+
+
+@loop_check:
+            mvi a, TEMP_BYTE
+            cmp l
+            jnz @loop
+@exit:
+            xchg
+            shld current_cluster_sprite_ptr
             ret
 
 ; builds a render batch that includes a bounding box pos, w, h, sprite ptrs.
