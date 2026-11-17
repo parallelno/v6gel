@@ -26,6 +26,144 @@ requirement remains unmet** for several tested frames. This is a working,
 tested renderer with an explicit limitation, not a claim of a universally
 faster implementation. An update may take more than one 50 Hz display refresh.
 
+## Function-level performance breakdown
+
+These measurements use the same emulator version and six moving updates as
+the table above, with no changes to the rendering assembly. All figures are
+**emulated CPU cycles**, not host execution time or PIT ticks. Frame numbers
+below are zero-based test update numbers, not display refresh numbers.
+
+### Whole-update accounting
+
+An **inclusive cost** includes a function's nested callees. A **self cost**
+excludes the separately measured nested callees. The following categories are
+non-overlapping: each row sums exactly to its elapsed total.
+
+| Test update | Density checks | Restore spans, inclusive | Draw spans, inclusive | Scan/clip/dispatch, self | Beam checks | Renderer remainder | Total elapsed |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 0 | 4,608 | 26,484 | 40,964 | 17,212 | 12,344 | 12,756 | **114,368** |
+| 1 | 4,608 | 26,484 | 40,964 | 17,212 | 15,408 | 24,136 | **128,812** |
+| 2 | 4,608 | 26,484 | 40,964 | 17,212 | 10,728 | 11,876 | **111,872** |
+| 3 | 4,652 | 26,484 | 40,964 | 17,212 | 15,016 | 23,356 | **127,684** |
+| 4 | 4,656 | 26,484 | 46,608 | 17,476 | 21,776 | 30,352 | **147,352** |
+| 5 | 4,704 | 28,928 | 46,608 | 17,728 | 13,472 | 24,832 | **136,272** |
+
+`Renderer remainder` is measured total minus the five other categories. It
+includes pending-band traversal, skipping completed bands, band entry/exit
+instructions, the caller's CALL instructions, position commit, final return,
+and any interrupt time outside the measured functions. It is not another
+function and should not be described as pure idle time. Beam waiting here is
+**busy waiting**: repeated band traversal and `wait_band` calls consume CPU.
+There is no separate steady-state sleep function to time.
+
+For update 5, drawing is about 34.2% of elapsed time, restoration 21.2%, scan
+and dispatch 13.0%, density checks 3.5%, beam checks 9.9%, and the renderer
+remainder 18.2%. Thus optimizing only the pixel-writing kernel leaves a
+substantial part of the end-to-end cost untouched.
+
+### Function costs
+
+Counts and totals below cover **all six updates**. Per-call ranges are actual
+observed inclusive costs. Nested rows overlap: do **not** add all rows together.
+For example, `draw_full_sprite` is already included in `draw_span/full`, which
+is itself included in `scan_sprites/draw`.
+
+| Function / path | Calls | Inclusive total | Self total | Inclusive cycles/call, min..max |
+| --- | ---: | ---: | ---: | ---: |
+| `check_density` | 12 | 27,836 | 27,836 | 2,304..2,352 |
+| `wait_band` | 359 | 88,744 | 88,744 | 216..256 |
+| `scan_sprites`, erase pass | 24 | 212,840 | 51,492 | 6,688..12,744 |
+| `scan_sprites`, draw pass | 24 | 309,632 | 52,560 | 8,308..19,220 |
+| `restore_span`, full 15 rows | 53 | 127,412 | 11,448 | **2,404** |
+| `restore_span`, clipped | 14 | 33,936 | 19,488 | 1,584..3,264 |
+| `draw_span`, full 15 rows | 52 | 183,664 | 5,824 | **3,532** |
+| `draw_span`, clipped | 16 | 73,408 | 35,520 | 2,508..6,668 |
+| `restore_full_sprite`, generated kernel | 53 | 115,964 | 115,964 | **2,188** |
+| `draw_full_sprite`, generated kernel | 52 | 177,840 | 177,840 | **3,420** |
+| `restore_N`, generated clipped column kernels | 84 | 14,448 | 14,448 | 32..312 |
+| `compiled_column_row`, generated drawing column kernels | 96 | 37,888 | 37,888 | 48..752 |
+
+`/full` and `/clipped` are profiler categories, not additional assembly
+functions. The clipped column names group all generated entry points. A
+fall-through from one generated row label to the next is counted as part of
+the same call, not a new invocation. The full generated restore kernel's
+interval ends on arrival at `restore_full_done`; its cleanup is part of the
+`restore_span` wrapper. Clipped restore kernels similarly end at
+`restore_column_done`.
+
+`scan_sprites` runs eight times per update: four erase scans and four draw
+scans, each examining all ten records. Its self cost includes rejection,
+clipping, job-field writes, dispatch, loop bookkeeping, and the CALL
+instructions entering span wrappers. It does not include the span execution
+itself. `wait_band` is a non-blocking phase check despite its name; the caller
+retries different bands. The six updates made respectively **49, 63, 43, 61,
+86, and 57** calls, of which four per update admitted a transaction.
+
+### Where clipping costs time
+
+A sprite split across a band boundary requires two jobs instead of the single
+fully unrolled path, even though the combined pixel area is unchanged:
+
+| Operation on one 15-row sprite | Unsplit | Split into two clipped jobs | Extra cost |
+| --- | ---: | ---: | ---: |
+| Draw, inclusive span cost | 3,532 | 9,176 | **5,644** |
+| Restore, inclusive span cost | 2,404 | 4,848 | **2,444** |
+
+The two-piece figures are measured for the complementary splits exercised by
+this test, not arbitrary unrelated calls. A full draw wrapper costs only
+112 cycles outside its generated kernel, versus **2,220 cycles per clipped
+job** outside the six column kernels. A full restore wrapper costs 216 cycles
+outside its kernel, versus **1,392 cycles per clipped job**. Clipped drawing
+also executes a row counter and return check for each row in each column.
+
+This explains why update 4's drawing rises by exactly 5,644 cycles when one
+more sprite crosses a band boundary. Update 5's restoration then rises by
+2,444 cycles because that split becomes part of the old-frame footprint.
+Reducing clipped dispatch/column overhead is therefore a concrete optimization
+candidate, alongside reducing scheduler retries. These observations identify
+costs; this profiling change does not alter the rendering algorithm.
+
+### Active bands and position commit
+
+The sums of the four `band_begin`..`band_end` intervals for updates 0..5 are
+**85,156; 85,156; 85,156; 85,156; 91,064; 93,760** cycles. The earlier 93,760
+figure describes the final geometry, not every initial frame. Each sum equals
+restore spans + draw spans + scan self costs + **496 cycles** of band wrapper
+instructions (124 per band). The position-copy loop through the final renderer
+return, measured from `commit_positions` to `frame_complete`, costs **1,100
+cycles** per update. Its setup before `commit_positions` remains in the
+renderer remainder.
+
+### Reproduce the profile
+
+```powershell
+make -f samples/10_sprite_frame_onscr_ai/Makefile profile V6ASM=C:/Work/Programming/v6asm/target/debug/v6asm.exe
+```
+
+Alternatively, run `tests/profile_renderer.py` with Python after building.
+The report is written to
+`build/10_sprite_frame_onscr_ai/function_profile.json`, including the emulator
+version, ROM SHA-256, per-frame totals, call counts, self/inclusive costs, and
+per-call minimum/maximum costs. `V6EMUL` supplies the emulator executable.
+
+The profiler reuses the test IPC client and reads symbol addresses from the
+linker map. It stops at function entries and dynamic return addresses, reads
+the emulated cycle counter, and maintains a nested accounting stack. It handles
+tail jumps, RAM-disk stack mapping, clipped-kernel continuations, and adjacent
+breakpoints reached by a single stepped instruction. No profiling instructions
+or counters are added to the ROM. Host-side debugger pauses do not advance the
+emulated beam or PIT; they only make the measurement slower on the host.
+
+As a cross-check, its six elapsed totals match `tests/verify.py` **exactly**.
+It also checks every profiled frame against the independent full-screen
+compositor and asserts that nested self costs reconcile with the top-level
+function intervals. Function intervals start at callee entry and include the
+return instruction; the caller's CALL instruction belongs to its own self
+time. Interrupts, if any, are charged to the interval they interrupt rather
+than reported as a separate function. Startup room rendering, asset export,
+palette fade, and the demo's post-render movement logic are outside this
+steady-state renderer profile.
+
 ## Build, test and run
 
 The sample uses the same asset exporter, engine object, assembler and linker

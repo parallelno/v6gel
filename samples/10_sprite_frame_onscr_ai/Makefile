@@ -4,7 +4,7 @@
 #
 # ------------------------------------------------------------------------------
 
-.PHONY: all assets engine run rom clean help test
+.PHONY: all assets engine run rom clean help test profile
 
 # --- platform detection -------------------------------------------------------
 ifeq ($(OS),Windows_NT)
@@ -140,6 +140,9 @@ all: $(OUT_ROM) ## Export assets, assemble + link the sample ROM.
 test: $(OUT_ROM)
 	$(PYTHON) "$(SAMPLE_DIR)/tests/verify.py"
 
+profile: $(OUT_ROM)
+	$(PYTHON) "$(SAMPLE_DIR)/tests/profile_renderer.py"
+
 ## assets: (re)export this sample's assets via v6export.
 assets: $(ASSET_OBJS)
 
@@ -210,6 +213,8 @@ help:
 	@echo   engine   Assemble the v6 engine library only
 	@echo   rom      Assemble main.asm and link the ROM
 	@echo   run      Build the ROM and launch it in the emulator
+	@echo   test     Verify pixels, beam deadlines, and overload deferral
+	@echo   profile  Measure function costs in the emulator; write JSON report
 	@echo   clean    Remove this sample's build output
 	@echo   help     Show this message
 	@echo.

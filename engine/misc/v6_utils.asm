@@ -609,7 +609,7 @@ count_bits8:
 			A_TO_ZERO(0)
 			mov l, a
 		.loop 8
-			dad h \ adc l \
+			dad h \ adc l
 		.endloop
 			; a - bit count
 			ret
@@ -634,7 +634,7 @@ count_bits16:
 			A_TO_ZERO(0)
 			mov e, a
 		.loop 16
-			dad h \ adc e \
+			dad h \ adc e
 		.endloop
 			; a - bit count
 			ret
