@@ -11,16 +11,16 @@ not consistently beat it.** Do not interpret the active-work figure as a
 wall-clock result. The final conservative scheduler deliberately waits when
 the beam is too close.
 
-Measured with V6EMUL `2026.10.21-3813e34`:
+Current optimized version, measured with V6EMUL `2026.10.21-3813e34`:
 
 | Measurement | CPU cycles |
 | --- | ---: |
-| Three repeated ten-sprite updates: sum of four active bands | 93,760 each |
-| Largest measured active band | 29,880 |
-| Six moving updates, including admission, scheduling and waiting | 114,368; 128,812; 111,872; 127,684; 147,352; 136,272 |
+| Three repeated ten-sprite updates: sum of four active bands | 76,312 each |
+| Largest active band in the six-update test / stress test | 25,544 / 27,992 |
+| Six moving updates, including admission, scheduling and waiting | 100,800; 128,836; 97,652; 83,172; 96,300; 117,820 |
 | Supplied off-screen reference | 117,488 |
 
-Active work is about 20.2% below the supplied reference, before adding density
+Active work is about 35.0% below the supplied reference, before adding density
 admission, scheduler and waiting overhead. Thus **the strict end-to-end speed
 requirement remains unmet** for several tested frames. This is a working,
 tested renderer with an explicit limitation, not a claim of a universally
@@ -28,8 +28,11 @@ faster implementation. An update may take more than one 50 Hz display refresh.
 
 ## Function-level performance breakdown
 
-These measurements use the same emulator version and six moving updates as
-the table above, with no changes to the rendering assembly. All figures are
+The detailed tables in this section preserve the **pre-optimization baseline**
+from commit `2750613`. See the optimization results immediately below for the
+current code; these historical tables must not be mistaken for its costs.
+These measurements use the same emulator version and six moving updates.
+All figures are
 **emulated CPU cycles**, not host execution time or PIT ticks. Frame numbers
 below are zero-based test update numbers, not display refresh numbers.
 
@@ -164,6 +167,121 @@ than reported as a separate function. Startup room rendering, asset export,
 palette fade, and the demo's post-render movement logic are outside this
 steady-state renderer profile.
 
+## Implemented performance optimizations
+
+A **prefix** is the first N sprite rows, and a **suffix** is the remaining rows
+starting at a given source row. Because the sprite is 15 rows high and each
+band is 64 rows high, any partial intersection is always one of those two
+shapes. The optimized generator emits one complete six-column routine for
+each of the 29 nonempty prefix/suffix shapes (including the full sprite), plus
+15 height-specialized six-column restore routines. There is no general
+arbitrary-middle clipping routine: that shape cannot occur under the input
+contract.
+
+The investigation identified and implemented these changes:
+
+* **Whole-span specialization:** replace six indirect column callbacks, column
+  loop bookkeeping, and per-row counters with a single table lookup followed
+  by straight-line drawing/restoration. The full-sprite fast paths remain.
+* **Alternating drawing direction:** draw adjacent columns in opposite Y
+  directions. `INR H` reaches the next byte column, and the current Y already
+  matches its first row. This removes Y resets and some address arithmetic.
+* **Register-resident scan counter:** keep the ten-record loop counter in B,
+  saving/restoring BC only for actual intersecting jobs rather than reading
+  and rewriting a memory counter for every record.
+* **Cached band operand:** patch the band's immediate Y operand once per scan
+  instead of loading `band_y` from memory ten times.
+* **Less restrictive beam admission:** after the kernels became faster, widen
+  the admission window from 3,072 to **6,144 PIT ticks**. This is a separate
+  timing-policy change, not free speed from code optimization. The density
+  limit remains four old and four new footprints per band. See stress results
+  below for measured safety margins.
+
+### Before/after: same six moving updates
+
+| Update | Baseline elapsed | Optimized elapsed | Baseline active bands | Optimized active bands |
+| --- | ---: | ---: | ---: | ---: |
+| 0 | 114,368 | 100,800 | 85,156 | 74,736 |
+| 1 | 128,812 | 128,836 | 85,156 | 74,736 |
+| 2 | 111,872 | 97,652 | 85,156 | 74,736 |
+| 3 | 127,684 | 83,172 | 85,156 | 74,736 |
+| 4 | 147,352 | 96,300 | 91,064 | 75,460 |
+| 5 | 136,272 | 117,820 | 93,760 | 76,312 |
+
+Mean elapsed cost falls from **127,726.7 to 104,096.7 cycles (18.5% less)**.
+Active work for the final geometry falls **18.6%**, independently of beam
+waiting. Faster work changes later beam phases, so individual elapsed times
+are not guaranteed to improve: update 1 is 24 cycles slower. Four of these six
+updates beat 117,488 end to end, but two do not. The broader stress test also
+shows that this is not a universal sub-117,488 renderer.
+
+### Current function costs
+
+| Path | Baseline per call / split pair | Optimized per call / split pair |
+| --- | ---: | ---: |
+| Full sprite draw wrapper + kernel | 3,532 | **3,444** |
+| Full drawing kernel only | 3,420 | **3,332** |
+| Draw one sprite as two complementary clipped jobs | 9,176 | **3,876** |
+| Full sprite restore wrapper + kernel | 2,404 | **2,404** |
+| Restore one sprite as two complementary clipped jobs | 4,848 | **2,976** |
+| Clipped draw wrapper self cost, each job | 2,220 | **244..264** |
+| Clipped restore wrapper self cost, each job | 1,392 | **308** |
+| Scan/clip/dispatch self cost, final update | 17,728 | **15,328** |
+
+Compared with the original split paths, drawing costs 57.8% less and
+restoration costs 38.6% less. Splitting is still not free, but the extra cost
+is now small rather than exceeding the full draw cost several times over.
+
+Final optimized update accounting, with non-overlapping categories:
+
+| Category | CPU cycles |
+| --- | ---: |
+| Density checks | 4,704 |
+| Restore spans, inclusive | 25,184 |
+| Draw spans, inclusive | 35,304 |
+| Scan/clip/dispatch, self | 15,328 |
+| Beam checks | 12,856 |
+| Renderer remainder | 24,444 |
+| **Total elapsed** | **117,820** |
+
+Across all six optimized updates, `wait_band` is called 192 times versus 359
+in the baseline. The generated routines increase ROM size from **18,235 to
+25,194 bytes**; code and runtime data remain below screen RAM. RAM-disk use
+is unchanged at 24,576 bytes. No shared engine files are changed.
+
+### Extended verification and limits
+
+```powershell
+make -f samples/10_sprite_frame_onscr_ai/Makefile test profile stress V6ASM=C:/Work/Programming/v6asm/target/debug/v6asm.exe
+```
+
+The six-frame pixel test and non-invasive function profiler produce identical
+elapsed totals. The profiler's `draw_kernel/full`, `draw_kernel/clipped`,
+`restore_kernel/full`, and `restore_kernel/clipped` categories replace the old
+individual-column categories; all nested accounting still reconciles exactly.
+Current JSON reports include the ROM fingerprint for reproducibility.
+
+`tests/stress_renderer.py` runs 50 deterministic updates: every one of the
+14 possible boundary splits, four-sprite dense bands, byte-column edges,
+overlaps, and seeded random admitted positions. It checks all visible colour
+bytes against the reference and verifies the fourth plane is untouched. For
+all **200 transactions**, it checks both that the beam has already passed the
+whole band at entry and that the update finishes before the next band top.
+
+* Maximum measured band workload: **27,992 cycles**.
+* Minimum measured completion margin: **7,100 cycles**.
+* Elapsed stress-update range: **84,364..137,488 cycles**.
+* Stress updates below 117,488 cycles: **24 / 50**.
+
+Results are saved to `build/10_sprite_frame_onscr_ai/stress_results.json`.
+This is much broader emulator coverage, but still not an exhaustive proof
+over all legal old/new positions and timer phases or validation on hardware.
+The earlier caveats about multi-refresh band visibility and unchanged
+scroll/interrupt assumptions still apply. Remaining optimization targets are
+busy-wait scheduling, building band job lists during density admission, and
+avoiding repeated restoration of overlapping background bytes. These were
+not silently substituted for the tested changes above.
+
 ## Build, test and run
 
 The sample uses the same asset exporter, engine object, assembler and linker
@@ -267,10 +385,10 @@ the six columns. This removes per-row loop tests, data loads and screen-plane
 address arithmetic. A zero preserve mask becomes an immediate store; setting
 all non-preserved bits can become a single OR rather than AND followed by OR.
 
-For a clipped intersection, a row/column entry-point table jumps into an
-unrolled column chain, and a row counter stops at the clipped end. Restoration
-has length-specific unrolled entry points. Full rectangles have an additional
-fast path with no column loop. Source-background reads use `POP B` from the
+For a clipped intersection, a prefix/suffix entry-point table selects a whole
+six-column unrolled drawing routine. Restoration selects a height-specific
+six-column routine. There is no runtime column loop or row counter in these
+kernels. Full rectangles retain a fast dispatch path. Source-background reads use `POP B` from the
 RAM disk while ordinary memory stores target the visible screen.
 
 Self-modifying operands hold column addresses, continuation pointers and the
@@ -292,15 +410,15 @@ The safe-window start is conservatively set to raster `304-y`: the band's
 bottom plus eight extra lines. Remaining timer ticks there are `(y+8)*96`.
 For the four possible Y values this is computed cheaply in the high byte;
 the low byte is zero. The latched 16-bit timer value is subtracted modulo
-29,952. A band is eligible only during the first 3,072 timer ticks after that
+29,952. A band is eligible only during the first 6,144 timer ticks after that
 threshold. Circular subtraction handles windows spanning frame wrap.
 
 The safety strategy has two parts: a narrow start window and a maximum of
 four old plus four new footprints per band. Tests independently read the
 emulator raster at transaction entry and assert the complete transaction
-finishes before the next visit to that band's *top*. Twelve tested
-transactions pass; the lowest observed remaining deadline in that run was
-41,960 cycles, compared with a maximum measured workload of 29,880.
+finishes before the next visit to that band's *top*. The optimized version
+also checks 200 stress transactions, with maximum workload 27,992 cycles and
+minimum measured completion margin of 7,100 cycles.
 
 This is **emulator-validated scheduling for the documented fixed workload**,
 not a formal exhaustive hardware timing proof. Real hardware timer phase and

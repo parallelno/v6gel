@@ -24,11 +24,11 @@ class Profiler:
         self.entries = {}
         for name in ('check_density', 'wait_band', 'scan_sprites', 'restore_span', 'draw_span'):
             self.entries[symbols[name]] = name
-        for name in ('draw_full_sprite', 'restore_full_sprite'):
-            self.entries[symbols[name]] = name
         for name, address in symbols.items():
-            if re.fullmatch(r'compiled_\d+_\d+|restore_\d+', name):
-                self.entries[address] = 'compiled_column' if name.startswith('compiled_') else 'restore_column_kernel'
+            if re.fullmatch(r'draw_prefix_\d+|draw_suffix_\d+|restore_span_\d+', name):
+                full = name in ('draw_suffix_0', 'restore_span_15')
+                kind = 'restore' if name.startswith('restore') else 'draw'
+                self.entries[address] = f'{kind}_kernel/' + ('full' if full else 'clipped')
 
     def sync_breakpoints(self, wanted):
         for address in self.installed - wanted:
@@ -84,20 +84,14 @@ class Profiler:
                 commit_start = cc
             if pc in self.entries:
                 name = self.entries[pc]
-                # Row labels are also reached by fall-through inside a span;
-                # only the first row entered from the wrapper is a kernel call.
-                if name == 'compiled_column' and stack and stack[-1]['name'] == 'compiled_column':
-                    continue
                 if name in ('restore_span', 'draw_span'):
                     height = emu.memory(s['job_len'], 1)[0]
                     name += '/full' if height == 15 else '/clipped'
                 if name == 'scan_sprites':
                     mode = emu.memory(s['draw_mode'], 1)[0]
                     name += '/draw' if mode else '/erase'
-                if name == 'restore_full_sprite':
+                if name.startswith('restore_kernel/'):
                     exit_pc = s['restore_full_done']
-                elif name == 'restore_column_kernel':
-                    exit_pc = s['restore_column_done']
                 else:
                     exit_pc = emu.call(17, addr=regs['sp'])['data']
                 stack.append(dict(name=name, start=cc, exit=exit_pc, children=0))

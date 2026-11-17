@@ -13,7 +13,6 @@ job_x:      .byte 0
 job_row:    .byte 0
 job_len:    .byte 0
 scan_ptr:   .word 0
-scan_count: .byte 0
 draw_mode:  .byte 0
 render_count: .word 0
 pending_bands: .byte 0
@@ -132,7 +131,10 @@ wait_threshold:
             dad d
             mov a, h
 wait_positive:
-            cpi 12
+            ; Whole-span kernels reduce the maximum transaction workload.
+            ; 6144 PIT ticks leave about 33000 CPU cycles before the band top;
+            ; density admission still limits each pass to four footprints.
+            cpi 24
             jnc band_not_safe
             ora a
             ret
@@ -142,13 +144,15 @@ band_not_safe:
 
 ; One cheap Y rejection per sprite per pass; only intersections pay clipping.
 scan_sprites:
-            mvi a, 10
-            sta scan_count
+            lda band_y
+            sta scan_band + 1
+            mvi b, 10
 scan_next:
             inx h
             mov c, m
             inx h
-            lda band_y
+scan_band:
+            mvi a, 0
             sub c
             jc starts_inside
             cpi 15
@@ -187,6 +191,7 @@ clipped_len:
             lda band_y
             sta job_y
 dispatch_job:
+            push b
             lhld scan_ptr
             dcx h
             dcx h
@@ -200,24 +205,22 @@ dispatch_job:
 erase_job:
             call restore_span
 job_done:
+            pop b
             lhld scan_ptr
 scan_skip:
-            lda scan_count
-            dcr a
-            sta scan_count
+            dcr b
             jnz scan_next
             ret
 
-; Restore six short columns with POP B from bank 0 while writes use main RAM.
-; SP is never used for CALL/RET while mapped. IRQs are disabled by band_begin.
+; Select one complete six-column restoration kernel by clipped height.
+; All stack mapping is confined to this wrapper/kernel; IRQs are already off.
 restore_span:
             lxi h, 0
             dad sp
             shld restore_stack + 1
             lda job_len
             cpi 15
-            jz restore_full
-            lda job_len
+            jz restore_fast_full
             add a
             mov e, a
             mvi d, 0
@@ -228,43 +231,23 @@ restore_span:
             mov d, m
             xchg
             shld restore_jump + 1
-            mvi a, RAM_DISK_S0
-            out RAM_DISK_PORT
             lda job_x
             adi 0a0h
-            sta restore_column + 1
-            mvi a, 6
-            sta restore_columns + 1
-restore_column:
-            mvi h, 0
+            mov h, a
             lda job_y
             mov l, a
-            sphl
+            mov e, a
+            mvi a, RAM_DISK_S0
+            out RAM_DISK_PORT
 restore_jump:
             jmp 0
-restore_column_done:
-            ; Columns: A0+x,A1+x,C0+x,C1+x,E0+x,E1+x.
-            lda restore_columns + 1
-            ani 1
-            mvi e, 1
-            jz restore_step
-            mvi e, 31
-restore_step:
-            lda restore_column + 1
-            add e
-            sta restore_column + 1
-restore_columns:
-            mvi a, 6
-            dcr a
-            sta restore_columns + 1
-            jnz restore_column
 restore_full_done:
             xra a
             out RAM_DISK_PORT
 restore_stack:
             lxi sp, 0
             ret
-restore_full:
+restore_fast_full:
             lda job_x
             adi 0a0h
             mov h, a
@@ -275,64 +258,41 @@ restore_full:
             out RAM_DISK_PORT
             jmp restore_full_sprite
 
-; Six column spans eliminate per-pixel screen-plane address arithmetic.
+; A clipped 15-row sprite is always a prefix or suffix of its source image.
+; Select a whole six-column kernel once, not six individual column callbacks.
 draw_span:
             lda job_len
             cpi 15
-            jz draw_full
+            jz draw_fast_full
             lda job_row
-            mov l, a
-            mvi h, 0
-            dad h
-            mov d, h
-            mov e, l
-            dad h
+            ora a
+            jnz draw_suffix
+            lda job_len
+            jmp draw_index
+draw_suffix:
+            ; Nonzero row implies a suffix ending at the sprite's last row.
+draw_suffix_index:
+            adi 15
+draw_index:
+            add a
+            mov e, a
+            mvi d, 0
+            lxi h, draw_spans
             dad d
-            dad h
-            lxi d, compiled_rows
-            dad d
-draw_table_ready:
-            shld draw_ptr + 1
-            lda job_x
-            adi 0a0h
-            sta draw_column + 1
-            mvi a, 6
-            sta draw_columns + 1
-draw_ptr:
-            lxi h, 0
             mov e, m
             inx h
             mov d, m
-            inx h
-            shld draw_ptr + 1
-draw_column:
-            mvi h, 0
+            xchg
+            shld draw_jump + 1
+            lda job_x
+            adi 0a0h
+            mov h, a
             lda job_y
             mov l, a
-            lda job_len
-            mov b, a
-            push h
-            lxi h, draw_column_done
-            xthl
-            push d
-            ret
-draw_column_done:
-            lda draw_columns + 1
-            ani 1
-            mvi e, 1
-            jz draw_step
-            mvi e, 31
-draw_step:
-            lda draw_column + 1
-            add e
-            sta draw_column + 1
-draw_columns:
-            mvi a, 6
-            dcr a
-            sta draw_columns + 1
-            jnz draw_ptr
-            ret
-draw_full:
+            mov e, a
+draw_jump:
+            jmp 0
+draw_fast_full:
             lda job_x
             adi 0a0h
             mov h, a
