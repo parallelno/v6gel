@@ -39,24 +39,31 @@ main:
             ei
 main_loop:
             call renderer
+
 frame_complete:
+            lda animation_tick
+            inr a
+            sta animation_tick
+            ani 1; 31
+            jnz main_loop
+
             ; Move all ten sprites in byte columns, wrapping at the right edge.
             ; Tests also vary Y to exercise dirty footprints across band edges.
             lxi h, sprites
             mvi b, 10
-            lda animation_tick
-            inr a
-            sta animation_tick
-            ani 31
-            jnz main_loop
 move_loop:
+@update_pos_x:
             inr m
             mov a, m
             cpi 31
-            jc move_ok
+            jc @update_pos_y
             mvi m, 0
-move_ok:
+@update_pos_y:
             inx h
+            dcr m
+            jnz @next_sprite
+            mvi m, 255-15
+@next_sprite:
             inx h
             dcr b
             jnz move_loop
