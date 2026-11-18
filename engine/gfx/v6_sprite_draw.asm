@@ -53,9 +53,9 @@ draw_sprite_width_height:
 ; pixels data:
 
 ; 8 width:
-; odd line from left to right
+; odd line
 ; mask, color_scr1, color_scr2, color_scr3
-; even line from right to left
+; even line
 ; mask, color_scr3, color_scr2, color_scr1
 
 ; 16 width:
@@ -106,12 +106,9 @@ sprite_draw_vm:	; VM stands for: V - variable height, M - mask support
 			xchg
 			; d, b - width
 			; e, c - height
-			mov a, b
-			rrc
-			jc @width16
-			rrc
-			jc @width24
-			jmp @width8
+			dcr d
+			jz @width16
+			jp @width24
 
 @width8:
 			mov a, h
@@ -268,26 +265,27 @@ sprite_draw_vm:	; VM stands for: V - variable height, M - mask support
 			jmp draw_sprite_ret
 
 @width24:
+            ; d=1
 			mov a, h
 			sta @width24_offset00 + 1
-			inr a
+			add d
 			sta @width24_offset01 + 1
-			inr a
+		    add d
 			sta @width24_offset02 + 1
 			adi 0x20 - 2
 			sta @width24_offset20 + 1
 			sta @width24_offset20_2 + 1
-			inr a
+			add d
 			sta @width24_offset21 + 1
 			sta @width24_offset21_2 + 1
-			inr a
+			add d
 			sta @width24_offset22 + 1
 			sta @width24_offset22_2 + 1
 			adi 0x40 - 0x22
 			sta @width24_offset40 + 1
-			inr a
+			add d
 			sta @width24_offset41 + 1
-			inr a
+			add d
 			sta @width24_offset42 + 1
 
 @width24_loop:

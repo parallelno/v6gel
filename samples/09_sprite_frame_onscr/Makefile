@@ -1,4 +1,4 @@
-# v6gel — samples/09_sprite_frame_onscr Makefile
+# v6gel — samples/09_sprite_frame_offscreen Makefile
 #
 #   TODO: update this header to reflect the sample's purpose and features.
 #

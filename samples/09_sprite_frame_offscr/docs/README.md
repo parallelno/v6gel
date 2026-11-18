@@ -1,5 +1,15 @@
 # Sprite Clustering Using a Spatial Grid
 
+## Resolution
+
+The research is closed. It does not have an efficient solution for problem:
+* sprites moved.
+* it caused cluster reformation.
+* old sprite belonged to cluster A, new sprite belongs to cluster B.
+* cluster drawing includes the erase of the old sprites first.
+When we erase that sprite? The problem that this design assume we render each
+cluster in isolation, but old and new sprites might not belong different clusters.
+
 ## Problem
 
 Rendering sprites on the screen causes flickering. The flickering occures a beam crossing the sprite rendering line.
@@ -38,7 +48,7 @@ Gain:
 
 ## 1. Input and Data Structures
 
-- Maximum of 32 sprites.
+- Maximum of 16 sprites.
 - Sprites are sorted, and each `sprite_ID` corresponds to the sprite's index in the array, starting at 0.
 - Each sprite stores:
   - `sprite_ID`
@@ -50,7 +60,7 @@ Gain:
 
   `cell_sprite_mask = sprite_mask1 OR sprite_mask2 OR ... OR sprite_maskN`
 
-- Cluster array: 32 entries, each storing a `cluster_sprite_mask` containing the bitwise OR of the masks of all sprites belonging to that cluster. An entry with a mask of zero is considered empty.
+- Cluster array: 16 entries, each storing a `cluster_sprite_mask` containing the bitwise OR of the masks of all sprites belonging to that cluster. An entry with a mask of zero is considered empty.
 
 ## 2. Algorithm
 
@@ -85,7 +95,7 @@ Because each sprite belongs to exactly one cluster, the masks of distinct existi
 
 Since sprites are processed in ascending `sprite_ID` order, when processing sprite `i`, only sprites with IDs from `0` through `i - 1` have been processed.
 
-Consequently, the number of active clusters cannot exceed `i`. The algorithm can limit cluster-array scanning to at most `i` entries instead of scanning all 32 entries.
+Consequently, the number of active clusters cannot exceed `i`. The algorithm can limit cluster-array scanning to at most `i` entries instead of scanning all 16 entries.
 
 To preserve this optimization:
 
