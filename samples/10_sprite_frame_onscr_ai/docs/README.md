@@ -2,6 +2,13 @@
 
 ## Status and measured result
 
+**Research status: closed. This implementation is not suitable for the target
+animation-heavy game.** Its drawing speed depends on expanding sprite frames
+into executable code, and its current interrupt handling does not meet the
+requirement for stable music, game ticks, controls, and palette updates. The
+results below are retained as research findings, not a production renderer
+recommendation. See "Animation storage and code expansion" below.
+
 This sample renders ten overlapping knights directly into the three colour
 planes at `$A000..$FFFF`. It does not construct an off-screen composite or copy
 one to the screen. Sample 09 and its unfinished implementation are unchanged.
@@ -380,6 +387,51 @@ pieces. Its old and new positions need not intersect the same bands.
 substitute. It decodes the exporter's alternating column/plane traversal and
 emits assembly into the build directory.
 
+### Animation storage and code expansion
+
+A **compiled sprite** here means executable **8080 instructions containing
+immediate mask and colour constants**, not a compact sprite-data format read
+by a general drawing routine. For example, source mask/colour bytes can become:
+
+```asm
+            mov a, m
+            ani 192     ; mask embedded in the instruction stream
+            ori 30      ; colour bits embedded in the instruction stream
+            mov m, a
+```
+
+`KNIGHT.BIN` is read by the Python generator at build time. At runtime the
+renderer executes the generated instructions; it does not fetch that frame's
+mask/colour stream from the RAM disk. The source format already uses the
+engine's one mask plus three colour-plane bytes per eight-pixel group. This
+approach does **not** make that data smaller.
+
+The current implementation specializes only one idle frame into 29 whole-span
+drawing variants: 14 prefixes and 15 suffixes, including the full sprite.
+Supporting another animation frame this way requires another frame-specific
+set of executable routines and entry points. Much of the pixel work is
+duplicated between those variants. The height-specific background restoration
+routines can be shared; the frame-specific mask/colour instructions cannot.
+Consequently, code size grows with the number of compiled animation frames.
+The measured ROM growth from 18,235 to 25,194 bytes was the cost of this
+sample's optimization, **not** a fixed overhead that covers unlimited frames.
+
+Generated routines and their tables currently reside in ordinary CPU memory
+below screen RAM. The sample uses the RAM disk for the immutable background;
+it has **no runtime animation loading, code overlay, or banked execution
+mechanism** for those compiled sprites. Storing the original animation data
+on the RAM disk alone does not let these routines render arbitrary frames.
+The RAM disk is not inherently incapable of holding generated code, but
+copying or mapping that code for execution would require a separate design,
+consume storage for the expanded representation, and introduce costs not
+covered by these measurements.
+
+**Conclusion:** this specialization is a poor fit for a game with many sprite
+animations that must remain compact and RAM-disk-resident. Its timings must
+not be presented as the performance of a general data-driven sprite renderer.
+A shared routine reading compact frame data would be a different approach
+and would need its own performance investigation.
+
 For a complete 15-row intersection, generated code is fully unrolled over
 the six columns. This removes per-row loop tests, data loads and screen-plane
 address arithmetic. A zero preserve mask becomes an immediate store; setting
@@ -393,8 +445,24 @@ RAM disk while ordinary memory stores target the visible screen.
 
 Self-modifying operands hold column addresses, continuation pointers and the
 saved stack pointer, following the engine's existing assembly style. The
-renderer is not reentrant. Interrupts are disabled before the stack is mapped
-and restored only after SP and RAM-disk mapping return to normal.
+renderer is not reentrant. At `band_begin` in `renderer.asm`, `DI` disables
+interrupts for the entire restore-and-draw transaction; `EI` appears just
+before `band_end`, after SP and RAM-disk mapping return to normal. This is
+not merely a few protected instructions around a mapping change.
+
+In addition, `main.asm` replaces the engine interrupt service routine with
+`frame_interrupt`, an empty `EI`/`RET` handler. The sample therefore does not
+provide steady-state music playback, game ticks, controls polling, or palette
+updates through the engine handler. There are also two short initialization
+critical sections for installing the vector and programming the timer.
+
+These are limitations of this implementation, not inherent requirements of
+the source sprite format or horizontal-band algorithm. The compiled drawing
+itself does not repurpose SP, but restoration uses it as a RAM-disk pointer.
+Supporting the real engine handler requires interrupt-safe stack/data access,
+correct RAM-disk mode bookkeeping, and beam budgets that include interrupt
+execution time. Simply removing `DI` or restoring the old vector is not safe.
+That integration was not implemented or validated before closing this research.
 
 ## Beam scheduling
 
