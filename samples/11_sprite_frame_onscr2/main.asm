@@ -24,7 +24,6 @@
 .include "sprites.asm"
 
 .include "frame_sync.asm"
-.include "renderer_offscr.asm"
 .include "renderer_onscr.asm"
 .include "misc.asm"
 
