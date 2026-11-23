@@ -1,27 +1,13 @@
 init_render:
-            ; swap band_sprites1 & band_sprites2
+            ; init band_sprites1 & band_sprites2
             lxi h, band_sprites1
             shld band_sprites_new
             lxi h, band_sprites2
             shld band_sprites_old
 
-            ; swap bands_first_sprite1 & bands_first_sprite2
-            lxi h, bands_first_sprite1
-            shld bands_first_sprite_new
-            lxi h, bands_first_sprite2
-            shld bands_first_sprite_old
-
-            ; swap band_costs1 & band_costs2
-            lxi h, band_costs1
-            shld band_costs_new
-            lxi h, band_costs2
-            shld band_costs_old
-
-            ; swap band_counts1 & band_counts2
-            lxi h, band_counts1
-            shld band_counts_new
-            lxi h, band_counts2
-            shld band_counts_old
+            ; init band_new_offset
+            A_TO_ZERO(0)
+            sta band_new_offset
             ret
 
 ; renders sprites to the back buffer, then copies them to the screen
@@ -34,6 +20,8 @@ update_render_onscr:
             ret
 
 ; v1. 1468 cc
+; v2. 1320 cc
+; v3. 712 cc
 swap_bands:
             ; swap band_sprites_new & band_sprites_old
             lhld band_sprites_new
@@ -43,38 +31,48 @@ swap_bands:
             shld band_sprite_tail
             shld band_sprites_old
 
-            ; swap bands_first_sprite_new & bands_first_sprite_old
-            lhld bands_first_sprite_new
-            xchg
-            lhld bands_first_sprite_old
-            shld bands_first_sprite_new
-            shld bands_first_sprite_old
+            ; switch band_new_offset
+            lxi h, band_new_offset
+            inr m
 
-            ; swap band_costs_new & band_costs_old
-            lhld band_costs_new
-            xchg
-            lhld band_costs_old
-            shld band_costs_new
-            shld band_costs_old
+            ; unroll mem_erase same way as jmp_tbl in mem_copy_to_ram_disk
 
-            ; swap band_counts_new & band_counts_old
-            lhld band_counts_new
-            xchg
-            lhld band_counts_old
-            shld band_counts_new
-            shld band_counts_old
+            ; erase bands new
+            ERASE_BUF_LEN = BAND_MAX * band.size
 
-            ; erase bands_first_sprite1 and bands_first_sprite2
-            ; erase band_costs1 and band_costs2
-            ; erase band_counts1 and band_counts2
-            ERASE_BUF_LEN = _erase_buff_end - _erase_buff_start
-            lxi b, _erase_buff_end
-            lxi d, ERASE_BUF_LEN / 32 - 1
+            lda band_new_offset
+            rrc ; check the 0-bit
+            jc @band_swapped
+            lxi h, bands1
+            lxi b, bands1 + ERASE_BUF_LEN
+            jmp @clear_buffs
+@band_swapped:
+            lxi h, bands2
+            lxi b, bands2 + ERASE_BUF_LEN
+@clear_buffs
+            ; hl - source
+            ; bc - source + len
+            call mem_erase8
+
+
+/*
+            lda band_new_offset
+            rrc ; check the 0-bit
+            jc @band_swapped
+            lxi b, bands1 + ERASE_BUF_LEN
+            jmp @clear_buffs
+@band_swapped:
+            lxi b, bands2 + ERASE_BUF_LEN
+@clear_buffs
+            lxi d, 0
             A_TO_ZERO(0)
             call mem_erase_sp
+            */
             ret
 
+
 ; v1. 12528 cc
+; v2. 12572 cc
 update_bands:
             ; init the loop
             A_TO_ZERO(0)
@@ -231,42 +229,59 @@ init_band_sprite_gfx:
             add c           ; cost x3 ; width24
 @save_cost:
             ; a - render cost
+            mov c, a ; tmp cost
             lxi h, update_bands_sprite_idx + 1
-            mov e, m
-            mvi d, 0
-            ; de - sprite idx
-            lhld band_costs_new
-            dad d ; hl - ptr to the band cost
-            add m
+            mov l, m
+            mvi h, 0
+            dad h ; HL *=4,
+            dad h ; because the band.size is 4 bytes
+            lxi d, bands1
+            lda band_new_offset
+            rrc ; check the 0-bit
+            jz @calc_band_ptr
+            lxi d, bands2
+@calc_band_ptr:
+            dad d
+            ; update band cost
+            mov a, m
+            add c
             mov m, a
-            jnc @save_first_sprite_ptr
+            jnc @save_count
             mvi m, 255 ; clamp to max
 
-@save_first_sprite_ptr:
-            ; save ptr to band_sprite if it wasn't saved before
-            lhld bands_first_sprite_new
-            dad d
-            dad d ; two dad because its an addr
+            ; update the band count
+@save_count:
+            HL_ADVANCE(band.cost, band.count)
+            inr m
+
+            ; update the band first sprite
+            HL_ADVANCE(band.count, band.sprite)
             pop b
             ; b - ptr to current band_sprite
-            ; check if band first_sprite was already inited
+            ; check if a band first sprite already inited
             A_TO_ZERO(0)
             ora m
-            inx h
+            HL_ADVANCE(band.sprite, band.sprite + 1)
             ora m
-            jnz @inc_sprite_counter
+            rnz
             mov m, b
-            dcx h
+            HL_ADVANCE(band.sprite + 1, band.sprite)
             mov m, c
-@inc_sprite_counter:
-            lhld band_counts_new
-            dad d
-            inr m
             ret
 
 
 ; erase old sprites, draw new sprites.
 draw_bands:
+            lxi d, bands1
+            lda band_new_offset
+            rrc ; check the 0-bit
+            jz @loop
+            lxi d, bands2
+@loop:      ; infinite loop over all bands
+            ret
+
+
+
 /*
             lxi b, 0
             ; infinite loop over all bands

@@ -43,64 +43,36 @@ BAND_HEIGHT = 32
 band_sprites1: band_sprite[SPR_MAX * 2]
 band_sprites2: band_sprite[SPR_MAX * 2]
 
-; the next avaiable entry in band_spritesN
-band_sprite_tail:
-    .storage ADDR_LEN
-
-
-; align buffers for fast erase
-_safe_word:
-            .storage 2
-.align 32
-_erase_buff_start:
-
 ; points to the current band_sprites1 or band_sprites2.
 ; band_sprites_new and band_sprites_old swap every next frame.
 band_sprites_new: .storage ADDR_LEN
 band_sprites_old: .storage ADDR_LEN
 
-; ptr to the first sprite in the in band_spritesN new.
-bands_first_sprite1:
-    .storage BAND_MAX * ADDR_LEN
-bands_first_sprite2:
-    .storage BAND_MAX * ADDR_LEN
-
-; render cost; used for beam avoidance.
-band_costs1:
-    .storage BAND_MAX
-band_costs2:
-    .storage BAND_MAX
-
-; number of sprites in each band
-band_counts1:
-    .storage BAND_MAX
-band_counts2:
-    .storage BAND_MAX
-
-_aligner:
-            .align 32
-_erase_buff_end:
-
-; TODO: check if combining first_sprite, costs, counts into one band is more
-; efficient
-
-; points to the current bands_first_sprite1 or bands_first_sprite2.
-; bands_first_sprite_new and bands_first_sprite_old swap every next frame.
-bands_first_sprite_new:
-    .storage ADDR_LEN
-bands_first_sprite_old:
+; the next avaiable entry in band_spritesN
+band_sprite_tail:
     .storage ADDR_LEN
 
-; points to the current band_costs1 or band_costs2.
-; band_costs_new and band_costs_old swap every next frame.
-band_costs_new:
-    .storage ADDR_LEN
-band_costs_old:
-    .storage ADDR_LEN
 
-; points to the current band_counts1 or band_counts2.
-; band_counts_new and band_counts_old swap every next frame.
-band_counts_new:
-    .storage ADDR_LEN
-band_counts_old:
-    .storage ADDR_LEN
+; contains the band context
+.struct band
+    cost: byte  ; render cost; used for beam avoidance.
+    count: byte ; number of sprites in band
+    sprite: word ; ptr to the first sprite in the in band_spritesN.
+.endstruct
+
+
+; align buffers for fast erase
+.storage 2
+.align 32
+bands1: band[BAND_MAX]
+.align 32
+
+; align buffers for fast erase
+.storage 2
+.align 32
+bands2: band[BAND_MAX]
+.align 32
+
+; if 0-bit is zero, bands1 is new, and vise versa
+band_new_offset:
+    .storage BYTE_LEN
