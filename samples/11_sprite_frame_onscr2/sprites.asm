@@ -63,15 +63,11 @@ band_sprite_tail:
 
 ; align buffers for fast erase
 .storage 2
-.align 32
 bands1: band[BAND_MAX]
-.align 32
 
 ; align buffers for fast erase
 .storage 2
-.align 32
 bands2: band[BAND_MAX]
-.align 32
 
 ; if 0-bit is zero, bands1 is new, and vise versa
 band_new_offset:

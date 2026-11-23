@@ -39,23 +39,6 @@ swap_bands:
 
             ; erase bands new
             ERASE_BUF_LEN = BAND_MAX * band.size
-
-            lda band_new_offset
-            rrc ; check the 0-bit
-            jc @band_swapped
-            lxi h, bands1
-            lxi b, bands1 + ERASE_BUF_LEN
-            jmp @clear_buffs
-@band_swapped:
-            lxi h, bands2
-            lxi b, bands2 + ERASE_BUF_LEN
-@clear_buffs
-            ; hl - source
-            ; bc - source + len
-            call mem_erase8
-
-
-/*
             lda band_new_offset
             rrc ; check the 0-bit
             jc @band_swapped
@@ -67,7 +50,6 @@ swap_bands:
             lxi d, 0
             A_TO_ZERO(0)
             call mem_erase_sp
-            */
             ret
 
 

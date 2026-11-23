@@ -4,9 +4,9 @@
 .include "misc/v6_dzx0.asm"
 
 
+.opt
 ; shared chunk of code to restore SP
 ; and dismount the RAM Disk
-.opt
 restore_sp:
 			lxi sp, TEMP_ADDR
 			RAM_DISK_OFF()
@@ -14,6 +14,7 @@ restore_sp:
 .endopt
 
 
+.opt
 ; erase a memory buffer (ram)
 ; 	hl - source
 ;	bc - source + len
@@ -24,7 +25,6 @@ restore_sp:
 ; loop: 32-64cc
 ; erase 4 bytes: 48 + 32*4 + 32 * 1 = 208
 ; erase 32 bytes: 48 + 32*32 + 32 * 1 = 1104
-.opt
 mem_erase:
 			mvi e, 0
 ; e - filler
