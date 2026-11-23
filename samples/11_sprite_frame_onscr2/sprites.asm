@@ -6,7 +6,7 @@ SPR_MAX = 10 ; max number of sprites to render
     frame_ptr: word ; ptr to a sprite frame
 .endstruct
 
-sprites:  sprite (scr_addr_y=190, scr_addr_x=SPRITE_X_SCR_ADDR + 27, frame_ptr=_knight + _knight_idle_0_0_relative)
+sprites:  sprite (scr_addr_y=18, scr_addr_x=SPRITE_X_SCR_ADDR, frame_ptr=_knight + _knight_idle_0_0_relative)
 sprite01: sprite (scr_addr_y=203, scr_addr_x=SPRITE_X_SCR_ADDR + 30, frame_ptr=_knight + _knight_idle_0_0_relative)
 sprite02: sprite (scr_addr_y= 63, scr_addr_x=SPRITE_X_SCR_ADDR + 18, frame_ptr=_knight + _knight_idle_0_0_relative)
 sprite03: sprite (scr_addr_y=156, scr_addr_x=SPRITE_X_SCR_ADDR + 24, frame_ptr=_knight + _knight_idle_0_0_relative)
@@ -25,50 +25,82 @@ sprite14: sprite (scr_addr_y=171, scr_addr_x=SPRITE_X_SCR_ADDR + 1, frame_ptr=_k
 
 
 BAND_MAX = 8
-
-_safe_word:
-            .storage 2
-.align 32
+BAND_HEIGHT = 32
 
 ; sprite rendered in a band. can be a verticaly split portion.
 .struct band_sprite
+    band_idx: byte  ; band index
     scr_addr_y: byte
     scr_addr_x: byte
-    height: byte ; width (0=8pxs, 1=16pxs, 2=24pxs, 3=32pxs)
-    width:  byte ; height (in pixels)
-    gfx_ptr: word ; ptr to a sprite frame
-    draw_func: word
-    next_ptr: word ; ptr to the next band_sprite in a band
+    height: byte    ; height (in pixels)
+    width: byte     ; width (0=8pxs, 1=16pxs, 2=24pxs, 3=32pxs)
+    gfx_ptr: word   ; ptr to a sprite frame
 .endstruct
 
-; contigues list of new and old band sprites. the list length is doubled because
-; every sprite can be split.
-band_sprites_new: band_sprite[SPR_MAX * 2]
-band_sprites_old: band_sprite[SPR_MAX * 2]
+; list of new and old band sprites. the list length is doubled because every
+; sprite can be split. To know what which one is new, read band_sprites_new and
+; band_sprites_old
+band_sprites1: band_sprite[SPR_MAX * 2]
+band_sprites2: band_sprite[SPR_MAX * 2]
 
-================================================================================
+; the next avaiable entry in band_spritesN
+band_sprite_tail:
+    .storage ADDR_LEN
 
-band_sprites_new and band_sprites_old must also be swapped.
-also think if swapping new_sprites and old_sprites of every band is necessary
 
-================================================================================
+; align buffers for fast erase
+_safe_word:
+            .storage 2
+.align 32
+_erase_buff_start:
 
-last_band_sprite_new_ptr: .storage ADDR_LEN ; ptr to next vacant entry in band_sprites_new
+; points to the current band_sprites1 or band_sprites2.
+; band_sprites_new and band_sprites_old swap every next frame.
+band_sprites_new: .storage ADDR_LEN
+band_sprites_old: .storage ADDR_LEN
 
-; ptr to next vacant entry in band_sprites_new for each band
-last_bands_new_sprite: .storage BAND_MAX * ADDR_LEN
+; ptr to the first sprite in the in band_spritesN new.
+bands_first_sprite1:
+    .storage BAND_MAX * ADDR_LEN
+bands_first_sprite2:
+    .storage BAND_MAX * ADDR_LEN
 
-.struct band
-    new_sprites: word ; ptr to a linked list of band_sprite
-    old_sprites: word ; ptr to a linked list of band_sprite
-.endstruct
+; render cost; used for beam avoidance.
+band_costs1:
+    .storage BAND_MAX
+band_costs2:
+    .storage BAND_MAX
 
-bands: band[BAND_MAX]
-
-.if bands.size > 256
-    .error "bands.size > 256"
-.endif
+; number of sprites in each band
+band_counts1:
+    .storage BAND_MAX
+band_counts2:
+    .storage BAND_MAX
 
 _aligner:
             .align 32
-_filler_end:
+_erase_buff_end:
+
+; TODO: check if combining first_sprite, costs, counts into one band is more
+; efficient
+
+; points to the current bands_first_sprite1 or bands_first_sprite2.
+; bands_first_sprite_new and bands_first_sprite_old swap every next frame.
+bands_first_sprite_new:
+    .storage ADDR_LEN
+bands_first_sprite_old:
+    .storage ADDR_LEN
+
+; points to the current band_costs1 or band_costs2.
+; band_costs_new and band_costs_old swap every next frame.
+band_costs_new:
+    .storage ADDR_LEN
+band_costs_old:
+    .storage ADDR_LEN
+
+; points to the current band_counts1 or band_counts2.
+; band_counts_new and band_counts_old swap every next frame.
+band_counts_new:
+    .storage ADDR_LEN
+band_counts_old:
+    .storage ADDR_LEN

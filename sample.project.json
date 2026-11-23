@@ -1,8 +1,8 @@
 {
   "name": "sample",
   "run": {
-    "executable": "build\\09_sprite_frame_onscr\\09_sprite_frame_onscr.rom",
-    "debugArtifact": "build\\09_sprite_frame_onscr\\09_sprite_frame_onscr.elf",
+    "executable": "build\\11_sprite_frame_onscr2\\11_sprite_frame_onscr2.rom",
+    "debugArtifact": "build\\11_sprite_frame_onscr2\\11_sprite_frame_onscr2.elf",
     "loadAddr": "0x100",
     "fddReadOnly": false,
     "speed": "100%",

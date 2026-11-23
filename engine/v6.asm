@@ -53,6 +53,7 @@
 
 .include "gfx/v6_sprite.asm"
 .include "gfx/v6_sprite_draw.asm"
+.include "gfx/v6_sprite_draw_onscr.asm"
 .include "gfx/v6_sprite_erase.asm"
 .include "gfx/v6_sprite_copy_to_scr.asm"
 .include "gfx/v6_sprite_draw_invis.asm"

@@ -1,0 +1,52 @@
+
+
+; swaps new_sprites and old_sprites ptrs of every bound
+; uses:
+; a, bc, de, hl
+; v1 1228 cc
+swap_band_sprite_lists:
+            lxi h, bands.new_sprites
+            lxi d, bands.old_sprites
+            mvi c, BAND_MAX
+@loop:
+            ; --- lo byte swap (HL = new, DE = old) ---
+            mov b, m
+            ldax d
+            xchg
+            ; HL = old, DE = new
+            stax d
+            mov m, b
+            inx h
+            inx d
+
+            ; --- hi byte swap (HL = old, DE = new) ---
+            mov b, m
+            ldax d
+            xchg
+            ; HL = new, DE = old
+            stax d
+            mov m, b
+            ; The next step is 3 bytes for both ptrs, and the old is 2 bytes
+            ; ahead of new. So we can advance DE by one byte, then copy DL to HL.
+            inx d
+            mov l, e
+            mov h, d
+            inx d
+            inx d
+
+@loop_check:
+            dcr c
+            jnz @loop
+            ret
+
+; v2. 2080 cc
+swap_band_sprite_lists2:
+            lxi h, bands
+            mvi c, BAND_MAX
+@loop:
+            mov a, m
+            RLC_(4)
+            mov m, a
+            dcr c
+            jnz @loop
+            ret

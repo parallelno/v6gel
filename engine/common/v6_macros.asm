@@ -318,26 +318,22 @@ BY_A			= 5
 			mov h, a
 .endmacro
 
-; bc = a + int16_const
-; 36 cc
-.macro BC_TO_A_PLUS_INT16(int16_const)
-			adi <int16_const
-			mov c, a
-			aci >int16_const
-			sub c
-			mov b, a
+
+; hl = a * 2 + int16_const
+; cc = 40
+.macro HL_TO_AX2_PLUS_INT16(int16_const)
+			add a
+			HL_TO_A_PLUS_INT16(int16_const)
 .endmacro
 
-; bc = a * 2 + int16_const
-; cc = 40
-.macro BC_TO_AX2_PLUS_INT16(int16_const)
-			add a
-			adi <int16_const
-			mov c, a
-			aci >int16_const
-			sub c
-			mov b, a
+; hl = a * 4 + int16_const
+; cc = 44
+.macro HL_TO_AX4_PLUS_INT16(int16_const)
+			ADD_A(2)
+			HL_TO_A_PLUS_INT16(int16_const)
 .endmacro
+
+
 ; de = a * 2 + int16_const
 ; cc = 40
 .macro DE_TO_AX2_PLUS_INT16(int16_const)
@@ -348,26 +344,26 @@ BY_A			= 5
 			sub e
 			mov d, a
 .endmacro
-; hl = a * 2 + int16_const
-; cc = 40
-.macro HL_TO_AX2_PLUS_INT16(int16_const)
-			add a
+
+
+; bc = a + int16_const
+; 36 cc
+.macro BC_TO_A_PLUS_INT16(int16_const)
 			adi <int16_const
-			mov l, a
+			mov c, a
 			aci >int16_const
-			sub l
-			mov h, a
+			sub c
+			mov b, a
 .endmacro
 
-; cc = 44
-.macro HL_TO_AX4_PLUS_INT16(int16_const)
-			ADD_A(2)
-			adi <int16_const
-			mov l, a
-			aci >int16_const
-			sub l
-			mov h, a
+
+; bc = a * 2 + int16_const
+; cc = 40
+.macro BC_TO_AX2_PLUS_INT16(int16_const)
+			add a
+			BC_TO_A_PLUS_INT16(int16_const)
 .endmacro
+
 
 .macro CPI_ZERO(int8_const = 0)
 		.if int8_const != 0

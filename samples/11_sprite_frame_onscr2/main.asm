@@ -35,16 +35,9 @@ main:
             call room_copy_scr_to_backbuffs
             call set_palette_fadein
 
+            call init_render
+
 
 main_loop:
-            ; if UP pressed, render directly to the screen,
-            ; otherwise render to the back buffer, then copy to the screen.
-            ; lda v6_action_code
-            ; ani CONTROL_CODE_UP
-            ; jnz @render_to_scr
-            ;call renderer_offscr
-            ;jmp @cont
-@render_to_scr:
-            call renderer_onscr
-@cont:
+            call update_render_onscr
             jmp main_loop
