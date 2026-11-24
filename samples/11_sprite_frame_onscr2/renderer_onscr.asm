@@ -267,7 +267,6 @@ draw_bands:
             rrc ; check the 0-bit
             jnc @main_loop
             xchg
-
 @main_loop:
             ; de - bands new
             ; hl - bands old
@@ -277,6 +276,7 @@ draw_bands:
 
             push h
             push d
+
 
             ; get new+old cost
             mov a, m
@@ -310,7 +310,9 @@ draw_bands:
             cmp c
             jc @next_beam
 
+
 @render_beam:
+
             ; de - bands new
             ; hl - bands old
 
@@ -330,14 +332,16 @@ draw_bands:
             call erase_band_sprites
             pop d
             pop h
-*/
 
+*/
             ; erase costs to mark the beam rendered
             A_TO_ZERO(0)
             mov m, a
             stax d
 
-            ; increase the all beams sprite total counter
+
+
+            ; decrease the beams total sprite counter
             lxi h, band_sprites_count
             dcr m
             jz @exit
