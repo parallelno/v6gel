@@ -182,6 +182,10 @@ init_band_sprite:
             lxi h, band_sprites_count
             inr m
 
+            mvi a, b1110_0000
+            ana e
+            sta @band_y + 1
+
             lhld band_sprite_tail
             push h
             ; hl - band sprite addr
@@ -214,11 +218,12 @@ init_band_sprite_gfx:
             ; a - render cost
             mov c, a ; tmp cost
 
-            lda update_bands_sprite_idx + 1
-            add a ; sprite_idx * 4
-            add a ; because the band.size is 4 bytes
+@band_y:
+            mvi a, TEMP_BYTE
+            rrc
             mov l, a
             mvi h, 0
+            ; hl - band_idx * 4
 
             ; TODO: instead of band_new_offset use bands1/bands2 swap
             lda band_new_offset
@@ -324,8 +329,8 @@ draw_bands:
 
 @render_beam:
 
-            ; de - bands new
-            ; hl - bands old
+            ; hl - bands new
+            ; de - bands old
 
 /*
             ; erase old sprites
@@ -351,10 +356,17 @@ draw_bands:
             stax d
 
 
+            HL_ADVANCE(band.cost, band.count)
+            mov a, m
+            cma
+            inr a
+            ; a = -band count
 
             ; decrease the beams total sprite counter
             lxi h, band_sprites_count
-            dcr m
+            add m
+            mov m, a
+
             jz @exit
 
 @next_beam:
