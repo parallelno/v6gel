@@ -184,7 +184,7 @@ init_band_sprite:
 
             mvi a, b1110_0000
             ana e
-            sta @band_y + 1
+            sta init_band_band_y + 1
 
             lhld band_sprite_tail
             push h
@@ -209,17 +209,19 @@ init_band_sprite_gfx:
             ; sprite render cost = height * w
             mov a, c
             dcr b
-            jm @save_cost   ; cost x1 ; width8
+            jm init_band_save_cost   ; cost x1 ; width8
             add a           ; cost x2 ; width16
             dcr b
-			jm @save_cost
+			jm init_band_save_cost
             add c           ; cost x3 ; width24
-@save_cost:
+init_band_save_cost:
             ; a - render cost
             mov c, a ; tmp cost
 
-@band_y:
+init_band_band_y:
             mvi a, TEMP_BYTE
+            rrc
+            rrc
             rrc
             mov l, a
             mvi h, 0
@@ -301,7 +303,7 @@ draw_bands:
             mov b, a
             ; b - new+old cost
             ; go next if a band is empty
-            jz @next_beam
+            jz @next_beam ; TODO: error. costs `200 + 56` make the cost zero
 
             ; if a beam is below a band_y, we good to render
             push h
