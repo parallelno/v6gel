@@ -261,13 +261,24 @@ init_band_sprite_gfx:
 ; erase old sprites, draw new sprites.
 ; v1. 7996 cc
 draw_bands:
-            lxi h, bands2
-            lxi d, bands1
+            lxi h, bands1
+            lxi d, bands2
             lda band_new_offset
             rrc ; check the 0-bit
-            jnc @main_loop
+            jnc @no_swap
             xchg
-@main_loop:
+@no_swap:
+            shld @band_new + 1
+            xchg
+            shld @band_old + 1
+            jmp @skip_band_set
+
+@reset_loops:
+@band_new:
+            lxi d, TEMP_WORD
+@band_old:
+            lxi h, TEMP_WORD
+@skip_band_set:
             ; de - bands new
             ; hl - bands old
             A_TO_ZERO(0)
@@ -362,7 +373,7 @@ draw_bands:
             adi BAND_HEIGHT
             sta @band_y + 1
             jnz @loop
-            jmp @main_loop
+            jmp @reset_loops
 
 @exit:
             ; clean up the stack
