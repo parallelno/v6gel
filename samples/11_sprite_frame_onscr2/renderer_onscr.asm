@@ -10,44 +10,46 @@ init_render:
             sta band_new_offset
             ret
 
+
 ; renders sprites to the back buffer, then copies them to the screen
+; update_render_onscr total cc must be < than update_render_offscr (83128 cc)
 update_render_onscr:
-                                      ; for 10 16x16 sprites:
             call swap_bands
-            call update_bands         ;        ? cc
-            call draw_bands           ;        ? cc
-                                      ; total: ? cc ;
+            call update_bands
+            call draw_bands
             ret
+
 
 ; v1. 1468 cc
 ; v2. 1320 cc
 ; v3. 712 cc
+; v4. 740 cc
 swap_bands:
+            A_TO_ZERO(0)
+            sta band_sprites_count
+
             ; swap band_sprites_new & band_sprites_old
             lhld band_sprites_new
             xchg
             lhld band_sprites_old
             shld band_sprites_new
             shld band_sprite_tail
+            xchg
             shld band_sprites_old
 
             ; switch band_new_offset
             lxi h, band_new_offset
             inr m
 
-            ; unroll mem_erase same way as jmp_tbl in mem_copy_to_ram_disk
-
             ; erase bands new
             ERASE_BUF_LEN = BAND_MAX * band.size
-            lda band_new_offset
+            mov a, m
             rrc ; check the 0-bit
-            jc @band_swapped
             lxi b, bands1 + ERASE_BUF_LEN
-            jmp @clear_buffs
-@band_swapped:
+            jnc @clear_buffs
             lxi b, bands2 + ERASE_BUF_LEN
-@clear_buffs
-            lxi d, 0
+@clear_buffs:
+            lxi d, 0 ; counter (len//32 - 1)
             A_TO_ZERO(0)
             call mem_erase_sp
             ret
@@ -55,6 +57,7 @@ swap_bands:
 
 ; v1. 12528 cc
 ; v2. 12572 cc
+; v3. 12932 cc
 update_bands:
             ; init the loop
             A_TO_ZERO(0)
@@ -110,51 +113,48 @@ update_bands_loop:
             ; bottom-half sprite band idx
             mvi a, b1110_0000
             ana e
-            RLC_(3)
             mov h, a
-            ; h - top-half sprite band idx
-            ; top band idx
+            ; h - top-half sprite band_y
+
+            ; calc the top-half band_y
             mov a, c
             add e
             dcr a ; find the last line scr_y
             ani b1110_0000
-            RLC_(3)
             cmp h
             jnz @save_split_band_sprite
 @save_unsplit_band_sprite:
             call init_band_sprite
             jmp @loop_check
 @save_split_band_sprite:
-            ; h - bottom-half sprite band idx
-            ; a - top-half sprite band idx
+            ; h - bottom-half sprite band_y
+            ; a - top-half sprite band_y
 			; b - width
             ; c - height
             ; de - scr addr
             ; (init_band_sprite_gfx + 1) - sprite gfx
 
-            ; sprite bottom half handling
+            ; sprite bottom-half handling
             ; adjust height
             push b
             push d
-            RRC_(3)
             sta @top_band_height + 1
             ; a - height of a top-half sprite band
             sub e
             mov c, a
-            mov a, h
             call init_band_sprite
             pop d
             pop b
 @top_band_height:
             mvi h, TEMP_BYTE
-            ; h - height of a top-half sprite band
+            ; h - top-half sprite band_y
 
             ; sprite top half handling
             ; adjust height
             mov a, e
             add c
             sub h
-            ; a - height of a top half
+            ; a - height of a top-half sprite
             mov c, a
             ; adjust scr_y
             mov e, h
@@ -168,26 +168,27 @@ update_bands_sprite_idx:
             sta update_bands_sprite_idx + 1
             cpi SPR_MAX
             jnz update_bands_loop
-
             ret
+
 
 ; init band_sprite
 ; in:
-; a - band_idx
 ; b - width
 ; c - height
 ; de - scr addr
 ; at (@sprite_gfx + 1) - sprite gfx
 init_band_sprite:
+            ; update the total sprite_count
+            lxi h, band_sprites_count
+            inr m
+
             lhld band_sprite_tail
             push h
             ; hl - band sprite addr
-            mov m, a
-            HL_ADVANCE(band_sprite.band_idx, band_sprite.scr_addr_y)
             mov m, e
-            HL_ADVANCE(band_sprite.scr_addr_y, band_sprite.scr_addr_x)
+            HL_ADVANCE(band_sprite.scr_addr, band_sprite.scr_addr + 1)
             mov m, d
-            HL_ADVANCE(band_sprite.scr_addr_x, band_sprite.height)
+            HL_ADVANCE(band_sprite.scr_addr + 1, band_sprite.height)
             mov m, c
             HL_ADVANCE(band_sprite.height, band_sprite.width)
             mov m, b
@@ -197,7 +198,7 @@ init_band_sprite_gfx:
             mov m, e
             HL_ADVANCE(band_sprite.gfx_ptr, band_sprite.gfx_ptr + 1)
             mov m, d
-            HL_ADVANCE(band_sprite.gfx_ptr + 1, band_sprite.band_idx + band_sprite.size)
+            HL_ADVANCE(band_sprite.gfx_ptr + 1, band_sprite.size)
             shld band_sprite_tail
 
             ; calc and store a render cost
@@ -212,19 +213,24 @@ init_band_sprite_gfx:
 @save_cost:
             ; a - render cost
             mov c, a ; tmp cost
-            lxi h, update_bands_sprite_idx + 1
-            mov l, m
+
+            lda update_bands_sprite_idx + 1
+            add a ; sprite_idx * 4
+            add a ; because the band.size is 4 bytes
+            mov l, a
             mvi h, 0
-            dad h ; HL *=4,
-            dad h ; because the band.size is 4 bytes
-            lxi d, bands1
+
+            ; TODO: instead of band_new_offset use bands1/bands2 swap
             lda band_new_offset
             rrc ; check the 0-bit
-            jz @calc_band_ptr
+            lxi d, bands1
+            jnc @calc_band_ptr
             lxi d, bands2
 @calc_band_ptr:
             dad d
             ; update band cost
+            ; TODO: check if clamp is necessary or should be adjusted
+            ; clamp to 255
             mov a, m
             add c
             mov m, a
@@ -253,74 +259,150 @@ init_band_sprite_gfx:
 
 
 ; erase old sprites, draw new sprites.
+; v1. 7996 cc
 draw_bands:
+            lxi h, bands2
             lxi d, bands1
             lda band_new_offset
             rrc ; check the 0-bit
-            jz @loop
-            lxi d, bands2
+            jnc @main_loop
+            xchg
+
+@main_loop:
+            ; de - bands new
+            ; hl - bands old
+            A_TO_ZERO(0)
+            sta @band_y + 1
 @loop:      ; infinite loop over all bands
-            ret
 
+            push h
+            push d
 
+            ; get new+old cost
+            mov a, m
+            xchg
+            add m
+            mov b, a
+            ; b - new+old cost
+            ; go next if a band is empty
+            jz @next_beam
+
+            ; if a beam is below a band_y, we good to render
+            push h
+            lxi h, @band_y + 1
+            mov l, m
+            mvi h, >scr_y_to_crt_line
+            mov c, m
+            ; c - band scr_y remaped to the timer range [30, 221]
+            call get_crt_line
+            ; scr lines are in reverse
+            ; if scr_y=255, crt_line 30
+            ; if scr_y=0, crt_line 221
+            ; a - current crt_line
+            ; c - band height mapped to crt_line range
+            cmp c
+            pop h
+            jnc @render_beam
+
+            ; check if a beam is above a band height + new+old cost
+            ; b - new+old cost
+            add b
+            cmp c
+            jc @next_beam
+
+@render_beam:
+            ; de - bands new
+            ; hl - bands old
 
 /*
-            lxi b, 0
-            ; infinite loop over all bands
-@loop:
-            ; check cost
-            lhld band_costs_new
-            dad b
+            ; erase old sprites
+            push h
+            push d
+
+            HL_ADVANCE(band.cost, band.count)
             mov a, m
-            CPI_ZERO(0)
-            jz @check_loop
-
-            mov e, a ; e - cost
-            mov a, c
-            RRC_(3)
-            adi BAND_HEIGHT - 1 ; TODO: remove it if unnecessary
-            ; a - height of the top line of the band
-            add e
-            mov e, a
-            ; e - safe line. if the beam above, we good to render all band sprites
-            ; TODO: logical error! we also need take into account the cost of
-            ; erase.
-
-            ; check the beam.
-            call get_scr_rast_line
-            ; a - aproximete currently rasterized line in a range of 0..255
-            sub e
-            jnc @skip_band
-
-            push b
-
-            lxi d, 0xA000
-            lxi b, _knight + _knight_idle_0_0_relative
-            ; BC = Sprite data, DE = Screen addr
-;            call sprite_draw_vm
-
-            pop b
-
-@skip_band:
-            ; band was skipped because of a beam intersection. requset a loop
-            ; repeat.
-            mvi a, 1
-            sta @repeat_loop + 1
-@check_loop:
-            inr c
-            mvi a, BAND_MAX
-            cmp c
-            jnz @loop
-
-@repeat_loop:
-            mvi a, TEMP_BYTE
-            CPI_ZERO(0)
-            mvi a, 0
-            sta @repeat_loop + 1
-            jnz @loop
-            ret
-
-; there is a problem . we can;t set the init_band_sprite_gfx to sp directly
-; because interupt routine will corrupt 2 prior bytes
+            HL_ADVANCE(band.count, band.sprite)
+            mov e, m
+            HL_ADVANCE(band.sprite, band.sprite + 1)
+            mov d, m
+            ; a - sprite count
+            ; de - first sprite ptr
+            call erase_band_sprites
+            pop d
+            pop h
 */
+
+            ; erase costs to mark the beam rendered
+            A_TO_ZERO(0)
+            mov m, a
+            stax d
+
+            ; increase the all beams sprite total counter
+            lxi h, band_sprites_count
+            dcr m
+            jz @exit
+
+@next_beam:
+            LXI_B_TO_DIFF(band.cost, band.size)
+            ; advance old and new band ptrs
+            pop h
+            dad b
+            xchg
+            ; advance new band ptr to next
+            pop h
+            dad b
+
+            ; check band end
+@band_y:
+            mvi a, TEMP_BYTE ; band_y
+            adi BAND_HEIGHT
+            sta @band_y + 1
+            jnz @loop
+            jmp @main_loop
+
+@exit:
+            ; clean up the stack
+            pop h
+            pop h
+            ret
+band_y: = @band_y
+
+
+; erase old sprites in the band
+; in:
+; a - sprite count
+; de - first sprite ptr
+erase_band_sprites:
+            sta @loop_check + 1
+            xchg
+@loop:
+            ; read the beam sprite data
+            mov e, m
+            HL_ADVANCE(band_sprite.scr_addr, band_sprite.scr_addr + 1)
+            mov d, m
+            HL_ADVANCE(band_sprite.scr_addr + 1, band_sprite.height)
+            mov c, m
+            HL_ADVANCE(band_sprite.height, band_sprite.width)
+            push h
+            mov h, m
+            mov l, a
+
+            ; de - scr addr
+            ; h - width
+            ; l - height
+            call sprite_copy_to_back_buff_v
+
+            pop h
+
+            ; check remaining sprites
+
+            ; advance to next sprite
+            HL_ADVANCE(band_sprite.width, band_sprite.size)
+
+@loop_check:
+            mvi a, TEMP_BYTE
+            dcr a
+            sta @loop_check + 1
+            jnz @loop
+
             ret

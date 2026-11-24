@@ -23,11 +23,12 @@ set_frame_timer:
             ret
 
 
-; read the timer
+; reads the current crt line remapped to [0..234). crt lines in reverse of scr_y
 ; out:
 ; a - remaining time until the end of the frame in range [0..FRAME_TIME / 128)
 ; which is [0..234)
-get_frame_timer:
+; use: a
+get_crt_line:
             A_TO_ZERO(NULL) ; защёлкнуть счётчик 0
             out 8
             in 11
@@ -37,29 +38,9 @@ get_frame_timer:
             ret
 
 
-; remap scr_y into a timer range [30, 221].
-; in:
-; l - scr_y
-; out:
-; a - scr_y mapped to CRT_Y remapped into [0-234) range
-SCR_Y_TO_TIMER_BC = 0
-SCR_Y_TO_TIMER_DE = 1
-SCR_Y_TO_TIMER_HL = 2
-.macro SCR_Y_TO_TIMER(regpair=SCR_Y_TO_TIMER_HL)
-        .if regpair == SCR_Y_TO_TIMER_BC
-            .error "SCR_Y_TO_TIMER(regpair=SCR_Y_TO_TIMER_BC) is unimplemented"
-        .endif
-        .if regpair == SCR_Y_TO_TIMER_DE
-            .error "SCR_Y_TO_TIMER(regpair=SCR_Y_TO_TIMER_DE) is unimplemented"
-        .endif
-        .if regpair == SCR_Y_TO_TIMER_HL
-            mvi h, >remap_256_192
-            mov a, m
-        .endif
-.endmacro
-
+; remaps scr_y into a timer range [30, 221]
 .align 256
-remap_256_192:
+scr_y_to_crt_line:
             .byte 221,221,220,219,218,218,217,216,215,215,214,213,212,212,211,210
             .byte 209,209,208,207,206,206,205,204,203,203,202,201,200,200,199,198
             .byte 197,197,196,195,194,194,193,192,191,191,190,189,188,188,187,186

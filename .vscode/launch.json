@@ -4,7 +4,8 @@
         {
             "type": "v6",
             "request": "launch",
-            "name": "Debug sample"
+            "name": "Debug sample",
+            "preLaunchTask": "make 11_sprite_frame_onscr2"
         }
     ]
 }

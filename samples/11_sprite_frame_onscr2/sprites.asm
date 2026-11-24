@@ -1,4 +1,6 @@
 SPR_MAX = 10 ; max number of sprites to render
+BAND_MAX = 8
+BAND_HEIGHT = 32
 
 .struct sprite
     scr_addr_y: byte
@@ -24,14 +26,10 @@ sprite13: sprite (scr_addr_y=195, scr_addr_x=SPRITE_X_SCR_ADDR + 31, frame_ptr=_
 sprite14: sprite (scr_addr_y=171, scr_addr_x=SPRITE_X_SCR_ADDR + 1, frame_ptr=_knight + _knight_idle_0_0_relative)
 
 
-BAND_MAX = 8
-BAND_HEIGHT = 32
 
 ; sprite rendered in a band. can be a verticaly split portion.
 .struct band_sprite
-    band_idx: byte  ; band index
-    scr_addr_y: byte
-    scr_addr_x: byte
+    scr_addr: word
     height: byte    ; height (in pixels)
     width: byte     ; width (0=8pxs, 1=16pxs, 2=24pxs, 3=32pxs)
     gfx_ptr: word   ; ptr to a sprite frame
@@ -52,6 +50,9 @@ band_sprites_old: .storage ADDR_LEN
 band_sprite_tail:
     .storage ADDR_LEN
 
+; total count sprites in all bands
+band_sprites_count:
+    .storage BYTE_LEN
 
 ; contains the band context
 .struct band
