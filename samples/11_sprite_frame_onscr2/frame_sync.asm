@@ -5,8 +5,11 @@ FRAME_SCR           = 256
 FRAME_BORDER_BOTTOM = 16
 
 FRAME_LINES      = FRAME_BORDER_TOP + FRAME_SCR + FRAME_BORDER_BOTTOM
-FRAME_LINE_TIME  = 96
+FRAME_LINE_TIME  = 96            ; PIT ticks per raster line
 FRAME_TIME       = FRAME_LINES * FRAME_LINE_TIME
+CRT_TIMER_UNIT   = 128           ; PIT ticks per get_crt_line unit
+CRT_FRAME_UNITS  = FRAME_TIME / CRT_TIMER_UNIT
+CRT_UNIT_CC      = CRT_TIMER_UNIT * 2 ; CPU clocks per timer unit
 
 
 ; set the timer to sync with the start of the frame
@@ -23,10 +26,10 @@ set_frame_timer:
             ret
 
 
-; reads the current crt line remapped to [0..234). crt lines in reverse of scr_y
+; Read the PIT countdown in coarse units, not screen Y. The beam scans from
+; screen address Y=255 down to Y=0 while the countdown decreases.
 ; out:
-; a - remaining time until the end of the frame in range [0..FRAME_TIME / 128)
-; which is [0..234)
+; a - remaining PIT ticks divided by CRT_TIMER_UNIT
 ; use: a
 get_crt_line:
             A_TO_ZERO(NULL) ; защёлкнуть счётчик 0
@@ -36,27 +39,6 @@ get_crt_line:
             in 11
             ral
             ret
-
-
-; remaps scr_y into a timer range [30, 221]
-.align 256
-scr_y_to_crt_line:
-            .byte 221,221,220,219,218,218,217,216,215,215,214,213,212,212,211,210
-            .byte 209,209,208,207,206,206,205,204,203,203,202,201,200,200,199,198
-            .byte 197,197,196,195,194,194,193,192,191,191,190,189,188,188,187,186
-            .byte 185,185,184,183,182,182,181,180,179,179,178,177,176,176,175,174
-            .byte 173,173,172,171,170,170,169,168,167,167,166,165,164,164,163,162
-            .byte 161,161,160,159,158,158,157,156,155,155,154,153,152,152,151,150
-            .byte 149,149,148,147,146,146,145,144,143,143,142,141,140,140,139,138
-            .byte 137,137,136,135,134,134,133,132,131,131,130,129,128,128,127,126
-            .byte 125,125,124,123,122,122,121,120,119,119,118,117,116,116,115,114
-            .byte 113,113,112,111,110,110,109,108,107,107,106,105,104,104,103,102
-            .byte 101,101,100,99,98,98,97,96,95,95,94,93,92,92,91,90
-            .byte 89,89,88,87,86,86,85,84,83,83,82,81,80,80,79,78
-            .byte 77,77,76,75,74,74,73,72,71,71,70,69,68,68,67,66
-            .byte 65,65,64,63,62,62,61,60,59,59,58,57,56,56,55,54
-            .byte 53,53,52,51,50,50,49,48,47,47,46,45,44,44,43,42
-            .byte 41,41,40,39,38,38,37,36,35,35,34,33,32,32,31,30
 
 
 ; read the timer

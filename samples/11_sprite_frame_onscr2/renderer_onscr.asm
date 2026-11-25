@@ -265,22 +265,37 @@ init_band_band_y:
             ret
 
 
-skipped_bands:
-            .byte 0
-rendered_bands:
-            .byte 0
+; Beam deadlines in countdown units. The raster enters at the high-Y edge.
+CRT_BAND_UNITS = BAND_HEIGHT * FRAME_LINE_TIME / CRT_TIMER_UNIT
+CRT_BAND0_ENTRY = (FRAME_BORDER_BOTTOM + BAND_HEIGHT) * FRAME_LINE_TIME / CRT_TIMER_UNIT
+; Allow for the PIT being started in software after the frame interrupt and
+; for rounding the countdown down to whole units.
+CRT_EDGE_GUARD = 2
+; Provisional work budget: one timer unit per eight column-rows (32 CPU
+; clocks each), plus fixed overhead. Recalibrate against the real blitters.
+CRT_WORK_MARGIN = 1 + (512 + CRT_UNIT_CC - 1) / CRT_UNIT_CC
 
-; erase old sprites, draw new sprites.
-; v1. 7996 cc
+.macro CRT_BAND_EDGES(idx)
+            .byte CRT_BAND0_ENTRY + idx * CRT_BAND_UNITS + CRT_EDGE_GUARD
+            .byte CRT_BAND0_ENTRY + (idx - 1) * CRT_BAND_UNITS - CRT_EDGE_GUARD
+.endmacro
+
+.align 16
+crt_band_edges:
+            CRT_BAND_EDGES(0)
+            CRT_BAND_EDGES(1)
+            CRT_BAND_EDGES(2)
+            CRT_BAND_EDGES(3)
+            CRT_BAND_EDGES(4)
+            CRT_BAND_EDGES(5)
+            CRT_BAND_EDGES(6)
+            CRT_BAND_EDGES(7)
+
+; Erase old sprites, draw new sprites.
 draw_bands:
-/*******************************************************************************
-            ; DEBUG:
-            ; TODO: delete it
-*******************************************************************************/
-            lxi h, 0
-            shld skipped_bands
-
-
+            lda band_sprites_count
+            ora a
+            rz
             lxi h, bands1
             lxi d, bands2
             lda band_new_offset
@@ -309,49 +324,52 @@ draw_bands:
             push d
 
 
-            ; get new+old cost
+            ; Test for pending work before summing the two byte costs.
             mov a, m
             xchg
-            add m
             mov b, a
-            ; b - new+old cost
-            ; go next if a band is empty
-            jz @next_beam ; TODO: error. costs `200 + 56` make the cost zero
+            ora m
+            jz @next_beam
+            mov a, b
+            add m
+            ; Shift the full nine-bit sum right by three. The margin also
+            ; covers the fractional unit lost by rounding down.
+            rar
+            rar
+            rar
+            ani $3f
+            adi CRT_WORK_MARGIN
+            mov b, a
 
-            ; if a beam is below a band_y, we good to render
             push h
-            lxi h, @band_y + 1
-            mov l, m
-            mvi h, >scr_y_to_crt_line
+            lda @band_y + 1
+            RRC_(4) ; band Y / 16 = two bytes per band
+            ori <crt_band_edges
+            mov l, a
+            mvi h, >crt_band_edges
             mov c, m
-            ; c - band scr_y remaped to the timer range [30, 221]
+            inx h
             call get_crt_line
-            ; scr lines are in reverse
-            ; if scr_y=255, crt_line 30
-            ; if scr_y=0, crt_line 221
-            ; a - current crt_line
-            ; c - band height mapped to crt_line range
+            ; A = countdown, C = guarded entry, M = guarded exit.
             cmp c
+            jnc @before_band
+            cmp m
+            jnc @beam_in_band
+            ; Beam has passed the band. Check against next frame's entry.
+            ; The add can wrap, but the difference after SUB is in [0, 234).
+            adi CRT_FRAME_UNITS
+@before_band:
+            sub c
+            cmp b
             pop h
             jnc @render_beam
-
-            ; check if a beam is above a band height + new+old cost
-            ; b - new+old cost
-            add b
-            cmp c
-            jnc @beam_overlaps
+            jmp @next_beam
+@beam_in_band:
+            pop h
+            jmp @next_beam
 
 
 @render_beam:
-/*******************************************************************************
-            ; DEBUG:
-            ; TODO: delete it
-*******************************************************************************/
-
-            lda rendered_bands
-            inr a
-            sta rendered_bands
-
             ; hl - bands new
             ; de - bands old
 
@@ -391,15 +409,6 @@ draw_bands:
             mov m, a
 
             jz @exit
-
-@beam_overlaps:
-/*******************************************************************************
-            ; DEBUG:
-            ; TODO: delete it
-*******************************************************************************/
-            lda skipped_bands
-            inr a
-            sta skipped_bands
 
 @next_beam:
             LXI_B_TO_DIFF(band.cost, band.size)
