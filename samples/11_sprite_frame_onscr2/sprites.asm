@@ -8,23 +8,38 @@ BAND_HEIGHT = 32
     frame_ptr: word ; ptr to a sprite frame
 .endstruct
 
-sprites: sprite (scr_addr_y=234, scr_addr_x=SPRITE_X_SCR_ADDR +  7, frame_ptr=_knight + _knight_idle_0_0_relative)
-sprite09: sprite (scr_addr_y=221, scr_addr_x=SPRITE_X_SCR_ADDR + 26, frame_ptr=_knight + _knight_idle_0_0_relative)
-sprite01: sprite (scr_addr_y=203, scr_addr_x=SPRITE_X_SCR_ADDR + 30, frame_ptr=_knight + _knight_idle_0_0_relative)
-sprite05: sprite (scr_addr_y=201, scr_addr_x=SPRITE_X_SCR_ADDR + 26, frame_ptr=_knight + _knight_idle_0_0_relative)
-sprite08: sprite (scr_addr_y=200, scr_addr_x=SPRITE_X_SCR_ADDR + 29, frame_ptr=_knight + _knight_idle_0_0_relative)
-sprite13: sprite (scr_addr_y=195, scr_addr_x=SPRITE_X_SCR_ADDR + 31, frame_ptr=_knight + _knight_idle_0_0_relative)
-sprite07: sprite (scr_addr_y=175, scr_addr_x=SPRITE_X_SCR_ADDR +  0, frame_ptr=_knight + _knight_idle_0_0_relative)
-sprite14: sprite (scr_addr_y=171, scr_addr_x=SPRITE_X_SCR_ADDR + 1, frame_ptr=_knight + _knight_idle_0_0_relative)
-sprite03: sprite (scr_addr_y=156, scr_addr_x=SPRITE_X_SCR_ADDR + 24, frame_ptr=_knight + _knight_idle_0_0_relative)
-sprite10: sprite (scr_addr_y=140, scr_addr_x=SPRITE_X_SCR_ADDR +  5, frame_ptr=_knight + _knight_idle_0_0_relative)
-sprite06: sprite (scr_addr_y=119, scr_addr_x=SPRITE_X_SCR_ADDR + 30, frame_ptr=_knight + _knight_idle_0_0_relative)
-sprite02: sprite (scr_addr_y= 63, scr_addr_x=SPRITE_X_SCR_ADDR + 18, frame_ptr=_knight + _knight_idle_0_0_relative)
-sprite11: sprite (scr_addr_y= 42, scr_addr_x=SPRITE_X_SCR_ADDR + 15, frame_ptr=_knight + _knight_idle_0_0_relative)
-sprite12: sprite (scr_addr_y= 28, scr_addr_x=SPRITE_X_SCR_ADDR + 22, frame_ptr=_knight + _knight_idle_0_0_relative)
-sprite04:  sprite (scr_addr_y= 18, scr_addr_x=SPRITE_X_SCR_ADDR, frame_ptr=_knight + _knight_idle_0_0_relative)
+sprites:  sprite (scr_addr_y=234, scr_addr_x=SPRITE_X_SCR_ADDR +  7, frame_ptr=_knight + _knight_idle_0_0_relative)
+sprite01: sprite (scr_addr_y=221, scr_addr_x=SPRITE_X_SCR_ADDR + 26, frame_ptr=_knight + _knight_idle_0_0_relative)
+sprite02: sprite (scr_addr_y=203, scr_addr_x=SPRITE_X_SCR_ADDR + 30, frame_ptr=_knight + _knight_idle_0_0_relative)
+sprite03: sprite (scr_addr_y=201, scr_addr_x=SPRITE_X_SCR_ADDR + 26, frame_ptr=_knight + _knight_idle_0_0_relative)
+sprite04: sprite (scr_addr_y=200, scr_addr_x=SPRITE_X_SCR_ADDR + 29, frame_ptr=_knight + _knight_idle_0_0_relative)
+sprite05: sprite (scr_addr_y=195, scr_addr_x=SPRITE_X_SCR_ADDR + 31, frame_ptr=_knight + _knight_idle_0_0_relative)
+sprite06: sprite (scr_addr_y=175, scr_addr_x=SPRITE_X_SCR_ADDR +  0, frame_ptr=_knight + _knight_idle_0_0_relative)
+sprite07: sprite (scr_addr_y=171, scr_addr_x=SPRITE_X_SCR_ADDR + 1, frame_ptr=_knight + _knight_idle_0_0_relative)
+sprite08: sprite (scr_addr_y=156, scr_addr_x=SPRITE_X_SCR_ADDR + 24, frame_ptr=_knight + _knight_idle_0_0_relative)
+sprite09: sprite (scr_addr_y=140, scr_addr_x=SPRITE_X_SCR_ADDR +  5, frame_ptr=_knight + _knight_idle_0_0_relative)
 
+sprite10: sprite (scr_addr_y=119, scr_addr_x=SPRITE_X_SCR_ADDR + 30, frame_ptr=_knight + _knight_idle_0_0_relative)
+sprite11: sprite (scr_addr_y= 63, scr_addr_x=SPRITE_X_SCR_ADDR + 18, frame_ptr=_knight + _knight_idle_0_0_relative)
+sprite12: sprite (scr_addr_y= 42, scr_addr_x=SPRITE_X_SCR_ADDR + 15, frame_ptr=_knight + _knight_idle_0_0_relative)
+sprite13: sprite (scr_addr_y= 28, scr_addr_x=SPRITE_X_SCR_ADDR + 22, frame_ptr=_knight + _knight_idle_0_0_relative)
+sprite14: sprite (scr_addr_y= 18, scr_addr_x=SPRITE_X_SCR_ADDR, frame_ptr=_knight + _knight_idle_0_0_relative)
 
+; 8 bands
+; band0 - y000, 0 sprite lines
+; band1 - y032, 0 sprite lines
+; band2 - y064, 0 sprite lines
+; band3 - y096, 0 sprite lines
+; band4 - y128, (15+4)*2 = 38 (0x26) sprite lines
+; band5 - y160, (11+15+15)*2 = 82 (0x52) sprite lines
+; band6 - y192, (15+15+15+15+3)*2 = 126 (0x7E) sprite lines
+; band7 - y224, (12+15)*2 = 54 (0x36) sprite lines
+
+; 8 bands
+; band8  - y128, (15+4)*2 = 38 (0x26) sprite lines
+; band9  - y160, (11+15+15)*2 = 82 (0x52) sprite lines
+; band10 - y192, (15+15+15+15+3)*2 = 126 (0x7E) sprite lines
+; band11 - y224, (12+15)*2 = 54 (0x36) sprite lines
 
 ; sprite rendered in a band. can be a verticaly split portion.
 .struct band_sprite

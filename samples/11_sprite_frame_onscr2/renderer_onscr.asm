@@ -13,6 +13,9 @@ init_render:
 
 ; renders sprites to the back buffer, then copies them to the screen
 ; update_render_onscr total cc must be < than update_render_offscr (83128 cc)
+; stats:
+; draw 16x15 sprite take 24 CRT lines or 4664 cc
+; erase 16x15 sprite take 17 CRT lines or 3244 cc
 update_render_onscr:
             call swap_bands
             call update_bands
@@ -265,10 +268,14 @@ init_band_band_y:
             ret
 
 
+.dw 0 ; aligner
+.db 0 ; aligner
 skipped_bands:
             .byte 0
 rendered_bands:
             .byte 0
+total_cost:
+            .word 0
 
 ; erase old sprites, draw new sprites.
 ; v1. 7996 cc
@@ -279,6 +286,7 @@ draw_bands:
 *******************************************************************************/
             lxi h, 0
             shld skipped_bands
+            shld total_cost
 
 
             lxi h, bands1
@@ -314,6 +322,7 @@ draw_bands:
             xchg
             add m
             mov b, a
+
             ; b - new+old cost
             ; go next if a band is empty
             jz @next_beam ; TODO: error. costs `200 + 56` make the cost zero
@@ -322,24 +331,21 @@ draw_bands:
             push h
             lxi h, @band_y + 1
             mov l, m
-            mvi h, >scr_y_to_crt_line
+            mvi h, >scr_y_to_timer
             mov c, m
             ; c - band scr_y remaped to the timer range [30, 221]
-            call get_crt_line
-            ; scr lines are in reverse
-            ; if scr_y=255, crt_line 30
-            ; if scr_y=0, crt_line 221
-            ; a - current crt_line
-            ; c - band height mapped to crt_line range
+            call get_frame_timer
+            ; a - current timer
+            ; c - band height mapped to a timer range
             cmp c
             pop h
-            jnc @render_beam
+            jc @render_beam
 
             ; check if a beam is above a band height + new+old cost
             ; b - new+old cost
-            add b
+            sub b
             cmp c
-            jnc @beam_overlaps
+            jc @beam_overlaps
 
 
 @render_beam:
@@ -347,11 +353,23 @@ draw_bands:
             ; DEBUG:
             ; TODO: delete it
 *******************************************************************************/
-
             lda rendered_bands
             inr a
             sta rendered_bands
-
+////////////////////////////////////////
+            push h
+            ldax d
+            add m
+            lhld total_cost
+            add l
+            mov l, a
+            adc h
+            sub l
+            mov h, a
+            shld total_cost
+            pop h
+/*******************************************************************************
+*******************************************************************************/
             ; hl - bands new
             ; de - bands old
 
@@ -392,14 +410,18 @@ draw_bands:
 
             jz @exit
 
-@beam_overlaps:
 /*******************************************************************************
             ; DEBUG:
             ; TODO: delete it
 *******************************************************************************/
+            jmp @next_beam
+@beam_overlaps:
+
             lda skipped_bands
             inr a
             sta skipped_bands
+/*******************************************************************************
+*******************************************************************************/
 
 @next_beam:
             LXI_B_TO_DIFF(band.cost, band.size)
