@@ -265,9 +265,22 @@ init_band_band_y:
             ret
 
 
+skipped_bands:
+            .byte 0
+rendered_bands:
+            .byte 0
+
 ; erase old sprites, draw new sprites.
 ; v1. 7996 cc
 draw_bands:
+/*******************************************************************************
+            ; DEBUG:
+            ; TODO: delete it
+*******************************************************************************/
+            lxi h, 0
+            shld skipped_bands
+
+
             lxi h, bands1
             lxi d, bands2
             lda band_new_offset
@@ -326,10 +339,18 @@ draw_bands:
             ; b - new+old cost
             add b
             cmp c
-            jc @next_beam
+            jnc @beam_overlaps
 
 
 @render_beam:
+/*******************************************************************************
+            ; DEBUG:
+            ; TODO: delete it
+*******************************************************************************/
+
+            lda rendered_bands
+            inr a
+            sta rendered_bands
 
             ; hl - bands new
             ; de - bands old
@@ -370,6 +391,15 @@ draw_bands:
             mov m, a
 
             jz @exit
+
+@beam_overlaps:
+/*******************************************************************************
+            ; DEBUG:
+            ; TODO: delete it
+*******************************************************************************/
+            lda skipped_bands
+            inr a
+            sta skipped_bands
 
 @next_beam:
             LXI_B_TO_DIFF(band.cost, band.size)

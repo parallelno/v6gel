@@ -1,0 +1,11 @@
+{
+  "name": "sample",
+  "run": {
+    "executable": "build\\09_sprite_frame_offscr\\09_sprite_frame_offscr.rom",
+    "debugArtifact": "build\\09_sprite_frame_offscr\\09_sprite_frame_offscr.elf",
+    "loadAddr": "0x100",
+    "fddReadOnly": false,
+    "speed": "100%",
+    "viewMode": "border"
+  }
+}
