@@ -284,10 +284,11 @@ draw_bands:
             ; DEBUG:
             ; TODO: delete it
 *******************************************************************************/
-            lxi h, 0
-            shld skipped_bands
-            shld total_cost
-
+            ; lxi h, 0
+            ; shld skipped_bands
+            ; shld total_cost
+/*******************************************************************************
+*******************************************************************************/
 
             lxi h, bands1
             lxi d, bands2
@@ -353,21 +354,21 @@ draw_bands:
             ; DEBUG:
             ; TODO: delete it
 *******************************************************************************/
-            lda rendered_bands
-            inr a
-            sta rendered_bands
-////////////////////////////////////////
-            push h
-            ldax d
-            add m
-            lhld total_cost
-            add l
-            mov l, a
-            adc h
-            sub l
-            mov h, a
-            shld total_cost
-            pop h
+;             lda rendered_bands
+;             inr a
+;             sta rendered_bands
+; ////////////////////////////////////////
+;             push h
+;             ldax d
+;             add m
+;             lhld total_cost
+;             add l
+;             mov l, a
+;             adc h
+;             sub l
+;             mov h, a
+;             shld total_cost
+;             pop h
 /*******************************************************************************
 *******************************************************************************/
             ; hl - bands new
@@ -414,12 +415,12 @@ draw_bands:
             ; DEBUG:
             ; TODO: delete it
 *******************************************************************************/
-            jmp @next_beam
+;             jmp @next_beam
 @beam_overlaps:
 
-            lda skipped_bands
-            inr a
-            sta skipped_bands
+;             lda skipped_bands
+;             inr a
+;             sta skipped_bands
 /*******************************************************************************
 *******************************************************************************/
 

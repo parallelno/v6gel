@@ -35,11 +35,15 @@ sprite14: sprite (scr_addr_y= 18, scr_addr_x=SPRITE_X_SCR_ADDR, frame_ptr=_knigh
 ; band6 - y192, (15+15+15+15+3)*2 = 126 (0x7E) sprite lines
 ; band7 - y224, (12+15)*2 = 54 (0x36) sprite lines
 
-; 8 bands
-; band8  - y128, (15+4)*2 = 38 (0x26) sprite lines
-; band9  - y160, (11+15+15)*2 = 82 (0x52) sprite lines
-; band10 - y192, (15+15+15+15+3)*2 = 126 (0x7E) sprite lines
-; band11 - y224, (12+15)*2 = 54 (0x36) sprite lines
+; 16 bands
+; band8  - y128, (4)*2 = 8 (0x8) safe timer lines
+; band9  - y144, (11+4)*2 = 30 (1E) safe timer lines
+; band10 - y160, (11+5+1)*2 = 34 (0x22) safe timer lines
+; band11 - y176, (10+14)*2 = 48 (0x30) safe timer lines
+; band12 - y192, (13+8+7+5)*2 = 66 (0x42) safe timer lines
+; band13 - y208, (2+7+8+10+3)*2 = 58 (0x3A) safe timer lines
+; band14 - y224, (12+6)*2 = 36 (0x24) safe timer lines
+; band15 - y240, (9)*2 = 18 (0x12) safe timer lines
 
 ; sprite rendered in a band. can be a verticaly split portion.
 .struct band_sprite
