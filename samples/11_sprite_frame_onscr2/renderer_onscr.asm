@@ -52,7 +52,7 @@ swap_bands:
             jnc @clear_buffs
             lxi b, bands2 + ERASE_BUF_LEN
 @clear_buffs:
-            lxi d, 0 ; counter (len//32 - 1)
+            lxi d, ERASE_BUF_LEN / 32 - 1
             A_TO_ZERO(0)
             call mem_erase_sp
             ret
@@ -114,7 +114,7 @@ update_bands_loop:
 
             ; find intersecting bands
             ; bottom-half sprite band idx
-            mvi a, b1110_0000
+            mvi a, BAND_Y_MASK
             ana e
             mov h, a
             ; h - top-half sprite band_y
@@ -123,7 +123,7 @@ update_bands_loop:
             mov a, c
             add e
             dcr a ; find the last line scr_y
-            ani b1110_0000
+            ani BAND_Y_MASK
             cmp h
             jnz @save_split_band_sprite
 @save_unsplit_band_sprite:
@@ -185,7 +185,7 @@ init_band_sprite:
             lxi h, band_sprites_count
             inr m
 
-            mvi a, b1110_0000
+            mvi a, BAND_Y_MASK
             ana e
             sta init_band_band_y + 1
 
@@ -223,9 +223,7 @@ init_band_save_cost:
 
 init_band_band_y:
             mvi a, TEMP_BYTE
-            rrc
-            rrc
-            rrc
+            RRC_(2) ; band Y / 16 * band.size (4 bytes)
             mov l, a
             mvi h, 0
             ; hl - band_idx * 4

@@ -1,6 +1,7 @@
 SPR_MAX = 10 ; max number of sprites to render
-BAND_MAX = 8
-BAND_HEIGHT = 32
+BAND_MAX = 16
+BAND_HEIGHT = 16
+BAND_Y_MASK = 256 - BAND_HEIGHT
 
 .struct sprite
     scr_addr_y: byte
@@ -53,9 +54,8 @@ sprite14: sprite (scr_addr_y= 18, scr_addr_x=SPRITE_X_SCR_ADDR, frame_ptr=_knigh
     gfx_ptr: word   ; ptr to a sprite frame
 .endstruct
 
-; list of new and old band sprites. the list length is doubled because every
-; sprite can be split. To know what which one is new, read band_sprites_new and
-; band_sprites_old
+; The sample's 15-line frames touch at most two 16-line bands, so each list
+; holds up to two fragments per sprite. See band_sprites_new/band_sprites_old.
 band_sprites1: band_sprite[SPR_MAX * 2]
 band_sprites2: band_sprite[SPR_MAX * 2]
 
